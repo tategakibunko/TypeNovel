@@ -1,0 +1,9 @@
+@scene({
+  obj: {
+    age: 10,
+    name: "taro"
+  }
+}){
+  $obj("age")
+  $obj("name")
+}

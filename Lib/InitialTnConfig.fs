@@ -1,0 +1,5 @@
+namespace TypeNovel.Lib
+
+module InitialTnConfig = begin
+  let value = "{\n  \"warnDuplicateConstraint\": true,\n  \"warnUndefinedConstraint\": true,\n  \"warnUnannotatedConstraint\": true,\n  \"markupMap\":{\n    \"//\":\"-----------------------\",\n    \"//\": \"[example]\",\n    \"//\": \"@chapter('prologue', 2)\",\n    \"//\":\"-----------------------\",\n    \"@chapter\":{\n      \"before\": \"<h<arg2>>\",\n      \"after\": \"</h<arg2>>\",\n      \"content\": \"<arg1>\"\n    },\n    \"@pre\":{\n      \"whiteSpace\": \"pre\"\n    },\n    \"@nonvalidate\":{\n      \"validate\": false\n    },\n    \"@scene\":{\n      \"tagName\": \"div\",\n      \"className\": \"<name> <arg2>\"\n    },\n    \"//\":\"-----------------------\",\n    \"//\": \"[example]\",\n    \"//\": \"@speak('John')\",\n    \"//\":\"-----------------------\",\n    \"@speak\":{\n      \"tagName\": \"div\",\n      \"className\": \"speak\",\n      \"attributes\": {\n\t\"data-character\": \"<arg1>\"\n      },\n      \"//\": \"Japanese style quotations\",\n      \"before\":\"&#x300c;\",\n      \"after\": \"&#x300d;\"\n    }\n  }\n}\n"
+end

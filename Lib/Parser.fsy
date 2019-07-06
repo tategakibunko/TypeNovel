@@ -1,0 +1,149 @@
+%{
+open TypeNovel.Lib.Types
+open FSharp.Text.Lexing
+
+let range (ps:FSharp.Text.Parsing.IParseState): SrcRange =
+  let (r1, r2) = ps.ResultRange
+  ({pos_fname = r1.pos_fname; pos_lnum = r1.pos_lnum; pos_bol = r1.pos_bol; pos_cnum = r1.pos_cnum},
+   {pos_fname = r2.pos_fname; pos_lnum = r2.pos_lnum; pos_bol = r2.pos_bol; pos_cnum = r2.pos_cnum})
+
+let stringOfParsePos (ps: FSharp.Text.Parsing.IParseState) =
+  let (r1, r2) = ps.ResultRange
+  sprintf "%s: line = %d, column = %d-%d" r1.pos_fname (r1.pos_lnum + 1) (r1.pos_cnum + 1) (r2.pos_cnum + 1)
+
+let uniqueId = ref 1
+
+let genUniqueId (): int =
+  let id = !uniqueId
+  uniqueId := id + 1
+  id
+
+let nodePos (): NodePos = {
+  uniqueId = genUniqueId ();
+  nth = 1;
+  nthOfType = 1;
+  index = 0;
+  indexOfType = 0;
+}
+%}
+
+%start start
+
+%token <int> INT
+%token <float> FLOAT
+%token <string> STRING_SINGLE
+%token <string> STRING_DOUBLE
+%token <string> TEXT
+%token <string> IDENT
+%token <string> BLOCK_IDENT
+%token <string> INLINE_IDENT
+%token <string> LAST_TEXT
+%token TRUE
+%token FALSE
+%token NULL
+%token ATMARK
+%token DOLLAR
+%token LPAREN
+%token RPAREN
+%token LCURL
+%token RCURL
+%token LBRACKET
+%token RBRACKET
+%token COMMA
+%token COLON
+%token MINUS
+%token EOF
+%left COMMA
+%left MINUS
+%nonassoc UMINUS
+
+// This is the type of the data produced by a successful reduction of the 'start' symbol:
+%type <TypeNovel.Lib.Types.Ast> start
+%%
+
+start: 
+| nodes EOF { $1 }
+| nodes last_text { $1 @ [$2] } // If text buffer remains when EOF comes, use LAST_TEXT instead of EOF.
+
+nodes: { [] }
+| nodes node { $1 @ [$2] }
+
+node:
+| block_node { $1 }
+| inline_node { $1 }
+| text_node { $1 }
+| error {
+  let message = stringOfParsePos parseState
+  failwith (sprintf "syntax error at %s" message)
+}
+
+block_node:
+| BLOCK_IDENT LPAREN actual_args RPAREN LCURL nodes RCURL { BlockNode($1, $3, $6, range parseState, nodePos()) }
+| BLOCK_IDENT LPAREN actual_args RPAREN LCURL nodes last_text { BlockNode($1, $3, $6 @ [$7], range parseState, nodePos()) }
+| BLOCK_IDENT LPAREN actual_args RPAREN { BlockNode($1, $3, [], range parseState, nodePos()) } // same as @<BlockIdent>({BlockArgs}){}
+
+/*
+  Annotation markup without args and parenthes(like $time) is called annot-symbol.
+  We deprecated this feature because it's ambigous when it appears in string literal.
+
+  For example, consider following markup.
+
+  @scene({time:'9:00'}){ "I woke up at $time" }
+
+  After lexer parsed '$', lexer mode changes from 'TextMode' to 'InlineMode',
+  so it will accept next double quote as 'start of string literal'!
+
+  Offcource there is no matched double quote for it, 
+  it will cause lexer error('Error: string literal is not terminated').
+
+  The reason why second string-quote is not accepted as 'TextMode' is that
+  there is no timing to change from 'InlineMode' to 'TextMode'
+  because annot-symbol like $time lacks LPAREN and RPAREN.
+*/ 
+inline_node:
+// | INLINE_IDENT { AnnotNode($1, [], range parseState, nodePos()) } // annot symbol (deprecated)
+| INLINE_IDENT LPAREN actual_args RPAREN { AnnotNode($1, $3, range parseState, nodePos()) }
+
+last_text:
+| LAST_TEXT { TextNode($1, range parseState) }
+
+text_node:
+| TEXT { TextNode($1, range parseState) }
+| STRING_SINGLE { TextNode("'" + $1 + "'", range parseState) }
+| STRING_DOUBLE { TextNode("\"" + $1 + "\"", range parseState) }
+| IDENT { TextNode($1, range parseState) }
+
+actual_args: { [] }
+| expr { [$1] }
+| actual_args COMMA expr { $1 @ [$3] }
+
+object:
+| LCURL RCURL { ObjExpr([]) }
+| LCURL obj_members RCURL { ObjExpr($2) }
+| LCURL obj_members COMMA RCURL { ObjExpr($2) } // accept last comma
+
+obj_members:
+| obj_pair { [$1] }
+| obj_members COMMA obj_pair { $1 @ [$3] }
+
+obj_pair:
+| IDENT COLON expr { ($1, $3) }
+| STRING_SINGLE COLON expr { ($1, $3) }
+| STRING_DOUBLE COLON expr { ($1, $3) }
+
+list:
+| LBRACKET RBRACKET { ListExpr([]) }
+| LBRACKET list_members RBRACKET { ListExpr($2) }
+
+list_members:
+| expr { [$1] }
+| list_members COMMA expr { $1 @ [$3] }
+
+expr:
+| STRING_SINGLE { StrExpr($1) }
+| STRING_DOUBLE { StrExpr($1) }
+| INT { IntExpr($1) }
+| FLOAT { FloatExpr($1) }
+| object { $1 }
+| list { $1 }
+| MINUS expr %prec UMINUS { NegOpExpr($2) }

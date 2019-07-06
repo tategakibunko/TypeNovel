@@ -1,0 +1,5 @@
+@scene(){
+  before
+  $include("extern.tn")
+  after
+}

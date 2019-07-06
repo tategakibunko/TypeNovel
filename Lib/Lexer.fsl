@@ -1,0 +1,258 @@
+{
+open FSharp.Text.Lexing
+open Parser
+
+exception SyntaxError of string
+
+type LexerMode = BlockMode | InlineMode | TextMode | ArgumentMode
+
+type LexerContext = {
+  mutable mode: LexerMode;
+  mutable parenOpen: int;
+  mutable curlOpen: int;
+}
+
+let context: LexerContext = {
+  mode = TextMode;
+  parenOpen = 0;
+  curlOpen = 0;
+}
+
+let lexeme = LexBuffer<_>.LexemeString
+let newline (lexbuf: LexBuffer<_>) = 
+  // lexbuf.StartPos <- lexbuf.StartPos.NextLine // not work! why?
+  lexbuf.StartPos <- {lexbuf.StartPos with pos_lnum = lexbuf.StartPos.pos_lnum + 1; pos_cnum = 0}
+  lexbuf.EndPos <- {lexbuf.EndPos with pos_lnum = lexbuf.EndPos.pos_lnum + 1; pos_cnum = 0}
+
+let buff = new System.Text.StringBuilder(256)
+let add_buff (str: string) = ignore (buff.Append(str))
+let peek_buff () = buff.ToString ()
+let clear_buff () = ignore (buff.Remove(0, buff.Length))
+
+// note that 'get_buff' conflicts with FSharp.Text.Lexing.get_Buff.
+let fetch_buff () = 
+  let content = peek_buff ()
+  clear_buff ()
+  content
+
+(*
+let print_lexer_context () =
+  printfn "%A, paren = %d, curl = %d" context.mode context.parenOpen context.curlOpen
+*)
+
+let open_paren () =
+  context.parenOpen <- context.parenOpen + 1
+  // print_lexer_context ()
+
+let close_paren () =
+  context.parenOpen <- context.parenOpen - 1
+  // print_lexer_context ()
+
+let open_curl () =
+  context.curlOpen <- context.curlOpen + 1
+  // print_lexer_context ()
+
+let close_curl () =
+  context.curlOpen <- context.curlOpen - 1
+  // print_lexer_context ()
+}
+//---------------------------------------------------------------------------
+
+let whitespace = [' ' '\t' ]
+let newline = ('\n' | '\r' '\n')
+let ident_first_char = [ 'A'-'Z' 'a'-'z' ]
+let ident_char =  [ 'A'-'Z' 'a'-'z' '_' '-' '0'-'9' ]
+let int_literal = ['0'-'9'] ['0'-'9']*
+let float_literal = ['0'-'9']+('.' ['0'-'9']*)? (['e' 'E'] ['+' '-']? ['0'-'9']+)?
+
+rule token = parse
+| whitespace {
+  if context.parenOpen = 0 then
+    context.mode <- TextMode
+  if context.mode = TextMode then
+    add_buff (lexeme lexbuf)
+  token lexbuf
+}
+| newline	{
+  let nl = lexeme lexbuf
+  match context.mode, context.parenOpen with
+  | TextMode, _ | InlineMode, _ -> add_buff nl
+  // accept newline after $foo('bar')\n
+  // cause $foo + '(' will set lexer-mode to ArgumentMode.
+  | ArgumentMode, 0 -> add_buff nl
+  | _ -> ()
+  newline lexbuf
+  token lexbuf
+}
+| "$" {
+  context.mode <- InlineMode
+  match fetch_buff () with
+  | "" -> token lexbuf
+  | content -> TEXT(content)
+}
+| "@" {
+  context.mode <- BlockMode
+  match fetch_buff () with
+  | "" -> token lexbuf
+  | content -> TEXT(content)
+}
+| "(" {
+  if context.mode = TextMode && context.parenOpen = 0 then begin
+    add_buff "(";
+    token lexbuf
+  end else begin
+    context.mode <- ArgumentMode;
+    open_paren ();
+    LPAREN
+  end
+}
+| ")" {
+  if context.mode = TextMode && context.parenOpen = 0 then begin
+    add_buff ")";
+    token lexbuf
+  end else begin
+    close_paren ()
+    if context.parenOpen = 0 then
+      context.mode <- TextMode
+    RPAREN
+  end
+}
+| "{" {
+  match context.mode, context.parenOpen with
+  | _, 0 -> open_curl (); context.mode <- TextMode;  LCURL
+  | _, _ -> open_curl (); LCURL
+}
+| "}" {
+  match context.mode, context.parenOpen with
+  | _, 0 ->
+    context.mode <- TextMode
+    close_curl ()
+    match peek_buff () with
+    | "" -> RCURL
+    | content -> clear_buff(); LAST_TEXT(content)
+  | _, _ ->
+    close_curl ()
+    RCURL
+}
+| "[" {
+  match context.mode with
+  | TextMode -> add_buff "["; token lexbuf
+  | _ -> LBRACKET
+}
+| "]" {
+  match context.mode with
+  | TextMode -> add_buff "]"; token lexbuf
+  | _ -> RBRACKET
+}
+| "," {
+  match context.mode with
+  | TextMode -> add_buff ","; token lexbuf
+  | _ -> COMMA
+}
+| ":" {
+  match context.mode with
+  | TextMode -> add_buff ":"; token lexbuf
+  | _ -> COLON
+}
+| "-" {
+  match context.mode with
+  | ArgumentMode -> MINUS
+  | _ -> add_buff "-"; token lexbuf
+}
+| "true" {
+  match context.mode with
+  | TextMode -> add_buff "true"; token lexbuf
+  | _ -> TRUE
+}
+| "false" {
+  match context.mode with
+  | TextMode -> add_buff "false"; token lexbuf
+  | _ -> FALSE
+}
+| "null" {
+  match context.mode with
+  | TextMode -> add_buff "null"; token lexbuf
+  | _ -> NULL
+}
+| '/' '/' { read_line_comment lexbuf }
+| '/' '*' { read_range_comment lexbuf }
+| '"' {
+  match context.mode with
+  | TextMode -> add_buff "\""; token lexbuf
+  | _ -> read_string "\"" "" false lexbuf
+} 
+| '\'' {
+  match context.mode with
+  | TextMode -> add_buff "'"; token lexbuf
+  | _ -> read_string "'" "" false lexbuf
+} 
+| int_literal {
+  let literal = lexeme lexbuf
+  match context.mode with
+  | ArgumentMode -> INT (int literal)
+  | _ -> add_buff literal; token lexbuf
+}
+| float_literal {
+  let literal = lexeme lexbuf
+  match context.mode with
+  | ArgumentMode -> FLOAT (float literal)
+  | _ -> add_buff literal; token lexbuf
+}
+| ident_first_char ident_char* {
+  let ident = lexeme lexbuf
+  match context.mode with
+  | ArgumentMode -> IDENT(ident)
+  | InlineMode -> INLINE_IDENT(ident)
+  | BlockMode -> BLOCK_IDENT(ident)
+  | TextMode -> add_buff ident; token lexbuf
+}
+| eof {
+  match peek_buff () with
+  | "" -> EOF
+  | text -> LAST_TEXT(text)
+}
+| '\\' _ {
+  let str = lexeme lexbuf
+  let chr = str.[1..1]
+  let () = add_buff chr
+  let content = fetch_buff ()
+  TEXT(content)
+}
+| _  {
+  context.mode <- TextMode
+  let str = lexeme lexbuf
+  let () = add_buff str
+  token lexbuf
+}
+
+and read_line_comment = parse
+| newline {
+  newline lexbuf
+  if context.mode = TextMode then
+    add_buff (lexeme lexbuf)
+  token lexbuf
+}
+| _ { read_line_comment lexbuf }
+
+and read_range_comment = parse
+| newline { newline lexbuf; read_range_comment lexbuf }
+| '*' '/' { token lexbuf }
+| _ { read_range_comment lexbuf }
+
+and read_string mark acm escaping = parse
+| ['"' '\''] {
+  let c = lexeme lexbuf
+  let is_same_mark = (c = mark)
+  match escaping, mark, is_same_mark with
+  | true, "\"", true -> (read_string mark (acm+"\\\"") false lexbuf) // escape double quote between double quoted string.
+  | true, "'", true -> (read_string mark (acm+"\\'") false lexbuf) // escape single quote between single quoted string.
+  | false, "\"", true -> STRING_DOUBLE(acm) // string closed by double quote.
+  | false, "'", true -> STRING_SINGLE(acm)  // string closed by single quote.
+  | _, _, _ -> (read_string mark (acm+c) escaping lexbuf)
+  }
+| '\\' { read_string mark acm true lexbuf }
+| [^ '"' '\'' '\\']+ { read_string mark (acm+(lexeme lexbuf)) false lexbuf }
+| eof {
+  // failwith ("ParseError" + LexBuffer<_>.LexemeString lexbuf) 
+  failwith "string literal is not terminated" 
+}

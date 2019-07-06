@@ -1,0 +1,11 @@
+===============================================================================
+Preliminary notes:
+------------------
+Mark "o": new feature
+Mark "*": bug fixed.
+Mark "!": change that can break compatibility with older version
+===============================================================================
+
+version 0.9.0, 2019/07/06
+==========================
+o First release

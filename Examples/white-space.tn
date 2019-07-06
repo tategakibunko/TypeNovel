@@ -1,0 +1,14 @@
+@scene(){
+  hoge hige hage.
+  foo bar baz.
+}
+
+@scene(){
+  おはよう。
+  こんばんわ。
+}
+
+@pre(){
+  hoge hige hage.
+  めそ。ほげ。
+}
