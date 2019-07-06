@@ -49,7 +49,7 @@ You can define markup map in `tnconfig.json`.
 }
 ```
 
-> `<name>` and `<nthOfType>` is called `placeholder variable`. For more information, see [cheatsheet](#) section.
+> `<name>` and `<nthOfType>` is called `placeholder variable`. For more information, see [cheatsheet](https://github.com/tategakibunko/TypeNovel/blob/master/Docs/Cheatsheet.md) section.
 
 If you re-compile this source, you'll get
 
@@ -61,6 +61,6 @@ If you re-compile this source, you'll get
 
 That's it!
 
-Want more information?  See [cheatsheet](#) section.
+Want more information?  See [cheatsheet](https://github.com/tategakibunko/TypeNovel/blob/master/Docs/Cheatsheet.md) section.
 
 
