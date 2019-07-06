@@ -130,6 +130,7 @@ And you get html output like this.
 This output is NLP(Natural Language Processing) or ML(Machine Leraning) friendly, so both platform and writers win!
 
 Writers merit: **quality of novel**
+
 Platform merit: **quality of data**
 
 By the way, if we don't annotated our constraints, what happens?
@@ -147,9 +148,13 @@ Offcource, you'll get errors at the compilation time.
 
 [Installer package](https://github.com/tategakibunko/TypeNovel/tree/master/Packages/Mac) is provided.
 
-### Windows, Linux
+### Windows
 
-[Zipped package](https://github.com/tategakibunko/TypeNovel/tree/master/example/samples) is provided.
+[Zipped package](https://github.com/tategakibunko/TypeNovel/tree/master/Packages/Win) is provided.
+
+### Linux
+
+[Zipped package](https://github.com/tategakibunko/TypeNovel/tree/master/Packages/Linux) is provided.
 
 ## Build
 
