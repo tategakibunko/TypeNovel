@@ -1,3 +1,5 @@
+version 5.215.0
+
 source https://api.nuget.org/v3/index.json
 storage: none
 
@@ -10,3 +12,10 @@ nuget NUnit3TestAdapter ~> 3
 nuget Microsoft.NET.Test.Sdk ~> 15
 nuget FSharp.Data ~> 3
 nuget FsLexYacc ~> 9
+
+group FakeBuild
+    source https://api.nuget.org/v3/index.json
+    storage: none
+    nuget Fake.DotNet.Cli ~> 5
+    nuget Fake.IO.FileSystem ~> 5
+    nuget Fake.Core.Target ~> 5
