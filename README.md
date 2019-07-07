@@ -150,20 +150,12 @@ Offcource, you'll get errors at the compilation time.
 
 ### Windows
 
-[Zipped package](https://github.com/tategakibunko/TypeNovel/tree/master/Packages/Win) is provided.
+Clone repository, and just type `make win` in top directory, and zippped package is generated in `Packages/Win`.
 
 ### Linux
 
-[Zipped package](https://github.com/tategakibunko/TypeNovel/tree/master/Packages/Linux) is provided.
+Clone repository, and just type `make linux` in top directory, and zippped package is generated in `Packages/Linux`.
 
 ## Build
 
 To build from source, `CMake` and [.NET Core 2.2](https://dotnet.microsoft.com/download) is required.
-
-```bash
-make mac
-make win
-make linux
-```
-
-Binary output is generated in `bin` directory.
