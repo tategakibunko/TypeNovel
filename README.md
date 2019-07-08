@@ -159,3 +159,9 @@ Clone repository, and just type `make linux` in top directory, and zippped packa
 ## Build
 
 To build from source, `CMake` and [.NET Core 2.2](https://dotnet.microsoft.com/download) is required.
+
+## Build with [FAKE](https://fake.build)
+
+In the repository, run `fake.sh build` (Linux, Mac) or `fake.cmd build` (Win).
+
+`fake.sh build -t Publish` performs the publish action.  Artifacts are created under the `dist/` directory.
