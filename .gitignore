@@ -1,0 +1,6 @@
+.ionide/
+paket-files/
+paket.lock
+bin/
+obj/
+dist/
