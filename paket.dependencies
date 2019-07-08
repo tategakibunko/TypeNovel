@@ -19,3 +19,4 @@ group FakeBuild
     nuget Fake.DotNet.Cli ~> 5
     nuget Fake.IO.FileSystem ~> 5
     nuget Fake.Core.Target ~> 5
+    nuget Fake.IO.Zip ~> 5
