@@ -1,14 +1,11 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
-
   <ItemGroup>
     <Compile Include="Meta.fs" />
     <Compile Include="Types.fs" />
-    <PackageReference Include="FSharp.Data" Version="3.1.1" />
-    <PackageReference Include="FsLexYacc" Version="9.0.2" />
     <FsYacc Include="Parser.fsy">
       <OtherFlags>--module Parser</OtherFlags>
     </FsYacc>
@@ -28,5 +25,5 @@
     <Compile Include="Validate.fs" />
     <Compile Include="Eval.fs" />
   </ItemGroup>
-
+  <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>
