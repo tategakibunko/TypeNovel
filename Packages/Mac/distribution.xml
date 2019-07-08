@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<installer-gui-script minSpecVersion="1">
+  <title>TypeNovel</title>
+  <pkg-ref id="com.antiscroll.typenovel"/>
+  <options customize="never" require-scripts="false"/>
+  <choices-outline>
+    <line choice="default">
+      <line choice="com.antiscroll.typenovel"/>
+    </line>
+  </choices-outline>
+  <choice id="default"/>
+  <choice id="com.antiscroll.typenovel" visible="false">
+    <pkg-ref id="com.antiscroll.typenovel"/>
+  </choice>
+  <pkg-ref id="com.antiscroll.typenovel" version="0.9.0" onConclusion="none">TypeNovel.pkg</pkg-ref>
+</installer-gui-script>
