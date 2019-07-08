@@ -146,15 +146,15 @@ Offcource, you'll get errors at the compilation time.
 
 ### Mac OS
 
-[Installer package](https://github.com/tategakibunko/TypeNovel/tree/master/Packages/Mac) is provided.
+[Installer package](https://github.com/tategakibunko/TypeNovel/tree/master/Archives/Mac) is provided.
 
 ### Windows
 
-Clone repository, and just type `make win` in top directory, and zippped package is generated in `Packages/Win`.
+Clone repository, and just type `make win` in top directory, and zippped package is generated in `Archives/Win`.
 
 ### Linux
 
-Clone repository, and just type `make linux` in top directory, and zippped package is generated in `Packages/Linux`.
+Clone repository, and just type `make linux` in top directory, and zippped package is generated in `Archives/Linux`.
 
 ## Build
 

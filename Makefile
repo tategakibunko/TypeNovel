@@ -4,17 +4,17 @@ all: mac win linux
 mac:
 	cd Lib && make
 	cd Tnc && make mac
-	cd Packages/Mac && make
-	@echo \"Packages/Mac/TypeNovel-$(VERSION).pkg\" is generated!
+	cd Archives/Mac && make
+	@echo \"Archives/Mac/TypeNovel-$(VERSION).pkg\" is generated!
 
 win:
 	cd Lib && make
 	cd Tnc && make win
-	cd Packages/Win && make
-	@echo \"Packages/Win/TypeNovel-$(VERSION).zip\" is generated!
+	cd Archives/Win && make
+	@echo \"Archives/Win/TypeNovel-$(VERSION).zip\" is generated!
 
 linux:
 	cd Lib && make
 	cd Tnc && make win
-	cd Packages/Linux && make
-	@echo \"Packages/Linux/TypeNovel-$(VERSION).zip\" is generated!
+	cd Archives/Linux && make
+	@echo \"Archives/Linux/TypeNovel-$(VERSION).zip\" is generated!
