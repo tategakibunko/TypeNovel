@@ -8,6 +8,8 @@ open Fake.IO
 open Fake.IO.FileSystemOperators
 open Fake.IO.Globbing.Operators
 
+let version = "0.9.0"
+
 Target.initEnvironment()
 Target.create "Clean" <| fun _ ->
     !!(__SOURCE_DIRECTORY__ </> "**/bin")
@@ -54,7 +56,7 @@ let publish (project : string) (runtimeId : string) =
         Directory.ensure distDir
         DotNet.publish setParam project
     Target.create zipTarget <| fun _ ->
-        !!(distDir </> "**") |> Zip.zip distBase (distBase </> (sprintf "%s.zip" projectId))
+        !!(distDir </> "**") |> Zip.zip distBase (distBase </> (sprintf "%s-%s.zip" projectId version))
     target ==> zipTarget ==> "Publish" |> ignore
     ()
 
