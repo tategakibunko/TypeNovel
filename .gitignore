@@ -1,5 +1,6 @@
 .ionide/
 .fake/
+.paket/paket.exe
 paket-files/
 bin/
 obj/
