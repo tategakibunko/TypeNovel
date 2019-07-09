@@ -150,11 +150,11 @@ Offcource, you'll get errors at the compilation time.
 
 ### Windows
 
-Clone repository, and just type `make win` in top directory, and zippped package is generated in `Archives/Win`.
+[Zippped package](https://github.com/tategakibunko/TypeNovel/tree/master/Archives/Win) is provided.
 
 ### Linux
 
-Clone repository, and just type `make linux` in top directory, and zippped package is generated in `Archives/Linux`.
+[Zipped package](https://github.com/tategakibunko/TypeNovel/tree/master/Archives/Linux) is provided.
 
 ## Build
 
