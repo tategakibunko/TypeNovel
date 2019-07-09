@@ -4,8 +4,6 @@ paket-files/
 bin/
 obj/
 dist/
-Archives/Win/*.zip
-Archives/Linux/*.zip
 Lib/Lexer.fs
 Lib/Parser.fs
 Lib/Parser.fsi
