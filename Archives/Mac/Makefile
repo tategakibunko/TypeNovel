@@ -1,5 +1,5 @@
 include ../../Makefile.def
-PKG_ROOT:=../../Tnc/bin/Release/netcoreapp2.2/osx-x64
+PKG_ROOT:=../../Tnc/bin/Release/netcoreapp2.2/osx-x64/publish
 PKG_IDENT:=com.antiscroll.typenovel
 PKG_INST_LOC:=/Applications/TypeNovel.App
 PKG_TEMP:=TypeNovel.pkg

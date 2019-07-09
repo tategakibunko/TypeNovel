@@ -8,6 +8,8 @@ Mark "!": change that can break compatibility with older version
 
 version 0.9.1
 ==========================
+o [PR#2] Use FAKE and Paket for building artifacts.
+* Changed zip target folder('linux-x64' to 'linux-x64/publish', 'win-x64' to 'win-x64/pub').
 ! Rename folder name 'Packages' to 'Archives' because Paket will use it.
 
 version 0.9.0, 2019/07/06
