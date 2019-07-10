@@ -31,7 +31,7 @@ And result is here.
 
 ## You don't like output html? Let's custumize!
 
-You can define markup map in `tnconfig.json`.
+You can customize html tag by `markupMap` section of `tnconfig.json`.
 
 ```javascript
 {
@@ -49,7 +49,7 @@ You can define markup map in `tnconfig.json`.
 }
 ```
 
-> `<name>` and `<nthOfType>` is called `placeholder variable`. For more information, see [cheatsheet](https://github.com/tategakibunko/TypeNovel/blob/master/Docs/Cheatsheet.md) section.
+> `<name>` and `<nthOfType>` are called `placeholder value`. For more information, see [Cheatsheet](https://github.com/tategakibunko/TypeNovel/blob/master/Docs/Cheatsheet.md) section.
 
 If you re-compile this source, you'll get
 
