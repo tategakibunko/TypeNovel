@@ -57,12 +57,8 @@ let printError ((error: string), (pos: SrcRange)) =
   printfn "%s(line:%d) %s" r1.pos_fname (r1.pos_lnum + 1) error
 
 let printErrors (env: Environment) (errors: (string * SrcRange) list) =
-  if env.outputFile <> "" then
-    printfn "<!--\n"
   List.iter printError errors
   printfn "error count = %d\n" errors.Length
-  if env.outputFile <> "" then
-    printfn "-->\n"
 
 [<EntryPoint>]
 let main(args) =    
