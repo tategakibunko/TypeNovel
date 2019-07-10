@@ -24,7 +24,7 @@
 
 `before`と`after`の値は、使用する言語に合わせて変更して下さい。
 
-例えば日本語であれば`before`は、`「`(U+300C)で、`after`は`」`(U+300D)とすると良いでしょう。
+> 例えば日本語であれば`before`は、`「`(U+300C)で、`after`は`」`(U+300D)とすると良いでしょう。
 
 さて、`before`と`after`を日本語用のものに変えた後に、台詞テキストを`@speak`タグで記述すると、
 
@@ -41,7 +41,7 @@
 ```html
 <scene data-time="朝">
   <speak data-person="ジョン">
-    「やあ、<time>おはよう！</time>"
+    「やあ、<time>おはよう！</time>」
   </speak>
 </scene>
 ```
