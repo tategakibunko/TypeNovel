@@ -8,7 +8,7 @@ Display TypeNovel version.
 
 ### --init
 
-Create `tnconfig.json`, ignored if it already exsits.
+Create `tnconfig.json` of default settings, ignored if it already exsits.
 
 ### --output
 
@@ -22,7 +22,7 @@ Define output file. If not defined, stdout is used.
 
 Output file by release mode.
 
-In release mode, all whitespaces are ignored in output html except the tag that is defined by `whiteSpace:'pre'` in markupMap of `tnconfig.json`.
+In release mode, all whitespaces are removed in output html except the tag that is defined by `whiteSpace:'pre'` in markupMap of `tnconfig.json`.
 
 ### --ast
 
@@ -34,7 +34,7 @@ Display environment.
 
 ### --config
 
-Specify configuration. If it's not found, `tnconfig.json` is used.
+Specify configuration. If it's not specified or found, `tnconfig.json` is used.
 
 If `tnconfig.json` is not found too, default configuration is used.
 
@@ -46,9 +46,21 @@ Display command line usage.
 
 Markup of block level is defined by `@<block-name>`.
 
-Regexp of `block-name` is `[a-zA-Z]+[a-zA-Z0-9_]*`.
+Regexp of `block-name` is `[a-zA-Z]+[a-zA-Z0-9-_]*`.
 
 ```javascript
+@scene(){
+  @p(){
+  }
+}
+```
+
+## Block level constraints
+
+You can define `constraint` in the argument of block markup like this.
+
+```javascript
+// constraint 'season' is defined
 @scene({season:"summer"}){
   @scene({time:"9:00"){
   }
@@ -61,6 +73,10 @@ Regexp of `block-name` is `[a-zA-Z]+[a-zA-Z0-9_]*`.
 }
 ```
 
+In this example, we define 'season' constraint as 'summer', so we have to `annotatate` this constraint at somewhere in the child text field.
+
+But we don't annotate nothing in this example, compiler will warn error.
+
 ## Annotation markup
 
 Markup of annotation is written by `$<annot-name>`.
@@ -72,14 +88,14 @@ Regexp of `annot-name` is same as `block-name`.
   season: "winter",
   time: "noon"
 }){
-  Finally $time("lunch time")! // Finally lunch time!
+  Finally $time("lunch time")! // Finally <time>lunch</time> time!
 
-  $season("Xmas") is comming! // Xmas is comming!
-  $season() is cold! // winter is cold!
+  $season("Xmas") is comming! // <season>Xmas</season> is comming!
+  $season() is cold! // <season>winter</season> is cold!
 }
 ```
 
-## Include file
+## Include external file
 
 ```javascript
 @scene(){
@@ -117,7 +133,9 @@ You should escape `@` and `$` in your text.
 
 ### String, Int, Float
 
-Annotation markup to `String`, `Int`, `Float` expression with no argument, it's replaced by constrait value itself.
+You can define `String`, `Int`, `Float` to block constraints.
+
+Note that if we annotate these constraint without any arguments, it's replaced by constrait value itself.
 
 ```javascript
 @scene({
@@ -155,11 +173,11 @@ Annotation markup to `String`, `Int`, `Float` expression with no argument, it's 
 }
 ```
 
-## Configuration
+## Configuration file
 
 ### Disable warning
 
-You can set each warning level `true` or `false` in `tnconfig.json`.
+You can set each warning enable/disable by setting `true` or `false` for each item in `tnconfig.json`.
 
 Default setting of warning is here.
 
@@ -173,7 +191,7 @@ Default setting of warning is here.
 
 #### warnDuplicationConstranit
 
-`warnDuplicationConstranit` warns if you define same constraint in multiple nested blocks.
+Warns if you define same constraint in multiple nested blocks. Default setting is `true`.
 
 ```javascript
 @scene({season:"summer"}){
@@ -191,7 +209,7 @@ Note that following case is safe because each scene blocks are independent sibli
 
 #### warnUndefinedConstraint
 
-`warnUndefinedConstraint` warns if you write some annotation that is not defined in constraints fields.
+Warns if you write some annotation that is not defined in constraints fields. Default setting is `true`.
 
 ```javascript
 @scene({season:"summer"}){
@@ -201,7 +219,7 @@ Note that following case is safe because each scene blocks are independent sibli
 
 #### warnUnannotatedConstraint
 
-`warnUnannotatedConstraint` warns if you don't write annotation that is defined in constraints fields.
+Warns if you don't write annotation that is defined in constraints fields. Default setting is `true`.
 
 ```javascript
 @scene({season:"summer"}){
@@ -232,13 +250,13 @@ After this configuration, `@scene` will produce `<div class='scene'>` in output 
 
 If you don't define markup map, `@scene` will produce `<scene>`.
 
-#### Customizable element
+#### Customizable item
 
-You can customize variaous fields for each markup of TypeNovel.
+You can customize various fields for each markup of TypeNovel.
 
 ##### tagName
 
-Defines element name for html output.
+Defines tagName for html output.
 
 ##### className
 
@@ -250,7 +268,7 @@ Defines `id` attribute for html output.
 
 ##### validate
 
-If set `validate` to `false`, constraints and annotations are not validated, errors are ignored.
+If `validate` is set to `false`, errors of constraints and annotations in target markup are ignored.
 
 ```javascript
 {
@@ -269,7 +287,7 @@ Note that if we compile source with `--release` option, all whitespaces are prun
 
 ##### attributes
 
-Defines misc attributes by `<attribute-key>: <attribute-value>` format.
+Defines misc HTML attributes by `<attribute-key>: <attribute-value>` format.
 
 Here is example markup map.
 
@@ -306,8 +324,10 @@ Then compilation result is here.
 ##### before, after, content
 
 `before` is text before content text.
+
 `after` is text after content text.
-`content` is content text of target markup.
+
+`content` is treated as content text of target markup.
 
 Here is example markup map.
 
@@ -339,15 +359,15 @@ It'll produce result like this.
 
 ### Placeholder variables
 
-`Placeholder variables` are the variables you can use in fields of `markupMap`.
+`Placeholder variables` are the values you can use in fields of `markupMap`.
 
 They are temporary placeholder, so it's replaced by associated string in compile time.
 
 #### `<name>`
 
-`<name>` is markup name of body tag or annotation tag in TypeNovel.
+`<name>` is markup **name** of body tag or annotation tag in TypeNovel.
 
-For example, `<name>` of `@scene`(body-tag) is **scene** and `<name>` of `$time`(annot-tag) is **time**.
+For example, **name** of `@scene`(body-tag) is **scene** and **name** of `$time`(annot-tag) is **time**.
 
 #### `<arg1>`, `<arg2>`, ...
 
@@ -365,10 +385,14 @@ then `<arg1>` is `{time: "9:00AM"}`(object), `<arg2>` is `"foo"`(string), and `<
 #### `<uniqueId>`, `<nth>`, `<nthOfType>`, `<index>`, `<indexOfType>`
 
 `<uniqueId>` is unique id of target markup in whole markups.
-`<nth>` is nth number of target markup in it's siblings, number starts from 1.
-`<index>` is index number of target markup in it's siblings, number starts from 0.
-`<nthOfTYpe>` is nth number of target markup in it's same markup siblings, number starts from 1.
-`<indexOfTYpe>` is index number of target markup in it's same markup siblings, number starts from 0.
+
+`<nth>` is nth number of target markup in it's siblings, number starts from **1**.
+
+`<index>` is index number of target markup in it's siblings, number starts from **0**.
+
+`<nthOfTYpe>` is nth number of target markup in it's same markup siblings, number starts from **1**.
+
+`<indexOfTYpe>` is index number of target markup in it's same markup siblings, number starts from **0**.
 
 You can use these placeholder to produce unique `id` to it's html tag.
 
@@ -383,4 +407,3 @@ For example, you can give unique id attribute to all `@scene` markup.
   }
 }
 ```
-
