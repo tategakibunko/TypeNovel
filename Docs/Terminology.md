@@ -1,6 +1,6 @@
 # TypeNovel terminology
 
-## Example code
+## Preamble
 
 Here is example code used to describe this section.
 
@@ -36,6 +36,8 @@ Here is `block-form` terminology for this example.
 
 Generally, `<block-constraints>` is first item of `<block-args>`.
 
+> But it's not mandatory.
+
 ## annot-form terminology
 
 Here is annot-form terminology for this example.
@@ -48,7 +50,7 @@ Here is annot-form terminology for this example.
 
 Generally, `<annot-body>` is first item of `<annot-args>`.
 
-Note that if you update this `annot-form` like this...
+Note that if you update this `annot-form` like this(two argument),
 
 ```javascript
 $time("early morning", "foo")
@@ -60,9 +62,9 @@ then `<annot-args>` is `["early morning", "foo"]` and `<arg2>` is `"foo"`.
 
 In this example, we have two `annot-form`, `$time("early morning")` and `$time()`.
 
-Second one(without `<annot-args>`) is called `annot-symbol`.
+There is no `<annot-args>` with second one(`$time()`), it's called `annot symbol`.
 
-It's replaced by constraint value defined in `<block-constraints>`.
+Annot symbol is replaced by constraint value defined in `<block-constraints>`.
 
-In this example, it's `"9:00AM"`.
+So in this example, it's `"9:00AM"`.
 

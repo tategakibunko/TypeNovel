@@ -6,5 +6,5 @@
 
 - [Guidelines](https://github.com/tategakibunko/TypeNovel/tree/master/Docs/Guidelines.md)（[日本語](https://github.com/tategakibunko/TypeNovel/tree/master/Docs/Guidelines_jp.md)）
 
-- [Terminology](https://github.com/tategakibunko/TypeNovel/tree/master/Docs/Terminology.md)
+- [Terminology](https://github.com/tategakibunko/TypeNovel/tree/master/Docs/Terminology.md)（[日本語](https://github.com/tategakibunko/TypeNovel/tree/master/Docs/Terminology_jp.md)）
 
