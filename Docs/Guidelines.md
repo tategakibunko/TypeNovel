@@ -4,7 +4,7 @@ Here is recommended guidelines.
 
 ## 1. Use @speak tag for speech text.
 
-If you want to write speech of some character, use `@speak` tag that is defined in  `tnconfig.json` by default.
+If you want to write speech of some character, we recommend you to use `@speak` tag that is already defined in  `tnconfig.json` by default.
 
 Definition of `@speak` is following.
 
@@ -24,7 +24,7 @@ Definition of `@speak` is following.
 
 Change `before` and `after` value according to your language. For example, if you're Japanese, use`「`(U+300C) for `before`, and `」`(U+300D) for `after`.
 
-If you wrote speech like this...
+If you wrote speech by `@speak` tag...
 
 ```javascipt
 @scene({time:"morning"}){
@@ -44,14 +44,16 @@ Output is following.
 </scene>
 ```
 
-It's very context aware and meaningful. This speech is very context aware, NLP friendly.
+Speaker of this speech is described in `data-person` in `<speak>` tag.
 
-Note that heading and trailing `"`  are automatically inserted and speaker is annotated by `dataset` attribute by markupMap of `@spaek`.
+It's very context aware and meaningful, and NLP friendly.
+
+Note that heading and trailing `"`  are automatically inserted by markupMap of `@spaek`.
 
 
 ## 2. Structure story, devide source
 
-You can `include` other file by using `$include("filename")`.
+In TypeNovel, you can `include` external file by using `$include("filename")`.
 
 We recommend you to devide all text into scene pieces.
 
