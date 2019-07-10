@@ -211,7 +211,7 @@ If `tnconfig.json` is not found too, default configuration is used.
 
 #### warnUndefinedConstraint
 
-ブロックに定義した制約が注釈されていない場合に警告を発します。初期設定は`true`です。
+ブロックの制約に定義されていない注釈がなされたときに警告を発します。初期設定は`true`です。
 
 ```javascript
 @scene({season:"summer"}){
@@ -221,7 +221,7 @@ If `tnconfig.json` is not found too, default configuration is used.
 
 #### warnUnannotatedConstraint
 
-制約に定義されていない注釈がなされたときに警告を発します。初期設定は`true`です。
+ブロックに定義した制約が注釈されていない場合に警告を発します。初期設定は`true`です。
 
 ```javascript
 @scene({season:"summer"}){
