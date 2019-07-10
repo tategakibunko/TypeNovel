@@ -62,7 +62,7 @@ If `tnconfig.json` is not found too, default configuration is used.
 ブロックレベルのマークアップには以下のようにして`制約(constraint)`を貸すことが出来ます。
 
 ```javascript
-@scene({season:"夏"}){
+@chapter({season:"夏"}){
   @scene({time:"9:00"){
   }
   @scene({time:"10:00"}){
@@ -99,7 +99,7 @@ If `tnconfig.json` is not found too, default configuration is used.
 ## 外部ファイルの埋め込み
 
 ```javascript
-@scene(){
+@book(){
   $include("prologue.tn")
   $include("chapter1.tn")
   $include("chapter2.tn")
@@ -195,7 +195,7 @@ If `tnconfig.json` is not found too, default configuration is used.
 入れ子になっているブロックの中で、同じ制約を複数回定義した場合に警告を発します。
 
 ```javascript
-@scene({season:"summer"}){
+@chapter({season:"summer"}){
   @scene({season:"winter"}){ // エラー！ seasonはすでに親ブロックで定義されています。
   }
 }

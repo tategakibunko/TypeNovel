@@ -61,7 +61,7 @@ You can define `constraint` in the argument of block markup like this.
 
 ```javascript
 // constraint 'season' is defined
-@scene({season:"summer"}){
+@chapter({season:"summer"}){
   @scene({time:"9:00"){
   }
   @scene({time:"10:00"}){
@@ -98,7 +98,7 @@ Regexp of `annot-name` is same as `block-name`.
 ## Include external file
 
 ```javascript
-@scene(){
+@book(){
   $include("prologue.tn")
   $include("chapter1.tn")
   $include("chapter2.tn")
@@ -194,7 +194,7 @@ Default setting of warning is here.
 Warns if you define same constraint in multiple nested blocks. Default setting is `true`.
 
 ```javascript
-@scene({season:"summer"}){
+@chapter({season:"summer"}){
   @scene({season:"winter"}){ // error! season is already defined in parent block.
   }
 }
