@@ -1,0 +1,6 @@
+When update version, modify "VERION" of these files.
+
+- Lib/Meta.fs
+- Makefile.def
+- build.fsk
+
