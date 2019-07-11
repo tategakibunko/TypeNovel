@@ -26,8 +26,8 @@ module Validate = begin
     match Config.lookupMarkupMap ctx.env.config.markupConfig mmapKey with
     | Some(mmap) when not mmap.validate -> ctx
     | _ ->
-      List.fold (fun ctx (key, _) ->
-        let ctx' = validateConstraintIsUsed ctx key spos children
+      List.fold (fun ctx (key, value) ->
+        let ctx' = validateConstraintIsUsed ctx key value spos children
         let ctx' = validateDuplicateAnnotKey ctx' key spos
         ctx'
       ) ctx kvs
@@ -42,9 +42,17 @@ module Validate = begin
     | _ -> validateUndefinedAnnotKey ctx name spos
   | _ -> failwith "validateAnnotNode: Invalid argument(not a annot node)."
 
-  and validateConstraintIsUsed (ctx: EvalContext) (key: string) (pos: SrcRange) (nodes: Node list) = 
-    match Ast.findAnnot key nodes with
-    | None -> 
+  and validateConstraintIsUsed (ctx: EvalContext) (key: string) (value: Expr) (pos: SrcRange) (nodes: Node list) = 
+    match Ast.findAnnot key nodes, value with
+    // [Update since v0.9.1]
+    // If constraint value is "?", annotation check is ignored.
+    //
+    // [example] @scene({time:"?"}){} => <scene data-time='?'></scene>
+    //
+    // This is useful when you want to add attribute like 'data-time' to html,
+    // but don't want to check whether annotation is declared or not.
+    | _, StrExpr("?") -> ctx
+    | None, _ -> 
       let error = sprintf "'%s' is not annotated in this block!" key
       {ctx with errors = (error, pos) :: ctx.errors}
     | _ -> ctx
