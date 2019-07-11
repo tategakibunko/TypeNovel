@@ -8,7 +8,7 @@ open Fake.IO
 open Fake.IO.FileSystemOperators
 open Fake.IO.Globbing.Operators
 
-let version = "0.9.0"
+let version = "0.9.1"
 
 Target.initEnvironment()
 Target.create "Clean" <| fun _ ->

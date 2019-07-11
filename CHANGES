@@ -6,7 +6,7 @@ Mark "*": bug fixed.
 Mark "!": change that can break compatibility with older version
 ===============================================================================
 
-version 0.9.1
+version 0.9.1, 2019/07/11
 ==========================
 o Support `ignored constraint`(not warned even if it's not annotated in body text) by setting it's value to "?".
 o [PR#2] Use FAKE and Paket for building artifacts.
