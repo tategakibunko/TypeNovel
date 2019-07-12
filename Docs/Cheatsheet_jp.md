@@ -38,8 +38,6 @@ TypeNovelのバージョンを表示します。
 
 もし`tnconfig.json`も存在しない場合は、初期設定が使用されます。
 
-If `tnconfig.json` is not found too, default configuration is used.
-
 ### --usage
 
 コマンドラインの使用方法を表示します。
