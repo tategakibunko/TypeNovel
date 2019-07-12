@@ -2,39 +2,47 @@
   "warnDuplicateConstraint": true,
   "warnUndefinedConstraint": true,
   "warnUnannotatedConstraint": true,
-  "markupMap":{
-    "//":"-----------------------",
+  "markupMap": {
+    "//": "-----------------------",
     "//": "[example]",
     "//": "@chapter('prologue', 2)",
-    "//":"-----------------------",
-    "@chapter":{
+    "//": "-----------------------",
+    "@chapter": {
       "before": "<h<arg2>>",
       "after": "</h<arg2>>",
       "content": "<arg1>"
     },
-    "@pre":{
+    "@pre": {
       "whiteSpace": "pre"
     },
-    "@nonvalidate":{
+    "@nonvalidate": {
       "validate": false
     },
-    "@scene":{
+    "@scene": {
       "tagName": "div",
       "className": "<name> <arg2>"
     },
-    "//":"-----------------------",
+    "//": "-----------------------",
     "//": "[example]",
     "//": "@speak('John')",
-    "//":"-----------------------",
-    "@speak":{
+    "//": "-----------------------",
+    "@speak": {
       "tagName": "div",
       "className": "speak",
       "attributes": {
-	"data-character": "<arg1>"
+        "data-character": "<arg1>"
       },
       "//": "Japanese style quotations",
-      "before":"&#x300c;",
+      "before": "&#x300c;",
       "after": "&#x300d;"
+    },
+    "//": "-----------------------",
+    "//": "[example]",
+    "//": "$ruby('漢字', 'かんじ')",
+    "//": "-----------------------",
+    "$ruby": {
+      "validate": false,
+      "content": "<arg1><rt><arg2></rt>"
     }
   }
 }
