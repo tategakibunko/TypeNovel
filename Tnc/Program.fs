@@ -87,7 +87,7 @@ let main(args) =
         if errors.Length > 0 then
           printErrors env errors
         if env.outputFile = "" then
-          System.Console.WriteLine(output)
+          stdout.WriteLine(output)
         else
           let inputFileDir = System.IO.Path.GetDirectoryName(inputFilePath)
           let outputFilePath = System.IO.Path.Combine(inputFileDir, env.outputFile)
