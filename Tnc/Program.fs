@@ -54,11 +54,11 @@ let createEnvFromCmdArgs args =
 
 let printError ((error: string), (pos: SrcRange)) =
   let (r1, r2) = pos
-  printfn "%s(line:%d) %s" r1.pos_fname (r1.pos_lnum + 1) error
+  stderr.WriteLine (sprintf "%s(line:%d) %s" r1.pos_fname (r1.pos_lnum + 1) error)
 
 let printErrors (env: Environment) (errors: (string * SrcRange) list) =
   List.iter printError errors
-  printfn "error count = %d\n" errors.Length
+  stderr.WriteLine (sprintf "error count = %d\n" errors.Length)
 
 [<EntryPoint>]
 let main(args) =    
