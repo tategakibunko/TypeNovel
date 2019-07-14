@@ -6,7 +6,7 @@ Mark "*": bug fixed.
 Mark "!": change that can break compatibility with older version
 ===============================================================================
 
-version 0.9.2
+version 0.9.2, 2019/07/14
 ==========================
 o Added $ruby markupMap in default tnconfig.json. [usage]: $ruby("漢字", "かんじ").
 * Use stdout for output html, stderr for error message.
