@@ -3,10 +3,8 @@
   "warnUndefinedConstraint": true,
   "warnUnannotatedConstraint": true,
   "markupMap": {
-    "//": "-----------------------",
     "//": "[example]",
     "//": "@chapter('prologue', 2)",
-    "//": "-----------------------",
     "@chapter": {
       "before": "<h<arg2>>",
       "after": "</h<arg2>>",
@@ -22,10 +20,8 @@
       "tagName": "div",
       "className": "<name> <arg2>"
     },
-    "//": "-----------------------",
     "//": "[example]",
     "//": "@speak('John')",
-    "//": "-----------------------",
     "@speak": {
       "tagName": "div",
       "className": "speak",
@@ -36,10 +32,8 @@
       "before": "&#x300c;",
       "after": "&#x300d;"
     },
-    "//": "-----------------------",
     "//": "[example]",
     "//": "$ruby('漢字', 'かんじ')",
-    "//": "-----------------------",
     "$ruby": {
       "validate": false,
       "content": "<arg1><rt><arg2></rt>"
