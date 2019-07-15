@@ -56,10 +56,6 @@ let printError ((error: string), (pos: SrcRange)) =
   let (r1, r2) = pos
   stderr.WriteLine (sprintf "%s(line:%d) %s" r1.pos_fname (r1.pos_lnum + 1) error)
 
-let printErrors (env: Environment) (errors: (string * SrcRange) list) =
-  List.iter printError errors
-  stderr.WriteLine (sprintf "error count = %d\n" errors.Length)
-
 [<EntryPoint>]
 let main(args) =    
   try
@@ -85,7 +81,7 @@ let main(args) =
         let errors = Validate.validate env ast
         let output = (Eval.eval env ast) + "\n"
         if errors.Length > 0 then
-          printErrors env errors
+          List.iter printError errors
         if env.outputFile = "" then
           stdout.WriteLine(output)
         else
