@@ -6,7 +6,7 @@ Mark "*": bug fixed.
 Mark "!": change that can break compatibility with older version
 ===============================================================================
 
-version 0.9.3
+version 0.9.3, 2019/07/16
 ==========================
 * Remain \u3000 for head-space when trimming.
 
