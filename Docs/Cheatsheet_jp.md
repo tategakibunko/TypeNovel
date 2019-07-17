@@ -343,7 +343,7 @@ HTML出力のID名を定義します。
 
 ```javascript
 @speak('taro'){
-  Hello, world!
+  "Hello, world!"
 }
 ```
 
@@ -351,17 +351,17 @@ HTML出力のID名を定義します。
 
 ```html
 <div class="speak" data-character='taro'>
-  Hello, world!
+  "Hello, world!"
 </div>
 ```
 
 ##### before, after, content
 
-`before`は中身のテキストの前に差し込まれるテキストです。
+`before`は中身のテキストの**前に**差し込まれるテキストです。
 
-`after` は中身のテキストの後に差し込まれるテキストです。
+`after` は中身のテキストの**後に**差し込まれるテキストです。
 
-`content`は中身のテキストそのものとして扱われます。
+`content`は中身のテキスト**そのもの**として扱われます。
 
 以下に例を示します。
 

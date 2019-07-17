@@ -2,54 +2,66 @@
 
 Here is recommended guidelines.
 
-## 1. Use @speak tag for speech text.
+## 1. Consider using @speak tag for speech text.
 
 If you want to write speech of some character, we recommend you to use `@speak` tag that is already defined in  `tnconfig.json` by default.
 
-Definition of `@speak` is following.
+Definitions of `@speak`, `@speak-jp`, `@speak-latin` is following.
 
 ```javascript
 {
   "markupMap": {
     "@speak": {
-      attributes:{
-	   "data-person": "<arg1>",
+      "tagName": "div",
+      "className": "speak",
+      "attributes":{
+	   "data-character": "<arg1>"
+      }
+    },
+    "@speak-latin": {
+      "tagName": "div",
+      "className": "speak",
+      "attributes":{
+	   "data-character": "<arg1>"
        "before":"\"",
        "after": "\""
+      }
+    },
+    "@speak-jp": {
+      "tagName": "div",
+      "className": "speak",
+      "attributes":{
+	   "data-character": "<arg1>",
+       "before":"&#x300c;",
+       "after": "&#x300d;"
       }
     }
   }
 }
 ```
 
-Change `before` and `after` value according to your language. For example, if you're Japanese, use`「`(U+300C) for `before`, and `」`(U+300D) for `after`.
+Note that if you use `@speak-latin`, `@speak-jp`, you don't have to enclose quotation mark for speech text.
 
-If you wrote speech by `@speak` tag...
+So if you write like this,
 
-```javascipt
-@scene({time:"morning"}){
-  @speak('John'){
-    Hi, $time("good morning!") // "Hi, <time>good morning!</time>"
-  }
+```javascript
+@speak-latin('Michael Jackson'){
+  This is it!
 }
 ```
 
-Output is following.
+you'll get following output.
 
 ```html
-<scene data-time="morning">
-  <speak data-person="John">
-    "Hi, <time>good morning!</time>"
-  </speak>
-</scene>
+<!-- heading and trailing quotation(") is auto inserted! -->
+<div class="speak" data-character="Michael Jackson">
+  "This is it!"
+</div>
 ```
 
-Speaker of this speech is described in `data-person` in `<speak>` tag.
+In this html, speaker of speech is described in `data-character` in `<speak>` tag.
 
 It's very context aware and meaningful, and NLP friendly.
-
-Note that heading and trailing `"`  are automatically inserted by markupMap of `@spaek`.
-
 
 ## 2. Structure story, devide source
 

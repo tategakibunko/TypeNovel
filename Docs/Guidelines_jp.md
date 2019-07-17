@@ -4,49 +4,62 @@
 
 ## 1. 台詞テキストには@speakタグを使おう
 
-登場人物の台詞を記述するときは、`@speak`タグを使うことをお勧めします（初期設定の`tnconfig.json`にすでに登録されています）。
+登場人物の台詞を記述するときは、`@speak`系のタグを使うことをお勧めします（初期設定の`tnconfig.json`にすでに登録されています）。
 
-`@speak`タグは次のように定義されています。
+`@speak`, `@speak-latin`, `@speak-jp` タグは、それぞれ次のように定義されています。
 
 ```javascript
 {
   "markupMap": {
     "@speak": {
-      attributes:{
-	   "data-person": "<arg1>",
+      "tagName": "div",
+      "className": "speak",
+      "attributes":{
+	   "data-character": "<arg1>"
+      }
+    },
+    "@speak-latin": {
+      "tagName": "div",
+      "className": "speak",
+      "attributes":{
+	   "data-character": "<arg1>"
        "before":"\"",
        "after": "\""
+      }
+    },
+    "@speak-jp": {
+      "tagName": "div",
+      "className": "speak",
+      "attributes":{
+	   "data-character": "<arg1>",
+       "before":"&#x300c;",
+       "after": "&#x300d;"
       }
     }
   }
 }
 ```
 
-`before`と`after`の値は、使用する言語に合わせて変更して下さい。
+`@speak-latin`や`@speak-jp`を使うと、台詞テキストを引用符で囲う必要がなくなることに注意して下さい。
 
-> 例えば日本語であれば`before`は、`「`(U+300C)で、`after`は`」`(U+300D)とすると良いでしょう。
+例えば次のように記述すると、
 
-さて、`before`と`after`を日本語用のものに変えた後に、台詞テキストを`@speak`タグで記述すると、
-
-```javascipt
-@scene({time:"朝"}){
-  @speak('ジョン'){
-    やあ, $time("おはよう！") // "やあ, <time>おはよう！</time>"
-  }
+```javascript
+@speak-latin('Michael Jackson'){
+  This is it!
 }
 ```
 
-出力は次のようになります。
+次のような出力になります。
 
 ```html
-<scene data-time="朝">
-  <speak data-person="ジョン">
-    「やあ、<time>おはよう！</time>」
-  </speak>
-</scene>
+<!-- heading and trailing quotation(") is auto inserted! -->
+<div class="speak" data-character="Michael Jackson">
+  "This is it!"
+</div>
 ```
 
-話者（ジョン）の情報が`<speak>`タグに`data-person`として記載されています。
+このHTMLでは、話者（ジョン）の情報が`<speak>`タグに`data-character`として記載されています。
 
 文脈による意味情報が詰まっており、とても自然言語処理のしやすいテキストです。
 
@@ -57,7 +70,7 @@
 
 TypeNovelでは、外部のファイルを`$include("filename")`という形で取り込むことが出来ます。
 
-全テキストをシーンごとに分割することをお勧めします。
+テキストをシーンごとに分割することをお勧めします。
 
 ```javascript
 // 良い例

@@ -3,18 +3,8 @@
   "warnUndefinedConstraint": true,
   "warnUnannotatedConstraint": true,
   "markupMap": {
-    "//": "[example]",
-    "//": "@chapter('prologue', 2)",
-    "@chapter": {
-      "before": "<h<arg2>>",
-      "after": "</h<arg2>>",
-      "content": "<arg1>"
-    },
     "@pre": {
       "whiteSpace": "pre"
-    },
-    "@nonvalidate": {
-      "validate": false
     },
     "@scene": {
       "tagName": "div",
@@ -23,6 +13,23 @@
     "//": "[example]",
     "//": "@speak('John')",
     "@speak": {
+      "tagName": "div",
+      "className": "speak",
+      "attributes": {
+        "data-character": "<arg1>"
+      }
+    },
+    "@speak-latin": {
+      "tagName": "div",
+      "className": "speak",
+      "attributes": {
+        "data-character": "<arg1>"
+      },
+      "//": "Latin style quotations",
+      "before": "\"",
+      "after": "\""
+    },
+    "@speak-jp": {
       "tagName": "div",
       "className": "speak",
       "attributes": {

@@ -1,5 +1,5 @@
 @scene(){
   before
-  $include("extern.tn")
+  $include("external.tn")
   after
 }

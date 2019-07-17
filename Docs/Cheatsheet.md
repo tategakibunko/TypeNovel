@@ -343,7 +343,7 @@ And here is example TypeNovel using `@speak`.
 
 ```javascript
 @speak('taro'){
-  Hello, world!
+  "Hello, world!"
 }
 ```
 
@@ -351,17 +351,17 @@ Then compilation result is here.
 
 ```html
 <div class="speak" data-character='taro'>
-  Hello, world!
+  "Hello, world!"
 </div>
 ```
 
 ##### before, after, content
 
-`before` is text before content text.
+`before` is text **before** content text.
 
-`after` is text after content text.
+`after` is text **after** content text.
 
-`content` is treated as content text of target markup.
+`content` is treated as **content text itself** of target markup.
 
 Here is example markup map.
 
