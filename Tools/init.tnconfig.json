@@ -11,7 +11,7 @@
       "className": "<name> <arg2>"
     },
     "//": "[example]",
-    "//": "@speak('John')",
+    "//": "@speak('John'){ speech text here }",
     "@speak": {
       "tagName": "div",
       "className": "speak",
