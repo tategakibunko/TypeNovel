@@ -6,41 +6,46 @@ Here is recommended guidelines.
 
 If you want to write speech of some character, we recommend you to use `@speak` tag that is already defined in  `tnconfig.json` by default.
 
-Definitions of `@speak`, `@speak-jp`, `@speak-latin` is following.
+Markup map of `@speak` is following.
 
 ```javascript
-{
-  "markupMap": {
-    "@speak": {
-      "tagName": "div",
-      "className": "speak",
-      "attributes":{
-	   "data-character": "<arg1>"
-      }
-    },
-    "@speak-latin": {
-      "tagName": "div",
-      "className": "speak",
-      "attributes":{
-	   "data-character": "<arg1>"
-       "before":"\"",
-       "after": "\""
-      }
-    },
-    "@speak-jp": {
-      "tagName": "div",
-      "className": "speak",
-      "attributes":{
-	   "data-character": "<arg1>",
-       "before":"&#x300c;",
-       "after": "&#x300d;"
-      }
-    }
+"@speak": {
+  "tagName": "div",
+  "className": "speak",
+  "attributes":{
+    "data-character": "<arg1>"
   }
 }
 ```
 
-Note that if you use `@speak-latin`, `@speak-jp`, you don't have to enclose quotation mark for speech text.
+By using `@speak` for speech text, speaker of speech will be described in `data-character` attribute in html tag.
+
+It's very context aware and meaningful, and NLP friendly.
+
+Or you may want to define your own `@speak` for ease of markup like this.
+
+```javascript
+"@speak-latin": {
+  "tagName": "div",
+  "className": "speak",
+  "attributes":{
+    "data-character": "<arg1>"
+  },
+  "before":"\"",
+  "after": "\""
+},
+"@speak-jp": {
+  "tagName": "div",
+  "className": "speak",
+  "attributes":{
+    "data-character": "<arg1>"
+  },
+  "before":"&#x300c;",
+  "after": "&#x300d;"
+}
+```
+
+Now you don't have to enclose quotation mark for speech text by using `@speak-latin` or `@speak-jp`.
 
 So if you write like this,
 
@@ -58,10 +63,6 @@ you'll get following output.
   "This is it!"
 </div>
 ```
-
-In this html, speaker of speech is described in `data-character` in `<speak>` tag.
-
-It's very context aware and meaningful, and NLP friendly.
 
 ## 2. Structure story, devide source
 

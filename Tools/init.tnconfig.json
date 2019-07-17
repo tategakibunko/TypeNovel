@@ -19,26 +19,6 @@
         "data-character": "<arg1>"
       }
     },
-    "@speak-latin": {
-      "tagName": "div",
-      "className": "speak",
-      "attributes": {
-        "data-character": "<arg1>"
-      },
-      "//": "Latin style quotations",
-      "before": "\"",
-      "after": "\""
-    },
-    "@speak-jp": {
-      "tagName": "div",
-      "className": "speak",
-      "attributes": {
-        "data-character": "<arg1>"
-      },
-      "//": "Japanese style quotations",
-      "before": "&#x300c;",
-      "after": "&#x300d;"
-    },
     "//": "[example]",
     "//": "$ruby('漢字', 'かんじ')",
     "$ruby": {

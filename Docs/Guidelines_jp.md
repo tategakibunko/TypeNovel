@@ -6,43 +6,48 @@
 
 登場人物の台詞を記述するときは、`@speak`系のタグを使うことをお勧めします（初期設定の`tnconfig.json`にすでに登録されています）。
 
-`@speak`, `@speak-latin`, `@speak-jp` タグは、それぞれ次のように定義されています。
+`@speak`タグは次のように定義されています。
 
 ```javascript
-{
-  "markupMap": {
-    "@speak": {
-      "tagName": "div",
-      "className": "speak",
-      "attributes":{
-	   "data-character": "<arg1>"
-      }
-    },
-    "@speak-latin": {
-      "tagName": "div",
-      "className": "speak",
-      "attributes":{
-	   "data-character": "<arg1>"
-       "before":"\"",
-       "after": "\""
-      }
-    },
-    "@speak-jp": {
-      "tagName": "div",
-      "className": "speak",
-      "attributes":{
-	   "data-character": "<arg1>",
-       "before":"&#x300c;",
-       "after": "&#x300d;"
-      }
-    }
+"@speak": {
+  "tagName": "div",
+  "className": "speak",
+  "attributes":{
+    "data-character": "<arg1>"
   }
 }
 ```
 
-`@speak-latin`や`@speak-jp`を使うと、台詞テキストを引用符で囲う必要がなくなることに注意して下さい。
+台詞を記述するのに`@speak`タグを使うと、話者の情報がHTMLタグの`data-character`属性として記載されます。
 
-例えば次のように記述すると、
+文脈による意味情報が詰まっており、とても自然言語処理のしやすいテキストです。
+
+ちなみに人によっては、次のような独自の`@speak`タグを定義したくなるかもしれません。
+
+```javascript
+"@speak-latin": {
+  "tagName": "div",
+  "className": "speak",
+  "attributes":{
+    "data-character": "<arg1>"
+  },
+  "before":"\"",
+  "after": "\""
+},
+"@speak-jp": {
+  "tagName": "div",
+  "className": "speak",
+  "attributes":{
+    "data-character": "<arg1>"
+  },
+  "before":"&#x300c;",
+  "after": "&#x300d;"
+}
+```
+
+このように定義した`@speak-latin`や`@speak-jp`を使うと、台詞テキストを引用符で囲う必要がなくなります。
+
+つまり次のように記述すると、
 
 ```javascript
 @speak-latin('Michael Jackson'){
@@ -58,13 +63,6 @@
   "This is it!"
 </div>
 ```
-
-このHTMLでは、話者（ジョン）の情報が`<speak>`タグに`data-character`として記載されています。
-
-文脈による意味情報が詰まっており、とても自然言語処理のしやすいテキストです。
-
-ちなみに先頭と最後の「かぎ括弧」が`@speak`タグの`markupMap`によって、自動的に追記されていることに注意して下さい。
-
 
 ## 2. 物語を構造化し、分割しよう
 
