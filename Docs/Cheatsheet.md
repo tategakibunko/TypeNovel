@@ -314,7 +314,7 @@ If `validate` is set to `false`, errors of constraints and annotations in target
 }
 ```
 
-##### selfClosing
+##### selfClosing (since version 0.9.4)
 
 If `selfClosing` is set to `true`, target markup is not required to close.
 
