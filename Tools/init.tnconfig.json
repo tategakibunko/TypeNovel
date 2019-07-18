@@ -48,6 +48,12 @@
         "width": "<arg2>",
         "height": "<arg3>"
       }
+    },
+    "$a": {
+      "validate": false,
+      "attributes": {
+	"href": "<arg1>"
+      }
     }
   }
 }
