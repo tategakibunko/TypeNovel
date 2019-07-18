@@ -313,6 +313,25 @@ If `validate` is set to `false`, errors of constraints and annotations in target
   }
 }
 ```
+
+##### selfClosing
+
+If `selfClosing` is set to `true`, target markup is not required to close.
+
+For example, `<img>`, `<br>`, `<hr>` are all self-closing tags. You should define them in markupMap if you use them.
+
+```javascript
+// [usage] $img("foo.jpg")
+"$img":{
+  "tagName": "<name>",
+  "validate": false,
+  "selfClosing": true,
+  "attributes":{
+    "src": "<arg1>"
+  }
+}
+```
+
 ##### whiteSpace
 
 If `whiteSpace` is set to `"pre"`, all newline, whitespace, tab are kept like html `<pre>` tag.

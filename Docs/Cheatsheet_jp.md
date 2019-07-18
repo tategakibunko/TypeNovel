@@ -313,9 +313,28 @@ HTML出力のID名を定義します。
   }
 }
 ```
+
+##### selfClosing
+
+`selfClosing`項目を`true`に設定すると、対象のマークアップは閉じタグが不要になります。
+
+例えば`<img>`, `<br>`, `<hr>`などは全て閉じタグが不要なタグです。これらのタグを使用する場合は、markupMapで閉じタグが不要であることを設定する必要があります。
+
+```javascript
+// [usage] $img("foo.jpg")
+"$img":{
+  "tagName": "<name>",
+  "validate": false,
+  "selfClosing": true,
+  "attributes":{
+    "src": "<arg1>"
+  }
+}
+```
+
 ##### whiteSpace
 
-`whiteSpace`盲目を`"pre"`と設定すると, HTMLの`<pre>`タグのように全ての改行や空白がそのまま表示されます。
+`whiteSpace`項目を`"pre"`と設定すると, HTMLの`<pre>`タグのように全ての改行や空白がそのまま表示されます。
 
 コンパイルオプションとして`--release`を使用すると、通常は全ての改行空白は取り除かれますが、`whiteSpace:'pre'`が設定されている場合は、そのまま残ることに注意して下さい。
 

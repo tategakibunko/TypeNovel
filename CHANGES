@@ -8,6 +8,7 @@ Mark "!": change that can break compatibility with older version
 
 version 0.9.4
 ==========================
+o Added self-closing tag(like <img>, <br>, <hr>) supports.
 ! Deleted `before` and `after` from markupMap of `@speak`.
 ! Removed `@chapter`, `@nonvalidate` from default tnconfig.json.
 
