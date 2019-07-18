@@ -6,6 +6,10 @@ Mark "*": bug fixed.
 Mark "!": change that can break compatibility with older version
 ===============================================================================
 
+version 0.9.5
+==========================
+* Prevent url pattern from being treated as line comment.
+
 version 0.9.4, 2019/07/18
 ==========================
 o Added self-closing tag(like <img>, <br>, <hr>) supports.
