@@ -29,7 +29,7 @@
       "validate": false,
       "selfClosing": true
     },
-    "$hr": {
+    "@hr": {
       "validate": false,
       "selfClosing": true
     },
