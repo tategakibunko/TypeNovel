@@ -56,6 +56,7 @@ module Types = begin
     whiteSpace: string option;
     attributes: MarkupAttr array;
     validate: bool;
+    selfClosing: bool;
   }
   and MarkupAttr = AttrName * AttrValue
   and AttrName = TmplString

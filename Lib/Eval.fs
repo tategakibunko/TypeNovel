@@ -29,7 +29,7 @@ module Eval = begin
     let attrs = evalAttributes name args npos mmapOpt |> StrUtils.spaceBeforeIfStr
     let dataAttrs =  evalDatasetAttr args |> StrUtils.spaceBeforeIfStr
     let otag = "<" + tagName + id + className + attrs + dataAttrs + ">"
-    let ctag = evalCloseTag ctx tagName
+    let ctag = evalCloseTag ctx tagName mmapOpt
     let content = evalAst ctx children |> (evalTagContent ctx name args npos mmapOpt)
     otag + content + ctag
   | _ -> failwith "evalBlockNode: Invalid argument(not a block node)"
@@ -42,6 +42,7 @@ module Eval = begin
 
   and evalTagContentPseudo (name: string) (args: Expr list) (npos: NodePos) (mmapOpt: MarkupMap option) (content: string) =
     match mmapOpt with
+    | Some(mmap) when mmap.selfClosing -> ""
     | Some(mmap) ->
       let before = evalPlaceHolderOpt name args npos "" mmap.before
       let after = evalPlaceHolderOpt name args npos "" mmap.after
@@ -102,8 +103,10 @@ module Eval = begin
       | "" -> name
       | tagName -> tagName
 
-  and evalCloseTag (ctx: EvalContext) (tagName: string) =
-    sprintf "</%s>" tagName
+  and evalCloseTag (ctx: EvalContext) (tagName: string) (mmapOpt: MarkupMap option) =
+    match mmapOpt with
+    | Some(mmap) when mmap.selfClosing -> ""
+    | _ -> sprintf "</%s>" tagName
 
   and evalId (name: string) (args: Expr list) (npos: NodePos) (mmapOpt: MarkupMap option) =
     match mmapOpt with
@@ -157,7 +160,7 @@ module Eval = begin
     let attrs = evalAttributes name args npos mmapOpt |> StrUtils.spaceBeforeIfStr
     let content = evalTagContent ctx name args npos mmapOpt content
     let otag = "<" + tagName + className + attrs + ">"
-    let ctag = evalCloseTag ctx tagName
+    let ctag = evalCloseTag ctx tagName mmapOpt
     otag + content + ctag
   | _ -> failwith "evalAnnotNode: Invalid argument(not a annot node)"
 

@@ -37,6 +37,7 @@ module Config = begin
       whiteSpace = getPropStrOpt json "whiteSpace";
       attributes = parseMarkupConfigEntryTagAttrs json;
       validate = getPropBool json "validate" true;
+      selfClosing = getPropBool json "selfClosing" false;
     }
 
   and parseMarkupConfigEntryTagAttrs (json: JsonValue): MarkupAttr array =

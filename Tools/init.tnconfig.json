@@ -24,6 +24,29 @@
     "$ruby": {
       "validate": false,
       "content": "<arg1><rt><arg2></rt>"
+    },
+    "$br": {
+      "validate": false,
+      "selfClosing": true
+    },
+    "$hr": {
+      "validate": false,
+      "selfClosing": true
+    },
+    "$img": {
+      "validate": false,
+      "selfClosing": true,
+      "attributes": {
+        "src": "<arg1>"
+      }
+    },
+    "$img-wh": {
+      "selfClosing": true,
+      "attributes": {
+        "src": "<arg1>",
+        "width": "<arg2>",
+        "height": "<arg3>"
+      }
     }
   }
 }
