@@ -6,7 +6,7 @@ Mark "*": bug fixed.
 Mark "!": change that can break compatibility with older version
 ===============================================================================
 
-version 0.9.4
+version 0.9.4, 2019/07/18
 ==========================
 o Added self-closing tag(like <img>, <br>, <hr>) supports.
 ! Deleted `before` and `after` from markupMap of `@speak`.
