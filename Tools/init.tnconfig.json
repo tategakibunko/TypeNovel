@@ -41,6 +41,7 @@
       }
     },
     "$img-wh": {
+      "tagName": "img",
       "selfClosing": true,
       "attributes": {
         "src": "<arg1>",
