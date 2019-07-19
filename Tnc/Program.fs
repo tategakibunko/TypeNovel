@@ -67,7 +67,7 @@ let main(args) =
       | Some(_) -> printfn "Created 'tnconfig.json'"
       | None -> printfn "'tnconfig.json' is already exists!"
     else if env.printVersion then
-      printfn "typenovel(version:%s)" env.version
+      stdout.WriteLine env.version
     else if env.printEnv then
       printfn "env:\n%A" env
     else if env.printUsage || (env.inputFile = "") then
