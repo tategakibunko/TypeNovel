@@ -6,9 +6,10 @@ Mark "*": bug fixed.
 Mark "!": change that can break compatibility with older version
 ===============================================================================
 
-version 0.9.5
+version 0.9.5, 2019/07/20
 ==========================
 o Added markupMap "$a" for html link.
+o Added markupMap for text-emphasis($fdot, $odot etc).
 * Prevent url pattern from being treated as line comment.
 
 version 0.9.4, 2019/07/18
