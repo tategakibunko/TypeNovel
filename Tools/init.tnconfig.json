@@ -20,6 +20,23 @@
       }
     },
     "//": "[example]",
+    "//": "Inspired by Machi@notes(){ By Chunsoft@1998 }",
+    "@notes": {
+      "tagName": "span",
+      "className": "<name>",
+      "validate": false
+    },
+    "//": "[example]",
+    "//": "@tip('IMO'){ 'In my opinion' }, it's correct.",
+    "@tip": {
+      "tagName": "span",
+      "className": "<name>",
+      "validate": false,
+      "attributes": {
+        "title": "<arg1>"
+      }
+    },
+    "//": "[example]",
     "//": "$ruby('漢字', 'かんじ')",
     "$ruby": {
       "validate": false,
@@ -104,6 +121,14 @@
     "$osesame": {
       "tagName": "span",
       "className": "empha open sesame",
+      "validate": false
+    },
+    "//": "[example]",
+    "//": "$icon('calendar outline')",
+    "$icon": {
+      "tagName": "<name>",
+      "className": "<arg1>",
+      "content": "",
       "validate": false
     }
   }

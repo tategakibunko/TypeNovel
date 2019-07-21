@@ -6,6 +6,10 @@ Mark "*": bug fixed.
 Mark "!": change that can break compatibility with older version
 ===============================================================================
 
+version 0.9.6
+==========================
+o Added $icon, @notes, @tip to markupMap.
+
 version 0.9.5, 2019/07/20
 ==========================
 o Added markupMap "$a" for html link.
