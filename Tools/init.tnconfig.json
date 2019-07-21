@@ -36,6 +36,11 @@
         "title": "<arg1>"
       }
     },
+    "@dropcaps": {
+      "tagName": "div",
+      "className": "<name>",
+      "validate": false
+    },
     "//": "[example]",
     "//": "$ruby('漢字', 'かんじ')",
     "$ruby": {
