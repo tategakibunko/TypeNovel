@@ -6,7 +6,7 @@ Mark "*": bug fixed.
 Mark "!": change that can break compatibility with older version
 ===============================================================================
 
-version 0.9.6, 2019/07/21
+version 0.9.6
 ==========================
 o Added $icon, @notes, @tip to markupMap.
 ! Remove $img-wh, update arguments of $img instead.
