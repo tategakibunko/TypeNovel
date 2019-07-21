@@ -50,21 +50,17 @@
       "validate": false,
       "selfClosing": true
     },
+    "//": "[example]",
+    "//": "$img(<img-path>, <width>, <height>, <'float start'|'float end'|''>)",
+    "//": "$img('path/to/img.png', 100, 100, '')",
     "$img": {
       "validate": false,
       "selfClosing": true,
-      "attributes": {
-        "src": "<arg1>"
-      }
-    },
-    "$img-wh": {
-      "tagName": "img",
-      "validate": false,
-      "selfClosing": true,
+      "className": "<arg4>",
       "attributes": {
         "src": "<arg1>",
-        "width": "<arg2>",
-        "height": "<arg3>"
+	"width": "<arg2>",
+	"height": "<arg3>"
       }
     },
     "$a": {
