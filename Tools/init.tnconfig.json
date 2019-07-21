@@ -126,6 +126,19 @@
       "className": "<arg1>",
       "content": "&#x20;",
       "validate": false
+    },
+    "//": "[example]",
+    "//": "$tcy('!?')",
+    "$tcy": {
+      "tagName": "span",
+      "className": "tcy",
+      "validate": false
+    },
+    "$page-break": {
+      "tagName": "hr",
+      "className": "page break before",
+      "selfClosing": true,
+      "validate": false
     }
   }
 }

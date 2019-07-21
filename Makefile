@@ -2,6 +2,7 @@ include Makefile.def
 all: mac win linux
 
 rebuild:
+	cd Tools && make
 	cd Lib && make
 	cd Tnc && make
 
