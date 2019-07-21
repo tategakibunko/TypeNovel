@@ -70,7 +70,7 @@
     "$a": {
       "validate": false,
       "attributes": {
-	"href": "<arg1>"
+        "href": "<arg1>"
       }
     },
     "$fdot": {
