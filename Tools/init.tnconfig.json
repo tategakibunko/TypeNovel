@@ -128,7 +128,7 @@
     "$icon": {
       "tagName": "<name>",
       "className": "<arg1>",
-      "content": "",
+      "content": "&#x20;",
       "validate": false
     }
   }
