@@ -21,7 +21,19 @@
     },
     "//": "[example]",
     "//": "@speak-table-start(<chara-key>, <img-key>){ speech text here }",
-    "//": "@speak-table('john', 'img-key1'){ speech text here }",
+    "//": "@speak-table-start('john', 'img-key1'){ speech text here }",
+    "@speak-table-start": {
+      "tagName": "table",
+      "className": "speak-table",
+      "before": "<tbody><tr><td class='name' data-chara-key='<arg1>' data-image-key='<arg2>'></td><td class='text'><div class='speech-bubble start'><div class='content' data-chara-key='<arg1>'>",
+      "after": "</div></div></td></tr></tbody>"
+    },
+    "@speak-table-end": {
+      "tagName": "table",
+      "className": "speak-table",
+      "before": "<tbody><tr><td class='text'><div class='speech-bubble end'><div class='content' data-chara-key='<arg1>'>",
+      "after": "</div></div></td><td class='name' data-chara-key='<arg1>' data-image-key='<arg2>'></td></tr></tbody>"
+    },
     "@speak-table": {
       "tagName": "table",
       "className": "<name>",
