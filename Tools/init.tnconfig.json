@@ -20,7 +20,8 @@
       }
     },
     "//": "[example]",
-    "//": "@speak-table('John', 'img-key'){ speech text here }",
+    "//": "@speak-table-start(<chara-key>, <img-key>){ speech text here }",
+    "//": "@speak-table('john', 'img-key1'){ speech text here }",
     "@speak-table": {
       "tagName": "table",
       "className": "<name>",
@@ -81,6 +82,12 @@
       "attributes": {
         "href": "<arg1>"
       }
+    },
+    "$b": {
+      "validate": false
+    },
+    "$strong": {
+      "validate": false
     },
     "$fdot": {
       "tagName": "span",

@@ -8,7 +8,7 @@ Mark "!": change that can break compatibility with older version
 
 version 0.9.6
 ==========================
-o Added $icon, @notes, @tip, $tcy, $page-break, @dropcaps, @speak-table to markupMap.
+o Added $icon, @notes, @tip, $tcy, $page-break, @dropcaps, @speak-table, $b, $strong to markupMap.
 ! Remove $img-wh, update arguments of $img instead.
 
 version 0.9.5, 2019/07/20
