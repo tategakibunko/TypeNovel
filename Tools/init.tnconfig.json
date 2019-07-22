@@ -53,7 +53,7 @@
       "className": "<name>",
       "validate": false,
       "attributes": {
-        "title": "<arg1>"
+        "data-title": "<arg1>"
       }
     },
     "@dropcaps": {
