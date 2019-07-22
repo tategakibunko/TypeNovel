@@ -6,9 +6,9 @@ Mark "*": bug fixed.
 Mark "!": change that can break compatibility with older version
 ===============================================================================
 
-version 0.9.6
+version 0.9.6, 2019/07/22
 ==========================
-o Added $icon, @notes, @tip, $tcy, $page-break, @dropcaps, @speak-table-start, @speak-table-end, $b, $strong to markupMap.
+o Added $icon, @notes, @tip, $tcy, $page-break, @dropcaps, @speak-table-start, @speak-table-end, $b, $strong, @line to markupMap.
 ! Remove $img-wh, update arguments of $img instead.
 
 version 0.9.5, 2019/07/20
