@@ -14,10 +14,18 @@
     "//": "@speak('John'){ speech text here }",
     "@speak": {
       "tagName": "div",
-      "className": "speak",
+      "className": "<name>",
       "attributes": {
         "data-character": "<arg1>"
       }
+    },
+    "//": "[example]",
+    "//": "@speak-table('John', 'img-key'){ speech text here }",
+    "@speak-table": {
+      "tagName": "table",
+      "className": "<name>",
+      "before": "<tbody><tr><td class='name' data-chara-key='<arg1>' data-image-key='<arg2>'></td><td class='text'><div class='speech-bubble start'><div class='content' data-chara-key='<arg1>'>",
+      "after": "</div></div></td></tr></tbody>"
     },
     "//": "[example]",
     "//": "Inspired by Machi@notes(){ By Chunsoft@1998 }",
