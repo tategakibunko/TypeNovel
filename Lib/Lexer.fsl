@@ -181,12 +181,12 @@ rule token = parse
 | '"' {
   match context.mode with
   | TextMode -> add_buff "\""; token lexbuf
-  | _ -> read_string "\"" "" false lexbuf
+  | _ -> read_string "\"" "" lexbuf
 } 
 | '\'' {
   match context.mode with
   | TextMode -> add_buff "'"; token lexbuf
-  | _ -> read_string "'" "" false lexbuf
+  | _ -> read_string "'" "" lexbuf
 } 
 | int_literal {
   let literal = lexeme lexbuf
@@ -241,20 +241,22 @@ and read_range_comment = parse
 | '*' '/' { token lexbuf }
 | _ { read_range_comment lexbuf }
 
-and read_string mark acm escaping = parse
-| ['"' '\''] {
-  let c = lexeme lexbuf
-  let is_same_mark = (c = mark)
-  match escaping, mark, is_same_mark with
-  | true, "\"", true -> (read_string mark (acm+"\\\"") false lexbuf) // escape double quote between double quoted string.
-  | true, "'", true -> (read_string mark (acm+"\\'") false lexbuf) // escape single quote between single quoted string.
-  | false, "\"", true -> STRING(acm) // string closed by double quote.
-  | false, "'", true -> STRING(acm)  // string closed by single quote.
-  | _, _, _ -> (read_string mark (acm+c) escaping lexbuf)
-  }
-| '\\' { read_string mark acm true lexbuf }
-| [^ '"' '\'' '\\']+ { read_string mark (acm+(lexeme lexbuf)) false lexbuf }
-| eof {
-  // failwith ("ParseError" + LexBuffer<_>.LexemeString lexbuf) 
-  failwith "string literal is not terminated" 
+and read_string terminator acm = parse
+| '\\' _ {
+  let token = lexeme lexbuf
+  let str =
+    match token.[1..1] with
+    | "\\" -> "\\"
+    | "n" -> "\n"
+    | "t" -> "\t"
+    | "r" -> "\r"
+    | s when s = terminator -> s
+    | s -> failwith (sprintf "illegal backslash escape:%s" s)
+  read_string terminator (acm + str) lexbuf
+}
+| _ {
+  match lexeme lexbuf with
+  | s when s = terminator -> STRING(acm)
+  | s when s = "\n" -> newline lexbuf; read_string terminator (acm + s) lexbuf
+  | s -> read_string terminator (acm + s) lexbuf
 }
