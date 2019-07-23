@@ -31,8 +31,7 @@ let nodePos (): NodePos = {
 
 %token <int> INT
 %token <float> FLOAT
-%token <string> STRING_SINGLE
-%token <string> STRING_DOUBLE
+%token <string> STRING
 %token <string> TEXT
 %token <string> IDENT
 %token <string> BLOCK_IDENT
@@ -109,9 +108,6 @@ last_text:
 
 text_node:
 | TEXT { TextNode($1, range parseState) }
-| STRING_SINGLE { TextNode("'" + $1 + "'", range parseState) }
-| STRING_DOUBLE { TextNode("\"" + $1 + "\"", range parseState) }
-| IDENT { TextNode($1, range parseState) }
 
 actual_args: { [] }
 | expr { [$1] }
@@ -128,8 +124,7 @@ obj_members:
 
 obj_pair:
 | IDENT COLON expr { ($1, $3) }
-| STRING_SINGLE COLON expr { ($1, $3) }
-| STRING_DOUBLE COLON expr { ($1, $3) }
+| STRING COLON expr { ($1, $3) }
 
 list:
 | LBRACKET RBRACKET { ListExpr([]) }
@@ -140,8 +135,7 @@ list_members:
 | list_members COMMA expr { $1 @ [$3] }
 
 expr:
-| STRING_SINGLE { StrExpr($1) }
-| STRING_DOUBLE { StrExpr($1) }
+| STRING { StrExpr($1) }
 | INT { IntExpr($1) }
 | FLOAT { FloatExpr($1) }
 | object { $1 }

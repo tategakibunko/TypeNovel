@@ -248,8 +248,8 @@ and read_string mark acm escaping = parse
   match escaping, mark, is_same_mark with
   | true, "\"", true -> (read_string mark (acm+"\\\"") false lexbuf) // escape double quote between double quoted string.
   | true, "'", true -> (read_string mark (acm+"\\'") false lexbuf) // escape single quote between single quoted string.
-  | false, "\"", true -> STRING_DOUBLE(acm) // string closed by double quote.
-  | false, "'", true -> STRING_SINGLE(acm)  // string closed by single quote.
+  | false, "\"", true -> STRING(acm) // string closed by double quote.
+  | false, "'", true -> STRING(acm)  // string closed by single quote.
   | _, _, _ -> (read_string mark (acm+c) escaping lexbuf)
   }
 | '\\' { read_string mark acm true lexbuf }
