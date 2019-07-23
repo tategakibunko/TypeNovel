@@ -9,6 +9,7 @@ Mark "!": change that can break compatibility with older version
 version 0.9.7
 ==========================
 * Modify attribute of @tip from 'title' to 'data-title'.
+! Rename @tip to $tip, @notes to $notes.
 
 version 0.9.6, 2019/07/22
 ==========================
