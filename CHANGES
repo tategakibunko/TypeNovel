@@ -8,6 +8,7 @@ Mark "!": change that can break compatibility with older version
 
 version 0.9.7
 ==========================
+* Fix escape sequences in string literal.
 * Modify attribute of @tip from 'title' to 'data-title'.
 ! Rename @tip to $tip, @notes to $notes.
 
