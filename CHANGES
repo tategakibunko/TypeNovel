@@ -6,6 +6,10 @@ Mark "*": bug fixed.
 Mark "!": change that can break compatibility with older version
 ===============================================================================
 
+version 0.9.8
+==========================
+o Supports both $tip and @tip, and $notes and @notes.
+
 version 0.9.7, 2019/07/23
 ==========================
 ! Rename @speak-table-start/end to @sb-start/end.

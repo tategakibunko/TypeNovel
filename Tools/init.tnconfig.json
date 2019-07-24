@@ -61,20 +61,24 @@
     "//": "[example]",
     "//": "Inspired by Machi$notes('By Chunsoft@1998')",
     "$notes": {
-      "tagName": "span",
-      "className": "<name>",
+      "tagName": "<name>",
       "content": "<arg1>",
       "validate": false
     },
     "//": "[example]",
     "//": "$tip('IMO', 'In my opinion'), it's correct.",
     "$tip": {
-      "tagName": "span",
-      "className": "<name>",
+      "tagName": "<name>",
       "content": "<arg2>",
       "validate": false,
       "attributes": {
         "data-title": "<arg1>"
+      }
+    },
+    "@tip": {
+      "tagName": "<name>",
+      "attributes": {
+	"data-title": "<arg1>"
       }
     },
     "//": "[example]",
