@@ -6,7 +6,7 @@ Mark "*": bug fixed.
 Mark "!": change that can break compatibility with older version
 ===============================================================================
 
-version 0.9.8
+version 0.9.8, 2019/07/25
 ==========================
 o Supports both $tip and @tip, and $notes and @notes.
 
