@@ -13,9 +13,14 @@ all: pkg.temp pkg.dist
 # [example]
 # <pkg-ref id="com.antiscroll.typenovel" version="0.9.0" onConclusion="none">TypeNovel.pkg</pkg-ref>
 pkg.temp:
-	rm -f $(PKG_TEMP)
+	rm *.pkg
 	chmod +x $(PKG_SCRIPTS_DIR)/*
 	pkgbuild --root $(PKG_ROOT) --identifier $(PKG_IDENT) --install-location $(PKG_INST_LOC) --version $(VERSION) --scripts $(PKG_SCRIPTS_DIR) $(PKG_TEMP)
+
+#pkg.temp:
+#	rm -f $(PKG_TEMP)
+#	chmod +x $(PKG_SCRIPTS_DIR)/*
+#	pkgbuild --root $(PKG_ROOT) --identifier $(PKG_IDENT) --install-location $(PKG_INST_LOC) --version $(VERSION) --scripts $(PKG_SCRIPTS_DIR) $(PKG_TEMP)
 
 # Do once to produce 'distribution.xml'.
 # macpkg.xml:
