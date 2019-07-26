@@ -6,6 +6,11 @@ Mark "*": bug fixed.
 Mark "!": change that can break compatibility with older version
 ===============================================================================
 
+version 0.9.9, 2019/07/26
+==========================
+* Rename dataset name from camel to chain.
+* Escape constraint value.
+
 version 0.9.8, 2019/07/25
 ==========================
 o Supports both $tip and @tip, and $notes and @notes.
