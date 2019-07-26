@@ -68,7 +68,7 @@ module Eval = begin
     let tmpl = TmplString (evalPlaceHolderName name tmpl)
     let tmpl = TmplString (evalPlaceHolderArgs args tmpl)
     let cont = evalPlaceHolderNodePos npos tmpl
-    escape cont
+    cont
 
   and evalPlaceHolderName (name: string) = function
   | TmplString tmpl -> Regex.Replace(tmpl, "<name>", name)
