@@ -2,6 +2,7 @@ namespace TypeNovel.Lib
 
 module Eval = begin
   open TypeNovel.Lib.Types
+  open TypeNovel.Lib.StrUtils
   open System.Text.RegularExpressions
 
   let rec eval (env: Environment) (ast: Ast) =
@@ -24,10 +25,10 @@ module Eval = begin
     let mmapKey = Config.getMarkupMapKey node
     let mmapOpt = Config.lookupMarkupMap ctx.env.config.markupConfig mmapKey
     let tagName = evalOpenTagName name args npos mmapOpt
-    let id = evalId name args npos mmapOpt |> StrUtils.spaceBeforeIfStr
-    let className = evalClassName name args npos mmapOpt |> StrUtils.spaceBeforeIfStr
-    let attrs = evalAttributes name args npos mmapOpt |> StrUtils.spaceBeforeIfStr
-    let dataAttrs =  evalDatasetAttr args |> StrUtils.spaceBeforeIfStr
+    let id = evalId name args npos mmapOpt |> spaceBeforeIfStr
+    let className = evalClassName name args npos mmapOpt |> spaceBeforeIfStr
+    let attrs = evalAttributes name args npos mmapOpt |> spaceBeforeIfStr
+    let dataAttrs =  evalDatasetAttr args |> spaceBeforeIfStr
     let otag = "<" + tagName + id + className + attrs + dataAttrs + ">"
     let ctag = evalCloseTag ctx tagName mmapOpt
     let content = evalAst ctx children |> (evalTagContent ctx name args npos mmapOpt)
@@ -47,7 +48,7 @@ module Eval = begin
       let before = evalPlaceHolderOpt name args npos "" mmap.before
       let after = evalPlaceHolderOpt name args npos "" mmap.after
       let content = match evalPlaceHolderOpt name args npos "" mmap.content with "" -> content | content' -> content'
-      let content = if before <> "" || after <> "" then StrUtils.trimString content else content
+      let content = if before <> "" || after <> "" then trimString content else content
       before + content + after
     | None -> content
 
@@ -56,8 +57,8 @@ module Eval = begin
     | Some(mmap) ->
       match mmap.whiteSpace with
       | Some("pre") -> content
-      | _ -> StrUtils.trimWhiteSpaceNormal content
-    | None -> StrUtils.trimWhiteSpaceNormal content
+      | _ -> trimWhiteSpaceNormal content
+    | None -> trimWhiteSpaceNormal content
 
   and evalPlaceHolderOpt (name: string) (args: Expr list) (npos: NodePos) (ifNoneStr: string ) = function
   | None -> ifNoneStr
@@ -82,7 +83,7 @@ module Eval = begin
       Regex.Replace(tmpl', pholder, pvalue)
     ) tmpl args)
     // remove uncaptured placeholders and chop head and tail.
-    Regex.Replace(cont, "<arg\d>", "") |> StrUtils.trimString
+    Regex.Replace(cont, "<arg\d>", "") |> trimString
 
   and evalPlaceHolderNodePos (npos: NodePos) = function
   | TmplString(cont) ->
@@ -92,7 +93,7 @@ module Eval = begin
     let cont = Regex.Replace(cont, "<indexOfType>", string(npos.indexOfType))
     // remove uncaptured placeholders and chop head and tail.
     let cont = List.fold (fun cont pat -> Regex.Replace(cont, pat, "")) cont ["<nth>"; "<nthOfType>"; "<index>"; "<indexOfType>"]
-    let cont = StrUtils.trimString cont
+    let cont = trimString cont
     cont
 
   and evalOpenTagName (name: string) (args: Expr list) (npos: NodePos) (mmapOpt: MarkupMap option) =
@@ -101,19 +102,19 @@ module Eval = begin
     | Some(mmap) ->
       match evalPlaceHolderOpt name args npos "" mmap.tagName with
       | "" -> name
-      | tagName -> tagName
+      | tagName -> (escape tagName)
 
   and evalCloseTag (ctx: EvalContext) (tagName: string) (mmapOpt: MarkupMap option) =
     match mmapOpt with
     | Some(mmap) when mmap.selfClosing -> ""
-    | _ -> sprintf "</%s>" tagName
+    | _ -> sprintf "</%s>" (escape tagName)
 
   and evalId (name: string) (args: Expr list) (npos: NodePos) (mmapOpt: MarkupMap option) =
     match mmapOpt with
     | Some(mmap) ->
       match evalPlaceHolderOpt name args npos "" mmap.id with
       | "" -> ""
-      | id -> sprintf "id='%s'" id
+      | id -> sprintf "id='%s'" (escape id)
     | None -> ""
 
   and evalClassName (name: string) (args: Expr list) (npos: NodePos) (mmapOpt: MarkupMap option) =
@@ -121,7 +122,7 @@ module Eval = begin
     | Some(mmap) ->
       match evalPlaceHolderOpt name args npos "" mmap.className with
       | "" -> ""
-      | className -> sprintf "class='%s'" className
+      | className -> sprintf "class='%s'" (escape className)
     | None -> ""
 
   and evalAttributes (name: string) (args: Expr list) (npos: NodePos) (mmapOpt: MarkupMap option) =
@@ -138,14 +139,14 @@ module Eval = begin
     let value = evalPlaceHolder name args npos tmplValue
     match attr, value with
     | "", _ | _, "" -> ""
-    | attr, value -> sprintf "%s='%s'" attr value
+    | attr, value -> sprintf "%s='%s'" attr (escape value)
 
   and evalDatasetAttr = function
   | ObjExpr(constraints) :: _ ->
     List.map (function
-    | (key, StrExpr str) -> sprintf "data-%s='%s'" key str // TODO(escape, camelCase -> snake-case)
-    | (key, IntExpr i) -> sprintf "data-%s='%d'" key i
-    | (key, FloatExpr f) -> sprintf "data-%s='%s'" key (string f)
+    | (key, StrExpr str) -> sprintf "data-%s='%s'" (camelToChain key) (escape str) // TODO(escape, camelCase -> snake-case)
+    | (key, IntExpr i) -> sprintf "data-%s='%d'" (camelToChain key) i
+    | (key, FloatExpr f) -> sprintf "data-%s='%s'" (camelToChain key) (string f)
     | _ -> "" // ignore if not str or int
     ) constraints |> List.filter ((<>) "") |> String.concat " "
   | _ -> ""
@@ -156,8 +157,8 @@ module Eval = begin
     let mmapOpt = Config.lookupMarkupMap ctx.env.config.markupConfig mmapKey
     let (name, content) = evalAnnotNodeContent ctx node // name -> name(with tree)
     let tagName = evalOpenTagName name args npos mmapOpt
-    let className = evalClassName name args npos mmapOpt |> StrUtils.spaceBeforeIfStr
-    let attrs = evalAttributes name args npos mmapOpt |> StrUtils.spaceBeforeIfStr
+    let className = evalClassName name args npos mmapOpt |> spaceBeforeIfStr
+    let attrs = evalAttributes name args npos mmapOpt |> spaceBeforeIfStr
     let content = evalTagContent ctx name args npos mmapOpt content
     let otag = "<" + tagName + className + attrs + ">"
     let ctag = evalCloseTag ctx tagName mmapOpt

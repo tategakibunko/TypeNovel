@@ -3,6 +3,19 @@ namespace TypeNovel.Lib
 module StrUtils = begin
   open System.Text.RegularExpressions
 
+  let camelToChain (text: string) =
+    Regex.Replace(text, "[A-Z]", fun (m: Match) -> 
+      "-" + m.ToString().ToLower()
+    );
+
+  let escape (text: string) =
+    let text = Regex.Replace(text, "&", "&#38;")
+    let text = Regex.Replace(text, "<", "&#60;")
+    let text = Regex.Replace(text, ">", "&#62;")
+    let text = Regex.Replace(text, "\"", "&#34;")
+    let text = Regex.Replace(text, "'", "&#39;")
+    text
+
   let headTrimChars: char array = [|
     '\u0009';  // CHARACTER TABULATION
     '\u000A';  // LINE FEED

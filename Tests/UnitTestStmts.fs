@@ -3,7 +3,7 @@ namespace Tests
 open NUnit.Framework
 open TypeNovel.Lib
 
-[<TestStmts>]
+// [<TestStmts>]
 type TestStmts () =
   let externalText = "this is external text!"
   let externalTextFile = "external-text.tn"
