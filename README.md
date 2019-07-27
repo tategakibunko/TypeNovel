@@ -24,6 +24,13 @@ Output is here.
 
 For more information, take a look at [Cheatsheet](https://github.com/tategakibunko/TypeNovel/tree/master/Docs/Cheatsheet.md).
 
+## Reader Application
+
+Reader application is available for TypeNovel.
+
+Take a look at [TypeNovelReader](https://github.com/tategakibunko/TypeNovelReader).
+
+
 ## Motivation
 
 ### What is the difference between pro novelist and amature novelist?
