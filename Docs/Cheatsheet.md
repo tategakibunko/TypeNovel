@@ -1,5 +1,9 @@
 # Cheatsheet
 
+## How do I read a work written in TypeNovel?
+
+Use [TypeNovelReader](https://github.com/tategakibunko/TypeNovelReader).
+
 ## Compile options
 
 ### --version

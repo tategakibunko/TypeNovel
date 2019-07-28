@@ -1,5 +1,9 @@
 # チートシート
 
+## TypeNovelで書かれた作品を読む方法は？
+
+[TypeNovelReader](https://github.com/tategakibunko/TypeNovelReader)を使って下さい。
+
 ## コンパイル・オプション
 
 ### --version
