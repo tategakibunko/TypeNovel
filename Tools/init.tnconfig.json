@@ -23,16 +23,20 @@
     "//": "sb = speech bubble, start or end is avatar position",
     "//": "@sb-start(<chara-key>, <img-key>){ speech text here }",
     "@sb-start": {
-      "tagName": "table",
-      "className": "sb-table",
-      "before": "<tbody><tr><td class='name' data-chara-key='<arg1>' data-image-key='<arg2>'></td><td class='text'><div class='speech-bubble start'><div class='content' data-chara-key='<arg1>'>",
-      "after": "</div></div></td></tr></tbody>"
+      "tagName": "speech-bubble",
+      "attributes": {
+	"data-direction": "start",
+	"data-chara-key": "<arg1>",
+	"data-image-key": "<arg2>"
+      }
     },
     "@sb-end": {
-      "tagName": "table",
-      "className": "sb-table",
-      "before": "<tbody><tr><td class='text'><div class='speech-bubble end'><div class='content' data-chara-key='<arg1>'>",
-      "after": "</div></div></td><td class='name' data-chara-key='<arg1>' data-image-key='<arg2>'></td></tr></tbody>"
+      "tagName": "speech-bubble",
+      "attributes": {
+	"data-direction": "end",
+	"data-chara-key": "<arg1>",
+	"data-image-key": "<arg2>"
+      }
     },
     "//": "paragraph, but treated as simple line (zero margin)",
     "@line": {
@@ -51,8 +55,11 @@
     "//": "[example]",
     "//": "$ruby('漢字', 'かんじ')",
     "$ruby": {
+      "tagName": "ruby-text",
       "validate": false,
-      "content": "<arg1><rt><arg2></rt>"
+      "attributes": {
+	"data-rt": "<arg2>"
+      }
     },
     "$br": {
       "validate": false,

@@ -60,15 +60,15 @@ module Eval = begin
       | _ -> trimWhiteSpaceNormal content
     | None -> trimWhiteSpaceNormal content
 
-  and evalPlaceHolderOpt (name: string) (args: Expr list) (npos: NodePos) (ifNoneStr: string ) = function
-  | None -> ifNoneStr
+  and evalPlaceHolderOpt (name: string) (args: Expr list) (npos: NodePos) (defaultStr: string) = function
+  | None -> defaultStr
   | Some(tmpl) -> evalPlaceHolder name args npos tmpl
 
   and evalPlaceHolder (name: string) (args: Expr list) (npos: NodePos) (tmpl: TmplString) =
     let tmpl = TmplString (evalPlaceHolderName name tmpl)
     let tmpl = TmplString (evalPlaceHolderArgs args tmpl)
     let cont = evalPlaceHolderNodePos npos tmpl
-    cont
+    escape cont
 
   and evalPlaceHolderName (name: string) = function
   | TmplString tmpl -> Regex.Replace(tmpl, "<name>", name)
