@@ -6,7 +6,7 @@ Mark "*": bug fixed.
 Mark "!": change that can break compatibility with older version
 ===============================================================================
 
-version 1.0.0, 2019/07/28
+version 1.0.0
 ==========================
 * Added secure escaping for pseudo content.
 
