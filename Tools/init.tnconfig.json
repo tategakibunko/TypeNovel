@@ -54,6 +54,7 @@
     },
     "//": "[example]",
     "//": "$ruby('漢字', 'かんじ')",
+    "//": "$ruby('漢,字', 'かん,じ')",
     "$ruby": {
       "tagName": "ruby-text",
       "validate": false,
