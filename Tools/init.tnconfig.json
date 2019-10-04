@@ -105,7 +105,7 @@
     "$a": {
       "validate": false,
       "attributes": {
-        "href": "<arg1>"
+        "href": "<arg2>"
       }
     },
     "$b": {
