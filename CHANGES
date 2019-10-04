@@ -6,6 +6,10 @@ Mark "*": bug fixed.
 Mark "!": change that can break compatibility with older version
 ===============================================================================
 
+version 1.0.1, 2019/10/04
+==========================
+* Fix wrong argument for $a in tnconfig.json.
+
 version 1.0.0, 2019/07/28
 ==========================
 * Added secure escaping for pseudo content.
