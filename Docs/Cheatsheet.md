@@ -158,7 +158,7 @@ Regexp of `annot-name` is same as `block-name`.
 
 ## Escaping
 
-You should escape `@` and `$` in your text.
+`@`, `$`, `{`, `}` must be escaped in the text.
 
 ```javascript
 @scene(){
