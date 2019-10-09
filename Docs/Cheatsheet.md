@@ -83,7 +83,7 @@ But we don't annotate nothing in this example, compiler will warn error.
 
 ### Ignored constraints (since version 0.9.1)
 
-Since version 0.9.1, you can define `ignored constraint` by setting it's value as `"?"`.
+Since version 0.9.1, you can define `ignored constraint` by setting it's value starts with `"?"`.
 
 Ignored constraint is the constraint that is not warned even if it's not annotated in the body text.
 
@@ -93,7 +93,7 @@ See next example.
 
 ```javascript
 @scene({
-  time:"?" // ignored constraint!
+  time:"?night" // ignored constraint!
 }){
   body text
 }
