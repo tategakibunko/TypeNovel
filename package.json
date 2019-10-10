@@ -1,5 +1,5 @@
 {
-  "name": "TypeNovel",
+  "name": "typenovel",
   "version": "1.0.0",
   "description": "A simple markup language to write novel with types.",
   "main": "./dist/index.js",
