@@ -1,0 +1,10 @@
+@p(){
+  foo /* this is comment */
+  meso // this is comment2 
+}
+
+/*
+  this is
+  multi line comment
+*/
+@p(){ meso }

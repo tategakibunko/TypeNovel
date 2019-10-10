@@ -49,7 +49,7 @@
 }
 ```
 
-> `<name>`や`<nthOfType>`はプレースホルダーと呼ばれる値です。より詳しい情報については[チートシート](https://github.com/tategakibunko/TypeNovel/blob/master/Docs/Cheatsheet_jp.md)のプレースホルダーに関する項を参照して下さい。.
+> `<name>`や`<nthOfType>`はプレースホルダーと呼ばれる値です。より詳しい情報については[チートシート](https://github.com/tategakibunko/TypeNovel/blob/master/docs/Cheatsheet_jp.md)のプレースホルダーに関する項を参照して下さい。.
 
 再度コンパイルすると、次のような結果になります。
 
@@ -61,6 +61,6 @@
 
 これで終わりです！
 
-もっと詳しい情報が欲しい場合は、[チートシート](https://github.com/tategakibunko/TypeNovel/blob/master/Docs/Cheatsheet_jp.md)を参照して下さい。
+もっと詳しい情報が欲しい場合は、[チートシート](https://github.com/tategakibunko/TypeNovel/blob/master/docs/Cheatsheet_jp.md)を参照して下さい。
 
 

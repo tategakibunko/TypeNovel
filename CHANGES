@@ -6,6 +6,13 @@ Mark "*": bug fixed.
 Mark "!": change that can break compatibility with older version
 ===============================================================================
 
+version 1.1.0, 2019/10/10
+==========================
+! Rewrote whole code by TypeScript.
+! Compiler flag `--release` is changed to `--minify`.
+! Structure of tnconfog.json changes(Added 'compilerOptions' field).
+o New compiler option `--format` is added('text' or 'html' is available).
+
 version 1.0.1, 2019/10/04
 ==========================
 * Fix wrong argument for $a in tnconfig.json.

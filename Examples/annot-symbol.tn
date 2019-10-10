@@ -1,6 +1,0 @@
-@scene({
-  foo:'bar'
-}){
-  $foo() // 'bar'
-}
-  

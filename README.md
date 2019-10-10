@@ -22,11 +22,17 @@ Output is here.
 </scene>
 ```
 
-For more information, take a look at [Cheatsheet](https://github.com/tategakibunko/TypeNovel/tree/master/Docs/Cheatsheet.md).
+For more information, take a look at [Cheatsheet](https://github.com/tategakibunko/TypeNovel/tree/master/docs/Cheatsheet.md).
+
+## Install
+
+```bash
+npm install -g typescript
+```
 
 ## Reader Application
 
-Reader application is available for TypeNovel.
+Reader application is available for TypeNovel(compiler included).
 
 Take a look at [TypeNovelReader](https://github.com/tategakibunko/TypeNovelReader).
 
@@ -148,27 +154,3 @@ Offcource, you'll get errors at the compilation time.
 /Users/u1/sample.tn(line:1) 'season' is not annotated in this block!
 /Users/u1/sample.tn(line:2) 'time' is not annotated in this block!
 ```
-
-## Installation
-
-### Mac OS
-
-[Installer package](https://github.com/tategakibunko/TypeNovel/tree/master/Archives/Mac) is provided.
-
-### Windows
-
-[Zippped package](https://github.com/tategakibunko/TypeNovel/tree/master/Archives/Win) is provided.
-
-### Linux
-
-[Zipped package](https://github.com/tategakibunko/TypeNovel/tree/master/Archives/Linux) is provided.
-
-## Build
-
-To build from source, `CMake` and [.NET Core 2.2](https://dotnet.microsoft.com/download) is required.
-
-## Build with [FAKE](https://fake.build)
-
-In the repository, run `fake.sh build` (Linux, Mac) or `fake.cmd build` (Win).
-
-`fake.sh build -t Publish` performs the publish action.  Artifacts are created under the `dist/` directory.

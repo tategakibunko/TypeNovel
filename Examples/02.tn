@@ -1,0 +1,10 @@
+@pre(){
+  this is pre
+  this is pre text
+  so new-lines and spaces are as it is.
+}
+@p(){
+  this is not pre
+  this is not pre text
+  so some new-lines and spaces are cut off.
+}

@@ -1,9 +1,6 @@
-.ionide/
-.fake/
-paket-files/
-bin/
-obj/
-dist/
-Lib/Lexer.fs
-Lib/Parser.fs
-Lib/Parser.fsi
+.gitignore
+.DS_Store
+node_modules/
+*.sh
+*.txt
+local/

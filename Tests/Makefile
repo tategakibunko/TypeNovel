@@ -1,4 +1,4 @@
 all: test
 
 test:
-	dotnet test
+	jest

@@ -49,7 +49,7 @@ You can customize html tag by `markupMap` section of `tnconfig.json`.
 }
 ```
 
-> `<name>` and `<nthOfType>` are called `placeholder value`. For more information, see [Cheatsheet](https://github.com/tategakibunko/TypeNovel/blob/master/Docs/Cheatsheet.md) section.
+> `<name>` and `<nthOfType>` are called `placeholder value`. For more information, see [Cheatsheet](https://github.com/tategakibunko/TypeNovel/blob/master/docs/Cheatsheet.md) section.
 
 If you re-compile this source, you'll get
 
@@ -61,6 +61,6 @@ If you re-compile this source, you'll get
 
 That's it!
 
-Want more information?  See [cheatsheet](https://github.com/tategakibunko/TypeNovel/blob/master/Docs/Cheatsheet.md) section.
+Want more information?  See [cheatsheet](https://github.com/tategakibunko/TypeNovel/blob/master/docs/Cheatsheet.md) section.
 
 

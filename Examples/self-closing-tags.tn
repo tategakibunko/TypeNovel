@@ -4,7 +4,7 @@
     $br()
     $img("/path/to/bar.png")
   }
-  @hr()
+  $hr()
   @scene(){
     foo
   }

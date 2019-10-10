@@ -1,5 +1,0 @@
-@scene({
-  time:"?"
-}){
-  There is no time annotation, but not warned because constraint value of time is "?"
-}

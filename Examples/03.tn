@@ -1,0 +1,6 @@
+@scene(){
+  @p(){
+    http:\/\/hoge.com
+    $link('http://hoge.com')
+  }
+}

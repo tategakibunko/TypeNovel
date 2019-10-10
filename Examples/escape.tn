@@ -1,6 +1,0 @@
-@scene({
-}){
-  email(foo\@hoge.com)
-  It costs 100\$!
-  This is \{curly brace\}.
-}

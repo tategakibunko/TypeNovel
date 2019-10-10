@@ -1,0 +1,68 @@
+{
+  "name": "TypeNovel",
+  "version": "1.1.0",
+  "description": "A simple markup language to write novel with types.",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "tnc": "./bin/tnc"
+  },
+  "scripts": {
+    "build": "make",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tategakibunko/TypeNovel.git"
+  },
+  "keywords": [
+    "TypeNovel",
+    "novel",
+    "compiler",
+    "language",
+    "TypeScript",
+    "javascript"
+  ],
+  "author": "Watanabe Masaki",
+  "license": "MIT",
+  "files": [
+    "LICENSE",
+    "CHANGES",
+    "README.md",
+    "dist",
+    "src"
+  ],
+  "bugs": {
+    "url": "https://github.com/tategakibunko/ts-typenovel/issues"
+  },
+  "homepage": "https://github.com/tategakibunko/ts-typenovel#readme",
+  "jest": {
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ],
+    "transform": {
+      "^.+\\.ts$": "ts-jest"
+    },
+    "globals": {
+      "ts-jest": {
+        "tsConfig": "../src/tsconfig.json"
+      }
+    },
+    "testMatch": [
+      "**/tests/**/*.test.ts"
+    ]
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.18",
+    "@types/moo": "^0.5.0",
+    "jest": "^24.9.0",
+    "nearley": "^2.19.0",
+    "ts-jest": "^24.1.0",
+    "typescript": "^3.6.3"
+  },
+  "dependencies": {
+    "commandpost": "^1.4.0",
+    "moo": "^0.5.0"
+  }
+}
