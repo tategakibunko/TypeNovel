@@ -1,0 +1,6 @@
+@p(){
+  included1
+}
+@p(){
+  $include("included2.tn")
+}

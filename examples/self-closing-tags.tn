@@ -1,0 +1,11 @@
+@scene(){
+  @figure(){
+    $img("/path/to/foo.png")
+    $br()
+    $img("/path/to/bar.png")
+  }
+  $hr()
+  @scene(){
+    foo
+  }
+}

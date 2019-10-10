@@ -1,0 +1,10 @@
+@scene({
+  foo:"foo!",// this is comment
+  /* this is
+     also comment
+  */
+  bar:"bar!",
+  list: [1, 2,/* comment */ "switch!"],
+}){
+  $foo(), $bar()
+}
