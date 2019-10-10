@@ -1,5 +1,0 @@
-@div(){
-  @p(){ hoge }
-  @p(){ hige }
-  @p(){ hage }
-}
