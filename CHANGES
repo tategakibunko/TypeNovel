@@ -6,23 +6,17 @@ Mark "*": bug fixed.
 Mark "!": change that can break compatibility with older version
 ===============================================================================
 
-version 1.1.0, 2019/10/10
+version 1.0.0, 2019/10/11
 ==========================
 ! Rewrote whole code by TypeScript.
 ! Compiler flag `--release` is changed to `--minify`.
 ! Structure of tnconfog.json changes(Added 'compilerOptions' field).
 o New compiler option `--format` is added('text' or 'html' is available).
 
-version 1.0.1, 2019/10/04
-==========================
-* Fix wrong argument for $a in tnconfig.json.
-
-version 1.0.0, 2019/07/28
-==========================
-* Added secure escaping for pseudo content.
-
 version 0.9.9, 2019/07/26
 ==========================
+* Fix wrong argument for $a in tnconfig.json.
+* Added secure escaping for pseudo content.
 * Rename dataset name from camel to chain.
 * Escape constraint value.
 
