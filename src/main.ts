@@ -6,6 +6,8 @@ import {
 
 import * as commandpost from "commandpost";
 
+const pkg: any = require('../package.json');
+
 interface CliOptions {
   init: boolean;
   config: string[];
@@ -31,7 +33,7 @@ interface CliArgs {
 */
 const root = commandpost
   .create<CliOptions, CliArgs>("tnc <inputFile>")
-  .version("1.0.0", "-v, --version")
+  .version(`${pkg.version}`, "-v, --version")
   .description("TypeNovel compiler")
   .option("--init", "Generate default 'tnconfig.json'")
   .option("--minify", "Minify output html")
