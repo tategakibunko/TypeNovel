@@ -107,7 +107,7 @@ export class AnnotNode extends TnNode {
       }, constraint);
       return String(oval);
     }
-    return String(args[0]);
+    return String(aval);
   }
 
   public acceptNodeMapper(visitor: NodeMapper): AnnotNode {
