@@ -1,0 +1,10 @@
+@scene({
+  taro:{
+    info:{
+      age:20
+    }
+  }
+}){
+  @p(){ $taro("info", "age") }
+  @p(){ $taro("info", "foo") }
+}
