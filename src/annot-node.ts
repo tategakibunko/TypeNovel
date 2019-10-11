@@ -102,9 +102,9 @@ export class AnnotNode extends TnNode {
       }
       // $taro("age") => <taro-age>20</taro-age>
       this.tagName = [name].concat(args).join('-');
-      const oval = args.slice(1).reduce((acm, arg) => {
+      const oval = args.reduce((acm, arg) => {
         return typeof acm === 'object' ? (acm[arg] || '') : String(acm);
-      }, constraint[aval]);
+      }, constraint);
       return String(oval);
     }
     return String(args[0]);
