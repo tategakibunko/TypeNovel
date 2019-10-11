@@ -96,15 +96,18 @@ export class AnnotNode extends TnNode {
       return String(constraint[parseInt(aval, 10)]);
     }
     if (typeof constraint === 'object') {
-      // $taro("age") => <taro-age>20</taro-age>
-      if (constraint[aval]) {
-        this.tagName = [name, aval].join('-');
-        return String(constraint[aval]);
-      }
       // $taro("ouch") => <taro></taro>
-      return '';
+      if (!constraint[aval]) {
+        return '';
+      }
+      // $taro("age") => <taro-age>20</taro-age>
+      this.tagName = [name].concat(args).join('-');
+      const oval = args.slice(1).reduce((acm, arg) => {
+        return typeof acm === 'object' ? (acm[arg] || '') : String(acm);
+      }, constraint[aval]);
+      return String(oval);
     }
-    return String(args[0]); // TODO
+    return String(args[0]);
   }
 
   public acceptNodeMapper(visitor: NodeMapper): AnnotNode {
