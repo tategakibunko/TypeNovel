@@ -31,7 +31,7 @@ interface CliArgs {
 */
 const root = commandpost
   .create<CliOptions, CliArgs>("tnc <inputFile>")
-  .version("2.0.0", "-v, --version")
+  .version("1.0.0", "-v, --version")
   .description("TypeNovel compiler")
   .option("--init", "Generate default 'tnconfig.json'")
   .option("--minify", "Minify output html")
