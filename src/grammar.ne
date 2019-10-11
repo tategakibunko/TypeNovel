@@ -20,11 +20,9 @@ stmt ->
 | annot {% id %}
 | block {% id %}
 
-# You can also write...
-# stmt -> (plain | annot | block) {% (d) => d[0][0] %}
-
 # Note that nearley creates nested dim for each grouping like '(a | b | c)'!
 # So if you write like following, you must get each item by 'd[0][0]'.
+# stmt -> (plain | annot | block) {% (d) => d[0][0] %}
 
 plain -> text {%
   (d) => {
