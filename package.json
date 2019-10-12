@@ -1,6 +1,6 @@
 {
   "name": "typenovel",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A simple markup language to write novel with types.",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
