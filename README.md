@@ -27,7 +27,7 @@ For more information, take a look at [Cheatsheet](https://github.com/tategakibun
 ## Install
 
 ```bash
-npm install -g typescript
+npm install -g typenovel
 ```
 
 ## Reader Application
