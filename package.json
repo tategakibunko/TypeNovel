@@ -51,12 +51,12 @@
     "@types/moo": "^0.5.0",
     "@types/node": "^12.7.12",
     "jest": "^24.9.0",
-    "nearley": "^2.19.0",
     "ts-jest": "^24.1.0",
     "typescript": "^3.6.3"
   },
   "dependencies": {
     "commandpost": "^1.4.0",
-    "moo": "^0.5.0"
+    "moo": "^0.5.0",
+    "nearley": "^2.19.0"
   }
 }
