@@ -25,13 +25,6 @@
   ],
   "author": "Watanabe Masaki",
   "license": "MIT",
-  "files": [
-    "LICENSE",
-    "CHANGES",
-    "README.md",
-    "dist",
-    "src"
-  ],
   "bugs": {
     "url": "https://github.com/tategakibunko/ts-typenovel/issues"
   },
