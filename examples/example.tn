@@ -14,7 +14,9 @@
 @h2(){ Constraints }
 @scene({
   place: "my home",
-  season: "winter"
+  season: "winter",
+  time: "9:00AM", // time is not annotated in this scene block, so it causes error.
+  foo: "?foo", // constraints begin with '?' are not subject to annotation.
 }){
   @p(){ I woke up and saw the calendar in $place("my room"). }
   @p(){ It is 12/25. }

@@ -6,6 +6,10 @@ Mark "*": bug fixed.
 Mark "!": change that can break compatibility with older version
 ===============================================================================
 
+version 1.1.1, 2019/10/14
+==========================
+* Added compiler option `--output` to output result as file.
+
 version 1.1.0, 2019/10/13
 ==========================
 ! Modifed api of Tnc module(Tnc.exec -> Tnc.fromFile, Tnc.fromString).

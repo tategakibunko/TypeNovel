@@ -8,6 +8,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var modules_1 = require("./modules");
+var fs = __importStar(require("fs"));
 var commandpost = __importStar(require("commandpost"));
 var pkg = require('../package.json');
 /*
@@ -19,6 +20,7 @@ var pkg = require('../package.json');
 
     --init             Generate default 'tnconfig.json'
     --minify           Minify output html
+    --output <path>    Specify output path(if none, stdout is used)
     --config <path>    Specify path of 'tnconfig.json'
     --format <format>  Output format('text' or 'html')
 */
@@ -28,9 +30,11 @@ var root = commandpost
     .description("TypeNovel compiler")
     .option("--init", "Generate default 'tnconfig.json'")
     .option("--minify", "Minify output html")
+    .option("--output <path>", "Specify output path(if none, stdout is used)")
     .option("--config <path>", "Specify path of 'tnconfig.json'")
     .option("--format <format>", "Output format('text' or 'html')")
     .action(function (opts, args) {
+    var outputPath = opts.output[0];
     var result = modules_1.Tnc.fromFile(args.inputFile, {
         config: opts.config[0],
         minify: opts.minify,
@@ -41,7 +45,12 @@ var root = commandpost
     if (result.errors.length > 0) {
         console.log('\n');
     }
-    printer.printOutput(result.output);
+    if (outputPath) {
+        fs.writeFileSync(outputPath, result.output, { encoding: 'utf8' });
+    }
+    else {
+        printer.printOutput(result.output);
+    }
 });
 if (process.argv.some(function (arg) { return arg === '--init'; })) {
     modules_1.Tnc.init();
