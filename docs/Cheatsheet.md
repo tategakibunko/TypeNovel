@@ -22,19 +22,11 @@ Define output file. If not defined, stdout is used.
 [foo@localhost] tnc --output foo.html foo.tn
 ```
 
-### --release
+### --minify
 
-Output file by release mode.
+Output file by minify mode.
 
-In release mode, all whitespaces are removed in output html except the tag that is defined by `whiteSpace:'pre'` in markupMap of `tnconfig.json`.
-
-### --ast
-
-Display ast tree of input file.
-
-### --env
-
-Display environment.
+In minify mode, all whitespaces are removed in output html except the tag that is defined by `whiteSpace:'pre'` in markupMap of `tnconfig.json`.
 
 ### --config
 
@@ -42,7 +34,7 @@ Specify configuration. If it's not specified or found, `tnconfig.json` is used.
 
 If `tnconfig.json` is not found too, default configuration is used.
 
-### --usage
+### --help
 
 Display command line usage.
 

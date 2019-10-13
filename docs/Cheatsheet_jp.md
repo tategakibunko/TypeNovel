@@ -22,19 +22,11 @@ TypeNovelのバージョンを表示します。
 [foo@localhost] tnc --output foo.html foo.tn
 ```
 
-### --release
+### --minify
 
-リリースモードで出力します。
+圧縮モードで出力します。
 
-リリースモードでは、空白文字（半角の空白や改行など）が削除されます。ただし`tnconfig.json`のタグ設定にて`whiteSpace:'pre'`が指定されているタグについては、空白文字が保たれます。
-
-### --ast
-
-入力ファイルに対する抽象構文木（Abstract Syntax Tree）を出力します。
-
-### --env
-
-環境変数を表示します。
+圧縮モードでは、空白文字（半角の空白や改行など）が削除されます。ただし`tnconfig.json`のタグ設定にて`whiteSpace:'pre'`が指定されているタグについては、空白文字が保たれます。
 
 ### --config
 
@@ -42,7 +34,7 @@ TypeNovelのバージョンを表示します。
 
 もし`tnconfig.json`も存在しない場合は、初期設定が使用されます。
 
-### --usage
+### --help
 
 コマンドラインの使用方法を表示します。
 
