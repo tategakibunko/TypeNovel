@@ -14,6 +14,10 @@ Display TypeNovel version.
 
 Create `tnconfig.json` of default settings, ignored if it already exsits.
 
+### --format
+
+Specify output format. You can use `html`(default) or `text`.
+
 ### --output
 
 Define output file. If not defined, stdout is used.
