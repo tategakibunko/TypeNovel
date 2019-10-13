@@ -4,9 +4,9 @@ export interface TncArgs {
     config?: string;
     minify?: boolean;
     format?: OutputFormat;
-    inputFile: string;
 }
 export declare class Tnc {
     static init(): void;
-    static exec(args: TncArgs): CompileResult;
+    static fromFile(inputFile: string, args: TncArgs): CompileResult;
+    static fromString(source: string, args: TncArgs, path?: string): CompileResult;
 }

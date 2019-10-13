@@ -17,13 +17,14 @@ import {
   PlainTextFormatter,
 } from './modules';
 
+import * as fs from 'fs';
+
 export type OutputFormat = 'text' | 'html';
 
 export interface TncArgs {
   config?: string; // path to tnconfig.json.
   minify?: boolean; // minify output or not.
   format?: OutputFormat; // 'text' or 'html'
-  inputFile: string; // file to compile(*.tn)
 }
 
 export class Tnc {
@@ -32,9 +33,14 @@ export class Tnc {
     console.log("'tnconfig.json' is generated.");
   }
 
-  static exec(args: TncArgs): CompileResult {
+  static fromFile(inputFile: string, args: TncArgs): CompileResult {
+    const path = Utils.getPath(inputFile);
+    const source = fs.readFileSync(path, { encoding: 'utf-8' });
+    return this.fromString(source, args, path);
+  }
+
+  static fromString(source: string, args: TncArgs, path?: string): CompileResult {
     // console.log(args);
-    const path = Utils.getPath(args.inputFile);
     const config = Config.loadTnConfig(args.config || 'tnconfig.json');
     const rootBlockName = config.compilerOptions.rootBlockName || 'body';
 
@@ -81,7 +87,7 @@ export class Tnc {
       nodeFormatter,
     };
 
-    return Compile.fromFile(path, compileArgs);
+    return Compile.fromString(source, compileArgs);
   }
 }
 

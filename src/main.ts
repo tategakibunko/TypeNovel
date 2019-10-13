@@ -40,11 +40,10 @@ const root = commandpost
   .option("--config <path>", "Specify path of 'tnconfig.json'")
   .option("--format <format>", "Output format('text' or 'html')")
   .action((opts, args) => {
-    const result = Tnc.exec({
+    const result = Tnc.fromFile(args.inputFile, {
       config: opts.config[0],
       minify: opts.minify,
       format: opts.format[0],
-      inputFile: args.inputFile
     });
     const printer = new StdConsolePrinter();
     result.errors.forEach(error => printer.printValidationError(error));

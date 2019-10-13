@@ -31,11 +31,10 @@ var root = commandpost
     .option("--config <path>", "Specify path of 'tnconfig.json'")
     .option("--format <format>", "Output format('text' or 'html')")
     .action(function (opts, args) {
-    var result = modules_1.Tnc.exec({
+    var result = modules_1.Tnc.fromFile(args.inputFile, {
         config: opts.config[0],
         minify: opts.minify,
         format: opts.format[0],
-        inputFile: args.inputFile
     });
     var printer = new modules_1.StdConsolePrinter();
     result.errors.forEach(function (error) { return printer.printValidationError(error); });
