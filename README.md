@@ -30,7 +30,7 @@ For more information, take a look at [Cheatsheet](https://github.com/tategakibun
 npm install -g typenovel
 ```
 
-Tnen `/usr/local/bin/tnc` would be installed.
+Then `/usr/local/bin/tnc` would be installed.
 
 ```bash
 [foo@localhost] tnc --version
