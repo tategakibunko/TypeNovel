@@ -30,6 +30,43 @@ For more information, take a look at [Cheatsheet](https://github.com/tategakibun
 npm install -g typenovel
 ```
 
+Tnen `/usr/local/bin/tnc` would be installed.
+
+```bash
+[foo@localhost] tnn --version
+1.0.4
+```
+
+## Use compiler from project
+
+You can compile from source by `Tcn.fromString`.
+
+```typescript
+import { Tnc } from 'typenovel';
+
+const result = Tnc.fromString('@scene(){ foo }', {
+  format: 'html', // or 'text'
+  minify: false
+});
+
+console.error(result.errors);
+console.log(result.output);
+```
+
+Or you can compile from file by `Tcn.fromString`.
+
+```typescript
+import { Tnc } from 'typenovel';
+
+const result = Tnc.fromFile('sample.tn', {
+  format: 'html',
+  minify: false
+});
+
+console.error(result.errors);
+console.log(result.output);
+```
+
 ## Reader Application
 
 Reader application is available for TypeNovel(compiler included).
