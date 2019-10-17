@@ -33,7 +33,7 @@ npm install -g typenovel
 Tnen `/usr/local/bin/tnc` would be installed.
 
 ```bash
-[foo@localhost] tnn --version
+[foo@localhost] tnc --version
 1.0.4
 ```
 
