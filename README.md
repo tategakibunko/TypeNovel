@@ -39,7 +39,7 @@ Then `/usr/local/bin/tnc` would be installed.
 
 ## Use compiler from project
 
-You can compile from source by `Tcn.fromString`.
+You can compile from source by `Tnc.fromString`.
 
 ```typescript
 import { Tnc } from 'typenovel';
@@ -53,7 +53,7 @@ console.error(result.errors);
 console.log(result.output);
 ```
 
-Or you can compile from file by `Tcn.fromString`.
+Or you can compile from file by `Tnc.fromString`.
 
 ```typescript
 import { Tnc } from 'typenovel';
