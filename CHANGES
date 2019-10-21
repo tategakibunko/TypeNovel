@@ -6,6 +6,10 @@ Mark "*": bug fixed.
 Mark "!": change that can break compatibility with older version
 ===============================================================================
 
+version 1.1.2, 2019/10/21
+==========================
+o Support float number.
+
 version 1.1.1, 2019/10/14
 ==========================
 * Added compiler option `--output` to output result as file.
