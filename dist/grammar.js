@@ -8,7 +8,6 @@ function id(d) { return d[0]; }
 var modules_1 = require("./modules");
 var mlexer = require("./lexer");
 var lexer = mlexer.lexer;
-mlexer.debug = true;
 function extractBlockChildren(children) {
     return children.map(function (child) {
         return child instanceof Array ? child[0] : child;

@@ -68,6 +68,10 @@ export class AnnotNode extends TnNode {
     this.value = args.map.content || this.getAnnotValue(args.name, args.args, this.constraint);
   }
 
+  public isAnnotNode(): boolean {
+    return true;
+  }
+
   public toString(): string {
     return `annot(${this.name}): ${this.value}`;
   }

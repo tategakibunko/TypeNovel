@@ -33,7 +33,6 @@ import {
 
 const mlexer = require("./lexer");
 const lexer = mlexer.lexer;
-mlexer.debug = true;
 
 
 

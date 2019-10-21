@@ -49,6 +49,10 @@ export class BlockNode extends TnNode {
     this.children = []; // empty by default
   }
 
+  public isBlockNode(): boolean {
+    return true;
+  }
+
   public toString(): string {
     return `block(${this.name}) with ${this.children.length} children`;
   }

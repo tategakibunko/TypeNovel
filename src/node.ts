@@ -1,5 +1,4 @@
 import {
-  Utils,
   BlockNode,
   NodeMapper,
   NodeFormatter,
@@ -15,6 +14,18 @@ export abstract class TnNode {
   public abstract acceptNodeFormatter(visitor: NodeFormatter, indent: number): string;
   public abstract acceptNodeValidator(visitor: NodeValidator): ValidationError[];
   public abstract toString(): string;
+
+  public isTextNode(): boolean {
+    return false;
+  }
+
+  public isAnnotNode(): boolean {
+    return false;
+  }
+
+  public isBlockNode(): boolean {
+    return false;
+  }
 
   public get next(): TnNode | undefined {
     if (this.parent) {

@@ -26,6 +26,10 @@ export class TextNode extends TnNode {
     this.uniqueId = args.uniqueId;
   }
 
+  public isTextNode(): boolean {
+    return true;
+  }
+
   public setEmpty(): TextNode {
     this.value = '';
     return this;
