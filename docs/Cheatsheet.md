@@ -122,7 +122,7 @@ Regexp of `annot-name` is same as `block-name`.
   season: "winter",
   time: "noon"
 }){
-  Finally $time("lunch time")! // Finally <time>lunch</time> time!
+  Finally $time("lunch") time! // Finally <time>lunch</time> time!
 
   $season("Xmas") is comming! // <season>Xmas</season> is comming!
   $season() is cold! // <season>winter</season> is cold!
