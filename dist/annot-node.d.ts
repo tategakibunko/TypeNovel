@@ -19,6 +19,7 @@ export declare class AnnotNode extends TnNode {
         map: MarkupMapItem;
         uniqueId: number;
     });
+    isAnnotNode(): boolean;
     toString(): string;
     private getAnnotValue;
     acceptNodeMapper(visitor: NodeMapper): AnnotNode;

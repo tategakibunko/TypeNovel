@@ -25,6 +25,9 @@ var TextNode = /** @class */ (function (_super) {
         _this.uniqueId = args.uniqueId;
         return _this;
     }
+    TextNode.prototype.isTextNode = function () {
+        return true;
+    };
     TextNode.prototype.setEmpty = function () {
         this.value = '';
         return this;

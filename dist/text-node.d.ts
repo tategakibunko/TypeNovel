@@ -8,6 +8,7 @@ export declare class TextNode extends TnNode {
         value: string;
         uniqueId: number;
     });
+    isTextNode(): boolean;
     setEmpty(): TextNode;
     isWhiteSpace(): boolean;
     toString(): string;

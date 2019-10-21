@@ -157,14 +157,14 @@ export class BlockNode extends TnNode {
   }
 
   public findAnnot(name: string): TnNode | undefined {
-    const children = this.children.filter(child => !(child instanceof TextNode));
+    const children = this.children.filter(child => !child.isTextNode());
     for (let i = 0; i < children.length; i++) {
-      if (children[i] instanceof BlockNode) {
+      if (children[i].isBlockNode()) {
         const annot = (<BlockNode>children[i]).findAnnot(name);
         if (annot) {
           return annot;
         }
-      } else if (children[i] instanceof AnnotNode && children[i].name === name) {
+      } else if (children[i].isAnnotNode() && children[i].name === name) {
         return children[i];
       }
     }

@@ -140,27 +140,26 @@ export class StdHtmlFormatter implements NodeFormatter {
     next?: TnNode;
     indent: number;
   }): string {
-    const openTag = createOpenTag({
+    const otag = createOpenTag({
       tagName: args.tagName,
       id: args.id,
       className: args.className,
       attrs: args.attrs
     });
-    const closeTag = `</${args.tagName}>`;
+    const ctag = `</${args.tagName}>`;
     if (args.content) {
-      return addIndent(openTag + args.content + closeTag, args.indent) + '\n';
+      return addIndent(otag + args.content + ctag, args.indent) + '\n';
     }
-    const hasBlockChild = args.children.some(child => child instanceof BlockNode);
-    if (!hasBlockChild) {
+    if (!args.children.some(child => child.isBlockNode())) {
       const body = args.children.reduce((acm, child) => {
         return acm + child.acceptNodeFormatter(this, args.indent);
       }, '');
-      return addIndent(openTag + body + closeTag, args.indent) + '\n';
+      return addIndent(otag + body + ctag, args.indent) + '\n';
     }
     const body = args.children.reduce((acm, child) => {
       return acm + child.acceptNodeFormatter(this, args.indent + BLOCK_INDENT_SIZE);
     }, '');
-    return addIndent(openTag, args.indent) + '\n' + body + addIndent(closeTag, args.indent) + '\n';
+    return addIndent(otag, args.indent) + '\n' + body + addIndent(ctag, args.indent) + '\n';
   }
 }
 
@@ -188,17 +187,17 @@ export class MinifiedHtmlFormatter extends StdHtmlFormatter {
     next?: TnNode;
     indent: number;
   }): string {
-    const openTag = createOpenTag({
+    const otag = createOpenTag({
       tagName: args.tagName,
       id: args.id,
       className: args.className,
       attrs: args.attrs
     });
-    const closeTag = `</${args.tagName}>`;
+    const ctag = `</${args.tagName}>`;
     const body = args.content ? Utils.escapeText(args.content) : args.children.reduce((acm, child) => {
       return acm += child.acceptNodeFormatter(this, args.indent);
     }, '');
-    return openTag + body + closeTag;
+    return otag + body + ctag;
   }
 }
 

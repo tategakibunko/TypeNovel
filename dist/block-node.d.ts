@@ -18,6 +18,7 @@ export declare class BlockNode extends TnNode {
         map: MarkupMapItem;
         uniqueId: number;
     });
+    isBlockNode(): boolean;
     toString(): string;
     filterChildren(fn: (child: TnNode) => boolean): BlockNode;
     mapChildren(fn: (child: TnNode) => TnNode): BlockNode;

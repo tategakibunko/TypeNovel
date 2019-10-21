@@ -7,6 +7,9 @@ export declare abstract class TnNode {
     abstract acceptNodeFormatter(visitor: NodeFormatter, indent: number): string;
     abstract acceptNodeValidator(visitor: NodeValidator): ValidationError[];
     abstract toString(): string;
+    isTextNode(): boolean;
+    isAnnotNode(): boolean;
+    isBlockNode(): boolean;
     readonly next: TnNode | undefined;
     readonly prev: TnNode | undefined;
     readonly index: number;

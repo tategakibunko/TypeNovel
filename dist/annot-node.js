@@ -55,6 +55,9 @@ var AnnotNode = /** @class */ (function (_super) {
         _this.value = args.map.content || _this.getAnnotValue(args.name, args.args, _this.constraint);
         return _this;
     }
+    AnnotNode.prototype.isAnnotNode = function () {
+        return true;
+    };
     AnnotNode.prototype.toString = function () {
         return "annot(" + this.name + "): " + this.value;
     };

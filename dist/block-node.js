@@ -46,6 +46,9 @@ var BlockNode = /** @class */ (function (_super) {
         _this.children = []; // empty by default
         return _this;
     }
+    BlockNode.prototype.isBlockNode = function () {
+        return true;
+    };
     BlockNode.prototype.toString = function () {
         return "block(" + this.name + ") with " + this.children.length + " children";
     };
@@ -132,15 +135,15 @@ var BlockNode = /** @class */ (function (_super) {
         return ret;
     };
     BlockNode.prototype.findAnnot = function (name) {
-        var children = this.children.filter(function (child) { return !(child instanceof modules_1.TextNode); });
+        var children = this.children.filter(function (child) { return !child.isTextNode(); });
         for (var i = 0; i < children.length; i++) {
-            if (children[i] instanceof BlockNode) {
+            if (children[i].isBlockNode()) {
                 var annot = children[i].findAnnot(name);
                 if (annot) {
                     return annot;
                 }
             }
-            else if (children[i] instanceof modules_1.AnnotNode && children[i].name === name) {
+            else if (children[i].isAnnotNode() && children[i].name === name) {
                 return children[i];
             }
         }

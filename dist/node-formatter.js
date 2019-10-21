@@ -74,27 +74,26 @@ var StdHtmlFormatter = /** @class */ (function () {
     };
     StdHtmlFormatter.prototype.visitBlockNode = function (args) {
         var _this = this;
-        var openTag = createOpenTag({
+        var otag = createOpenTag({
             tagName: args.tagName,
             id: args.id,
             className: args.className,
             attrs: args.attrs
         });
-        var closeTag = "</" + args.tagName + ">";
+        var ctag = "</" + args.tagName + ">";
         if (args.content) {
-            return addIndent(openTag + args.content + closeTag, args.indent) + '\n';
+            return addIndent(otag + args.content + ctag, args.indent) + '\n';
         }
-        var hasBlockChild = args.children.some(function (child) { return child instanceof modules_1.BlockNode; });
-        if (!hasBlockChild) {
+        if (!args.children.some(function (child) { return child.isBlockNode(); })) {
             var body_1 = args.children.reduce(function (acm, child) {
                 return acm + child.acceptNodeFormatter(_this, args.indent);
             }, '');
-            return addIndent(openTag + body_1 + closeTag, args.indent) + '\n';
+            return addIndent(otag + body_1 + ctag, args.indent) + '\n';
         }
         var body = args.children.reduce(function (acm, child) {
             return acm + child.acceptNodeFormatter(_this, args.indent + BLOCK_INDENT_SIZE);
         }, '');
-        return addIndent(openTag, args.indent) + '\n' + body + addIndent(closeTag, args.indent) + '\n';
+        return addIndent(otag, args.indent) + '\n' + body + addIndent(ctag, args.indent) + '\n';
     };
     return StdHtmlFormatter;
 }());
@@ -117,17 +116,17 @@ var MinifiedHtmlFormatter = /** @class */ (function (_super) {
     }
     MinifiedHtmlFormatter.prototype.visitBlockNode = function (args) {
         var _this = this;
-        var openTag = createOpenTag({
+        var otag = createOpenTag({
             tagName: args.tagName,
             id: args.id,
             className: args.className,
             attrs: args.attrs
         });
-        var closeTag = "</" + args.tagName + ">";
+        var ctag = "</" + args.tagName + ">";
         var body = args.content ? modules_1.Utils.escapeText(args.content) : args.children.reduce(function (acm, child) {
             return acm += child.acceptNodeFormatter(_this, args.indent);
         }, '');
-        return openTag + body + closeTag;
+        return otag + body + ctag;
     };
     return MinifiedHtmlFormatter;
 }(StdHtmlFormatter));

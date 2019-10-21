@@ -13,7 +13,6 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var modules_1 = require("./modules");
 var IdNodeMapper = /** @class */ (function () {
     function IdNodeMapper() {
     }
@@ -37,7 +36,7 @@ var NodeWhiteSpaceCleaner = /** @class */ (function (_super) {
     NodeWhiteSpaceCleaner.prototype.visitBlockNode = function (node) {
         var _this = this;
         return node
-            .filterChildren(function (child) { return !(child instanceof modules_1.TextNode && child.isWhiteSpace()); })
+            .filterChildren(function (child) { return !(child.isTextNode() && child.isWhiteSpace()); })
             .mapChildren(function (child) { return child.acceptNodeMapper(_this); });
     };
     return NodeWhiteSpaceCleaner;

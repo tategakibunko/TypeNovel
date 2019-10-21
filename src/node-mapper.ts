@@ -25,7 +25,7 @@ export class IdNodeMapper implements NodeMapper {
 export class NodeWhiteSpaceCleaner extends IdNodeMapper {
   public visitBlockNode(node: BlockNode): BlockNode {
     return node
-      .filterChildren(child => !(child instanceof TextNode && (<TextNode>child).isWhiteSpace()))
+      .filterChildren(child => !(child.isTextNode() && (<TextNode>child).isWhiteSpace()))
       .mapChildren(child => child.acceptNodeMapper(this));
   }
 }

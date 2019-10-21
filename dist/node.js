@@ -5,6 +5,15 @@ var TnNode = /** @class */ (function () {
         this.name = '';
         this.uniqueId = 0;
     }
+    TnNode.prototype.isTextNode = function () {
+        return false;
+    };
+    TnNode.prototype.isAnnotNode = function () {
+        return false;
+    };
+    TnNode.prototype.isBlockNode = function () {
+        return false;
+    };
     Object.defineProperty(TnNode.prototype, "next", {
         get: function () {
             if (this.parent) {
