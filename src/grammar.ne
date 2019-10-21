@@ -90,7 +90,9 @@ literal ->
   %literalSq {% (d) => JSON.parse(Utils.sq2Dq(d[0].value)) %}
 | %literalDq {% (d) => JSON.parse(d[0].value) %}
 
-number -> %number {% (d) => parseInt(d[0].value, 10) %}
+number ->
+  %integer {% (d) => parseInt(d[0].value, 10) %}
+| %float {% (d) => parseFloat(d[0].value) %}
 
 array ->
   %arrayStart %arrayEnd {% (d) => [] %}

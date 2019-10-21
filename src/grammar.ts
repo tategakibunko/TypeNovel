@@ -17,7 +17,8 @@ declare var argsEnd: any;
 declare var comma: any;
 declare var literalSq: any;
 declare var literalDq: any;
-declare var number: any;
+declare var integer: any;
+declare var float: any;
 declare var arrayStart: any;
 declare var arrayEnd: any;
 declare var objStart: any;
@@ -165,7 +166,8 @@ const grammar: Grammar = {
     {"name": "expr", "symbols": ["object"], "postprocess": id},
     {"name": "literal", "symbols": [(lexer.has("literalSq") ? {type: "literalSq"} : literalSq)], "postprocess": (d) => JSON.parse(Utils.sq2Dq(d[0].value))},
     {"name": "literal", "symbols": [(lexer.has("literalDq") ? {type: "literalDq"} : literalDq)], "postprocess": (d) => JSON.parse(d[0].value)},
-    {"name": "number", "symbols": [(lexer.has("number") ? {type: "number"} : number)], "postprocess": (d) => parseInt(d[0].value, 10)},
+    {"name": "number", "symbols": [(lexer.has("integer") ? {type: "integer"} : integer)], "postprocess": (d) => parseInt(d[0].value, 10)},
+    {"name": "number", "symbols": [(lexer.has("float") ? {type: "float"} : float)], "postprocess": (d) => parseFloat(d[0].value)},
     {"name": "array", "symbols": [(lexer.has("arrayStart") ? {type: "arrayStart"} : arrayStart), (lexer.has("arrayEnd") ? {type: "arrayEnd"} : arrayEnd)], "postprocess": (d) => []},
     {"name": "array", "symbols": [(lexer.has("arrayStart") ? {type: "arrayStart"} : arrayStart), "exprs", (lexer.has("arrayEnd") ? {type: "arrayEnd"} : arrayEnd)], "postprocess": (d) => d[1]},
     {"name": "object", "symbols": [(lexer.has("objStart") ? {type: "objStart"} : objStart), (lexer.has("objEnd") ? {type: "objEnd"} : objEnd)], "postprocess": (d) => { return {}; }},

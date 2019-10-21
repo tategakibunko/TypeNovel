@@ -3,6 +3,10 @@ const rexIdent = /[a-zA-Z][a-zA-Z0-9_]*/;
 const rexTagName = /[a-zA-Z][a-zA-Z0-9_\-]*/;
 const rexLiteralDq = /"(?:\\["bfnrt\/\\]|\\u[a-fA-F0-9]{4}|[^"\\])*"/;
 const rexLiteralSq = /'(?:\\['bfnrt\/\\]|\\u[a-fA-F0-9]{4}|[^'\\])*'/;
+const rexInt = /\d+/
+// [example]
+// 0.1, 1.1, 1e10, 1.0e10, 1e+10, 1e-10, 1.0e-10 ...
+const rexFloat = /\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/
 const debug = false;
 
 const skipTypes = [
@@ -46,7 +50,8 @@ const argsRule = function (argsEnd) {
     arrayStart: { match: '[', push: 'array' },
     literalDq: rexLiteralDq,
     literalSq: rexLiteralSq,
-    number: /[0-9]+/,
+    float: rexFloat,
+    integer: rexInt,
     skip: { match: /\s+/, lineBreaks: true },
   };
 };
@@ -86,7 +91,8 @@ const lexer = moo.states({
     arrayStart: { match: '[', push: 'array' },
     literalDq: rexLiteralDq,
     literalSq: rexLiteralSq,
-    number: /[0-9]+/,
+    float: rexFloat,
+    integer: rexInt,
     skip: { match: /\s+/, lineBreaks: true },
   },
   array: {
@@ -97,7 +103,8 @@ const lexer = moo.states({
     comma: ',',
     literalDq: rexLiteralDq,
     literalSq: rexLiteralSq,
-    number: /[0-9]+/,
+    float: rexFloat,
+    integer: rexInt,
     skip: { match: /\s+/, lineBreaks: true },
   }
 });
