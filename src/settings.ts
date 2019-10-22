@@ -78,22 +78,7 @@ export const DefaultTnConfig: TnConfig = {
       "selfClosing": true
     },
     // [example]
-    // Inspired by Machi$notes('By Chunsoft@1998')
-    "$notes": {
-      "tagName": "<name>",
-      "content": "<arg1>",
-      "validate": false
-    },
-    // [example]
-    // $tip('IMO', 'In my opinion'), it's correct.
-    "$tip": {
-      "tagName": "<name>",
-      "content": "<arg2>",
-      "validate": false,
-      "attributes": {
-        "data-title": "<arg1>"
-      }
-    },
+    // @tip('IMO'){ 'In my opinion' }, it's correct.
     "@tip": {
       "tagName": "<name>",
       "attributes": {
