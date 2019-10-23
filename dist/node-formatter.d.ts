@@ -15,6 +15,7 @@ export interface NodeFormatter {
         id: string;
         className: string;
         attrs: any;
+        args: any[];
         content: string;
         selfClosing: boolean;
         prev?: TnNode;
@@ -27,6 +28,7 @@ export interface NodeFormatter {
         id: string;
         className: string;
         attrs: any;
+        args: any[];
         content?: string;
         children: TnNode[];
         prev?: TnNode;
@@ -50,6 +52,7 @@ export declare class StdHtmlFormatter implements NodeFormatter {
         id: string;
         className: string;
         attrs: any;
+        args: any[];
         content: string;
         selfClosing: boolean;
         prev?: TnNode;
@@ -62,6 +65,7 @@ export declare class StdHtmlFormatter implements NodeFormatter {
         id: string;
         className: string;
         attrs: any;
+        args: any[];
         children: TnNode[];
         content?: string;
         prev?: TnNode;
@@ -76,6 +80,7 @@ export declare class MinifiedHtmlFormatter extends StdHtmlFormatter {
         id: string;
         className: string;
         attrs: any;
+        args: any[];
         children: TnNode[];
         content?: string;
         prev?: TnNode;
@@ -90,6 +95,7 @@ export declare class PlainTextFormatter extends StdHtmlFormatter {
         id: string;
         className: string;
         attrs: any;
+        args: any[];
         children: TnNode[];
         content?: string;
         prev?: TnNode;

@@ -24,6 +24,7 @@ export interface NodeFormatter {
     id: string;
     className: string;
     attrs: any;
+    args: any[];
     content: string;
     selfClosing: boolean;
     prev?: TnNode;
@@ -37,6 +38,7 @@ export interface NodeFormatter {
     id: string;
     className: string;
     attrs: any;
+    args: any[];
     content?: string;
     children: TnNode[];
     prev?: TnNode;
@@ -57,6 +59,14 @@ function createOpenTag(args: {
   const classAttr = args.className ? `class="${Utils.escapeAttr(args.className)}"` : '';
   const attrField = [idAttr, classAttr, htmlAttr].filter(s => s !== '').join(' ');
   return attrField ? `<${args.tagName} ${attrField}>` : `<${args.tagName}>`;
+}
+
+function createRubyContent(args: any[]) {
+  const rbs = String(args[0]).split(',');
+  const rts = String(args[1]).split(',');
+  return rbs.reduce((acm, rb, index) => {
+    return acm + `${Utils.escapeText(rb)}<rt>${Utils.escapeText(rts[index])}</rt>`;
+  }, '');
 }
 
 function addIndent(text: string, size: number): string {
@@ -108,24 +118,25 @@ export class StdHtmlFormatter implements NodeFormatter {
     id: string;
     className: string;
     attrs: any;
+    args: any[];
     content: string;
     selfClosing: boolean;
     prev?: TnNode;
     next?: TnNode;
     indent: number;
   }): string {
-    const openTag = createOpenTag({
+    const otag = createOpenTag({
       tagName: args.tagName,
       id: args.id,
       className: args.className,
       attrs: args.attrs
     });
     if (args.selfClosing) {
-      return openTag;
+      return otag;
     }
-    const closeTag = `</${args.tagName}>`;
-    const annotContent = Utils.escapeText(args.content);
-    return openTag + annotContent + closeTag;
+    const ctag = `</${args.tagName}>`;
+    const annotContent = args.name === 'ruby' ? createRubyContent(args.args) : Utils.escapeText(args.content);
+    return otag + annotContent + ctag;
   }
 
   public visitBlockNode(args: {
@@ -134,6 +145,7 @@ export class StdHtmlFormatter implements NodeFormatter {
     id: string;
     className: string;
     attrs: any;
+    args: any[];
     children: TnNode[];
     content?: string;
     prev?: TnNode;
@@ -181,6 +193,7 @@ export class MinifiedHtmlFormatter extends StdHtmlFormatter {
     id: string;
     className: string;
     attrs: any;
+    args: any[];
     children: TnNode[];
     content?: string;
     prev?: TnNode;
@@ -219,6 +232,7 @@ export class PlainTextFormatter extends StdHtmlFormatter {
     id: string;
     className: string;
     attrs: any;
+    args: any[];
     children: TnNode[];
     content?: string;
     prev?: TnNode;

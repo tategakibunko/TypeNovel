@@ -23,6 +23,13 @@ function createOpenTag(args) {
     var attrField = [idAttr, classAttr, htmlAttr].filter(function (s) { return s !== ''; }).join(' ');
     return attrField ? "<" + args.tagName + " " + attrField + ">" : "<" + args.tagName + ">";
 }
+function createRubyContent(args) {
+    var rbs = String(args[0]).split(',');
+    var rts = String(args[1]).split(',');
+    return rbs.reduce(function (acm, rb, index) {
+        return acm + (modules_1.Utils.escapeText(rb) + "<rt>" + modules_1.Utils.escapeText(rts[index]) + "</rt>");
+    }, '');
+}
 function addIndent(text, size) {
     for (var i = 0; i < size; i++) {
         text = ' ' + text;
@@ -59,18 +66,18 @@ var StdHtmlFormatter = /** @class */ (function () {
         return content;
     };
     StdHtmlFormatter.prototype.visitAnnotNode = function (args) {
-        var openTag = createOpenTag({
+        var otag = createOpenTag({
             tagName: args.tagName,
             id: args.id,
             className: args.className,
             attrs: args.attrs
         });
         if (args.selfClosing) {
-            return openTag;
+            return otag;
         }
-        var closeTag = "</" + args.tagName + ">";
-        var annotContent = modules_1.Utils.escapeText(args.content);
-        return openTag + annotContent + closeTag;
+        var ctag = "</" + args.tagName + ">";
+        var annotContent = args.name === 'ruby' ? createRubyContent(args.args) : modules_1.Utils.escapeText(args.content);
+        return otag + annotContent + ctag;
     };
     StdHtmlFormatter.prototype.visitBlockNode = function (args) {
         var _this = this;
