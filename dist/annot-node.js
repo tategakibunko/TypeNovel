@@ -107,6 +107,7 @@ var AnnotNode = /** @class */ (function (_super) {
             id: this.evalAttrValue(this.id, this.args),
             className: this.evalAttrValue(this.className, this.args),
             attrs: this.evalAttrs(this.name, this.args, this.attrs),
+            args: this.args,
             content: this.content || this.value,
             selfClosing: this.selfClosing,
             prev: this.prev,

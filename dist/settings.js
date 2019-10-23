@@ -66,11 +66,7 @@ exports.DefaultTnConfig = {
         // $ruby('漢字', 'かんじ')
         // $ruby('漢,字', 'かん,じ')
         "$ruby": {
-            "tagName": "ruby-text",
-            "validate": false,
-            "attributes": {
-                "data-rt": "<arg2>"
-            }
+            "validate": false
         },
         "$br": {
             "validate": false,
