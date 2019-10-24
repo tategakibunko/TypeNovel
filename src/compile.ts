@@ -22,12 +22,12 @@ export interface CompileResult {
 export interface CompileArgs {
   path?: string; // source file path(optional)
   rootBlockName?: string;
-  typeNovelParser: TypeNovelParser; // String -> Ast[]
-  astMappers: AstMapper[]; // Ast[] -> Ast'[]
-  astConverter: AstConverter; // Ast[] -> TnNode[]
-  nodeMappers: NodeMapper[]; // TnNode[] -> TnNode[]
-  nodeValidators: NodeValidator[]; // TnNode[] -> ValidationError[]
-  nodeFormatter: NodeFormatter; // TnNode[] -> string[]
+  typeNovelParser: TypeNovelParser; // string -> Ast[]
+  astMappers: AstMapper[]; // Ast -> Ast'
+  astConverter: AstConverter; // Ast -> TnNode
+  nodeMappers: NodeMapper[]; // TnNode -> TnNode'
+  nodeValidators: NodeValidator[]; // TnNode -> ValidationError[]
+  nodeFormatter: NodeFormatter; // TnNode -> string
 }
 
 export class Compile {
