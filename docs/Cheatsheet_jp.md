@@ -101,7 +101,7 @@ TypeNovelのバージョンを表示します。
 そしてコンパイル結果はこうなります。
 
 ```html
-<scene data-time="?">
+<scene data-time="?深夜">
   本文テキスト
 </scene>
 ```

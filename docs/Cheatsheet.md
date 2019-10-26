@@ -102,7 +102,7 @@ In body text, there is no annoration for `time`, but compiler warn nothing becau
 And output html is here.
 
 ```html
-<scene data-time="?">
+<scene data-time="?night">
   body text
 </scene>
 ```
