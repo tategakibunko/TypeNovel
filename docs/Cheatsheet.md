@@ -109,7 +109,7 @@ And output html is here.
 
 Offcource you can be ambiguous about `time` by defining `@scene` without any constraints too.
 
-But if you want `data-time="?"` in your output html by application issue, and at the same time, don't wont to be warned by compiler by `time` constraint, `ignored constraint` is very usefull.
+But if you want `data-time="?night"` in your output html by application issue, and at the same time, don't wont to be warned by compiler by `time` constraint, `ignored constraint` is very usefull.
 
 ## Annotation markup
 
