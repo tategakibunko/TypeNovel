@@ -57,6 +57,7 @@ function extractPair(kv: any, output: any) {
 }
 
 function extractPairs(d: any) {
+  console.log('extractPairs:', d);
   let output: any = {};
   extractPair(d[0], output);
   for (let i in d[1]) {
@@ -103,7 +104,8 @@ const grammar: Grammar = {
     {"name": "stmt", "symbols": ["block"], "postprocess": id},
     {"name": "plain", "symbols": ["text"], "postprocess": 
         (d) => {
-          const startColumn = d[0].col;
+          const line = d[0].line - 1;
+          const startColumn = d[0].col - 1;
           const endColumn = startColumn + d[0].value.length;
           // console.log('text start:', d[0]);
           return new Ast({
@@ -112,13 +114,14 @@ const grammar: Grammar = {
             args: [],
             value: d[0].value,
             children: [],
-            codePos: {line: d[0].line, startColumn, endColumn},
+            codePos: {line, startColumn, endColumn},
           });
         }
         },
     {"name": "annot", "symbols": [(lexer.has("annotStart") ? {type: "annotStart"} : annotStart), (lexer.has("annotName") ? {type: "annotName"} : annotName), "args"], "postprocess": 
         (d) => {
-          const startColumn = d[0].col;
+          const line = d[0].line - 1;
+          const startColumn = d[0].col - 1;
           const endColumn = startColumn + d[1].value.length + 1;
           // console.log('annot start:', d[0]);
           return new Ast({
@@ -127,7 +130,7 @@ const grammar: Grammar = {
             args: d[2] || [],
             value: '',
             children: [],
-            codePos: {line: d[0].line, startColumn, endColumn},
+            codePos: {line, startColumn, endColumn},
           });
         }
         },
@@ -136,7 +139,8 @@ const grammar: Grammar = {
     {"name": "block$ebnf$1", "symbols": ["block$ebnf$1", "block$ebnf$1$subexpression$1"], "postprocess": (d) => d[0].concat([d[1]])},
     {"name": "block", "symbols": [(lexer.has("blockStart") ? {type: "blockStart"} : blockStart), (lexer.has("blockName") ? {type: "blockName"} : blockName), "args", (lexer.has("blockTextStart") ? {type: "blockTextStart"} : blockTextStart), "block$ebnf$1", (lexer.has("blockTextEnd") ? {type: "blockTextEnd"} : blockTextEnd)], "postprocess": 
         (d) => {
-          const startColumn = d[0].col;
+          const line = d[0].line - 1;
+          const startColumn = d[0].col - 1;
           const endColumn = startColumn + d[1].value.length + 1;
           // console.log('block start:', d[0]);
           return new Ast({
@@ -145,7 +149,7 @@ const grammar: Grammar = {
             args: d[2] || [],
             value: '',
             children: extractBlockChildren(d[4]),
-            codePos: {line: d[0].line, startColumn, endColumn},
+            codePos: {line, startColumn, endColumn},
           });
         }
         },

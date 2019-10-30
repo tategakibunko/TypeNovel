@@ -26,6 +26,7 @@ function extractPair(kv, output) {
     }
 }
 function extractPairs(d) {
+    console.log('extractPairs:', d);
     var output = {};
     extractPair(d[0], output);
     for (var i in d[1]) {
@@ -48,7 +49,8 @@ var grammar = {
         { "name": "stmt", "symbols": ["annot"], "postprocess": id },
         { "name": "stmt", "symbols": ["block"], "postprocess": id },
         { "name": "plain", "symbols": ["text"], "postprocess": function (d) {
-                var startColumn = d[0].col;
+                var line = d[0].line - 1;
+                var startColumn = d[0].col - 1;
                 var endColumn = startColumn + d[0].value.length;
                 // console.log('text start:', d[0]);
                 return new modules_1.Ast({
@@ -57,12 +59,13 @@ var grammar = {
                     args: [],
                     value: d[0].value,
                     children: [],
-                    codePos: { line: d[0].line, startColumn: startColumn, endColumn: endColumn },
+                    codePos: { line: line, startColumn: startColumn, endColumn: endColumn },
                 });
             }
         },
         { "name": "annot", "symbols": [(lexer.has("annotStart") ? { type: "annotStart" } : annotStart), (lexer.has("annotName") ? { type: "annotName" } : annotName), "args"], "postprocess": function (d) {
-                var startColumn = d[0].col;
+                var line = d[0].line - 1;
+                var startColumn = d[0].col - 1;
                 var endColumn = startColumn + d[1].value.length + 1;
                 // console.log('annot start:', d[0]);
                 return new modules_1.Ast({
@@ -71,7 +74,7 @@ var grammar = {
                     args: d[2] || [],
                     value: '',
                     children: [],
-                    codePos: { line: d[0].line, startColumn: startColumn, endColumn: endColumn },
+                    codePos: { line: line, startColumn: startColumn, endColumn: endColumn },
                 });
             }
         },
@@ -79,7 +82,8 @@ var grammar = {
         { "name": "block$ebnf$1$subexpression$1", "symbols": ["stmt"] },
         { "name": "block$ebnf$1", "symbols": ["block$ebnf$1", "block$ebnf$1$subexpression$1"], "postprocess": function (d) { return d[0].concat([d[1]]); } },
         { "name": "block", "symbols": [(lexer.has("blockStart") ? { type: "blockStart" } : blockStart), (lexer.has("blockName") ? { type: "blockName" } : blockName), "args", (lexer.has("blockTextStart") ? { type: "blockTextStart" } : blockTextStart), "block$ebnf$1", (lexer.has("blockTextEnd") ? { type: "blockTextEnd" } : blockTextEnd)], "postprocess": function (d) {
-                var startColumn = d[0].col;
+                var line = d[0].line - 1;
+                var startColumn = d[0].col - 1;
                 var endColumn = startColumn + d[1].value.length + 1;
                 // console.log('block start:', d[0]);
                 return new modules_1.Ast({
@@ -88,7 +92,7 @@ var grammar = {
                     args: d[2] || [],
                     value: '',
                     children: extractBlockChildren(d[4]),
-                    codePos: { line: d[0].line, startColumn: startColumn, endColumn: endColumn },
+                    codePos: { line: line, startColumn: startColumn, endColumn: endColumn },
                 });
             }
         },
