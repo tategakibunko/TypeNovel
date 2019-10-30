@@ -25,6 +25,8 @@ stmt ->
 
 plain -> text {%
   (d) => {
+    const startColumn = d[0].col;
+    const endColumn = startColumn + d[0].value.length;
     // console.log('text start:', d[0]);
     return new Ast({
       type: 'text',
@@ -32,13 +34,15 @@ plain -> text {%
       args: [],
       value: d[0].value,
       children: [],
-      codePos: {line: d[0].line, col: d[0].col}
+      codePos: {line: d[0].line, startColumn, endColumn},
     });
   }
 %}
 
 annot -> %annotStart %annotName args {%
   (d) => {
+    const startColumn = d[0].col;
+    const endColumn = startColumn + d[1].value.length + 1;
     // console.log('annot start:', d[0]);
     return new Ast({
       type:'annot',
@@ -46,13 +50,15 @@ annot -> %annotStart %annotName args {%
       args: d[2] || [],
       value: '',
       children: [],
-      codePos: {line: d[0].line, col: d[0].col}
+      codePos: {line: d[0].line, startColumn, endColumn},
     });
   }
 %}
 
 block -> %blockStart %blockName args %blockTextStart (stmt):* %blockTextEnd {%
   (d) => {
+    const startColumn = d[0].col;
+    const endColumn = startColumn + d[1].value.length + 1;
     // console.log('block start:', d[0]);
     return new Ast({
       type: 'block',
@@ -60,7 +66,7 @@ block -> %blockStart %blockName args %blockTextStart (stmt):* %blockTextEnd {%
       args: d[2] || [],
       value: '',
       children: extractBlockChildren(d[4]),
-      codePos: {line: d[0].line, col: d[0].col}
+      codePos: {line: d[0].line, startColumn, endColumn},
     });
   }
 %}

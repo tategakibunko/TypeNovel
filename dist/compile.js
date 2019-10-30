@@ -30,7 +30,7 @@ var Compile = /** @class */ (function () {
         var ast = (astList.length === 1) ? astList[0] : new modules_1.Ast({
             type: 'block',
             name: opt.rootBlockName || modules_1.DefaultRootBlockName,
-            codePos: { line: 0, col: 0 },
+            codePos: { line: 0, startColumn: 0, endColumn: 0 },
             args: [],
             value: '',
             children: astList

@@ -1,5 +1,7 @@
 .gitignore
 .DS_Store
+.vscode
+syntaxes/
 node_modules/
 *.sh
 *.txt

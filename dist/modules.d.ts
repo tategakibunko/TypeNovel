@@ -1,6 +1,7 @@
 export * from './utils';
 export * from './config';
 export * from './settings';
+export * from './code-pos';
 export * from './ast';
 export * from './node';
 export * from './block-node';

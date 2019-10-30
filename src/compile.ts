@@ -39,7 +39,7 @@ export class Compile {
     let ast: Ast = (astList.length === 1) ? astList[0] : new Ast({
       type: 'block',
       name: opt.rootBlockName || DefaultRootBlockName,
-      codePos: { line: 0, col: 0 },
+      codePos: { line: 0, startColumn: 0, endColumn: 0 },
       args: [],
       value: '',
       children: astList

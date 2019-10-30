@@ -1,10 +1,5 @@
-import { TnNode, AstMapper, AstConverter, BlockNode, TypeNovelParser } from './modules';
+import { CodePos, TnNode, AstMapper, AstConverter, BlockNode, TypeNovelParser } from './modules';
 export declare type AstType = 'text' | 'annot' | 'block';
-export interface CodePos {
-    path?: string;
-    line: number;
-    col: number;
-}
 export declare class Ast {
     private type;
     private name;

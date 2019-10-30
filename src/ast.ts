@@ -1,12 +1,6 @@
-import { Utils, TnNode, AstMapper, AstConverter, BlockNode, TypeNovelParser } from './modules';
+import { Utils, CodePos, TnNode, AstMapper, AstConverter, BlockNode, TypeNovelParser } from './modules';
 
 export type AstType = 'text' | 'annot' | 'block';
-
-export interface CodePos {
-  path?: string;
-  line: number;
-  col: number;
-}
 
 export class Ast {
   private type: AstType;
