@@ -1,0 +1,5 @@
+@scene(){
+  $foo() is not defined.
+  $bar() is not defined.
+  $baz() is not defined.
+}

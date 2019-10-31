@@ -1,10 +1,20 @@
-@scene({
+@pre({
+  person: {
+    name: "taro",
+    age: 20
+  },
   taro:{
     info:{
       age:20
+    },
+    info2:{
+      data:"aaa"
     }
   }
 }){
-  @p(){ $taro("info", "age") }
-  @p(){ $taro("info", "foo") }
+  @p(){ \$person("name") = $person("name") }
+  @p(){ \$person("age") = $person("age") }
+  @p(){ \$taro("info", "age") = $taro("info", "age") }
+  @p(){ \$taro("info", "foo") = $taro("info", "foo") }
+  @p(){ \$taro("info2", "data") = $taro("info2", "data") }
 }

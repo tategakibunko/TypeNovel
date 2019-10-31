@@ -20,18 +20,22 @@ function extractExprs(d) {
     }
     return output;
 }
-function extractPair(kv, output) {
-    if (kv[0]) {
-        output[kv[0]] = kv[1];
-    }
+function extractPair(d) {
+    var key = d[0];
+    var value = d[2];
+    var line = d[1].line - 1;
+    var startColumn = d[1].col - 1;
+    var endColumn = startColumn + 1;
+    var pos = { line: line, startColumn: startColumn, endColumn: endColumn };
+    return new modules_1.Constraint(key, value, pos);
 }
 function extractPairs(d) {
-    var output = {};
-    extractPair(d[0], output);
+    var output = [];
+    output.push(d[0]);
     for (var i in d[1]) {
-        extractPair(d[1][i][1], output);
+        output.push(d[1][i][1]);
     }
-    return output;
+    return new modules_1.ConstraintCollection(output);
 }
 ;
 ;
@@ -129,7 +133,7 @@ var grammar = {
         { "name": "pairs$ebnf$2", "symbols": ["pairs$ebnf$2$subexpression$1"], "postprocess": id },
         { "name": "pairs$ebnf$2", "symbols": [], "postprocess": function () { return null; } },
         { "name": "pairs", "symbols": ["pair", "pairs$ebnf$1", "pairs$ebnf$2"], "postprocess": extractPairs },
-        { "name": "pair", "symbols": ["pkey", (lexer.has("colon") ? { type: "colon" } : colon), "expr"], "postprocess": function (d) { return [d[0], d[2]]; } },
+        { "name": "pair", "symbols": ["pkey", (lexer.has("colon") ? { type: "colon" } : colon), "expr"], "postprocess": extractPair },
         { "name": "pkey", "symbols": [(lexer.has("ident") ? { type: "ident" } : ident)], "postprocess": function (d) { return d[0].value; } },
         { "name": "pkey", "symbols": ["literal"], "postprocess": id }
     ],

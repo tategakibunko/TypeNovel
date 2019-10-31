@@ -29,11 +29,12 @@ declare var ident: any;
 import {
   Ast,
   Utils,
+  Constraint,
+  ConstraintCollection,
 } from './modules';
 
 const mlexer = require("./lexer");
 const lexer = mlexer.lexer;
-
 
 
 function extractBlockChildren(children: any []): any [] {
@@ -50,19 +51,23 @@ function extractExprs(d: any) {
   return output;
 }
 
-function extractPair(kv: any, output: any) {
-  if(kv[0]) {
-    output[kv[0]] = kv[1];
-  }
+function extractPair(d: any) {
+  const key = d[0];
+  const value = d[2];
+  const line = d[1].line - 1;
+  const startColumn = d[1].col - 1;
+  const endColumn = startColumn + 1;
+  const pos = {line, startColumn, endColumn};
+  return new Constraint(key, value, pos);
 }
 
 function extractPairs(d: any) {
-  let output: any = {};
-  extractPair(d[0], output);
+  let output: Constraint [] = [];
+  output.push(d[0]);
   for (let i in d[1]) {
-    extractPair(d[1][i][1], output);
+    output.push(d[1][i][1]);
   }
-  return output;
+  return new ConstraintCollection(output);
 }
 
 interface NearleyToken {  value: any;
@@ -187,7 +192,7 @@ const grammar: Grammar = {
     {"name": "pairs$ebnf$2", "symbols": ["pairs$ebnf$2$subexpression$1"], "postprocess": id},
     {"name": "pairs$ebnf$2", "symbols": [], "postprocess": () => null},
     {"name": "pairs", "symbols": ["pair", "pairs$ebnf$1", "pairs$ebnf$2"], "postprocess": extractPairs},
-    {"name": "pair", "symbols": ["pkey", (lexer.has("colon") ? {type: "colon"} : colon), "expr"], "postprocess": (d) => [d[0], d[2]]},
+    {"name": "pair", "symbols": ["pkey", (lexer.has("colon") ? {type: "colon"} : colon), "expr"], "postprocess": extractPair},
     {"name": "pkey", "symbols": [(lexer.has("ident") ? {type: "ident"} : ident)], "postprocess": (d) => d[0].value},
     {"name": "pkey", "symbols": ["literal"], "postprocess": id}
   ],

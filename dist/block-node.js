@@ -36,10 +36,9 @@ var BlockNode = /** @class */ (function (_super) {
         _this.className = args.map.className || '';
         _this.content = args.map.content;
         _this.whiteSpace = args.map.whiteSpace || 'normal';
-        _this.constraints = _this.parseConstraints(args.args);
+        _this.constraints = _this.parseConstraints(args.args[0]);
         var mmapAttrs = (args.map ? (args.map.attributes || {}) : {});
-        var cntrsAttrs = _this.parseConstraintsAttrs(_this.constraints);
-        _this.attrs = __assign(__assign({}, mmapAttrs), cntrsAttrs);
+        _this.attrs = __assign(__assign({}, mmapAttrs), _this.constraints.attrs);
         _this.parent = args.parent;
         _this.codePos = args.codePos;
         _this.uniqueId = args.uniqueId;
@@ -85,32 +84,36 @@ var BlockNode = /** @class */ (function (_super) {
     BlockNode.prototype.isWhiteSpacePre = function () {
         return this.whiteSpace === 'pre';
     };
-    BlockNode.prototype.parseConstraints = function (args) {
-        return (args[0] && typeof args[0] === 'object') ? args[0] : {};
+    BlockNode.prototype.parseConstraints = function (arg0) {
+        return (arg0 && arg0 instanceof modules_1.ConstraintCollection) ? arg0 : new modules_1.ConstraintCollection([]);
     };
-    BlockNode.prototype.parseConstraintsAttrs = function (constraints) {
-        return this.getConstraintNames().reduce(function (acm, name) {
-            acm["data-" + name] = String(constraints[name]);
-            return acm;
-        }, {});
+    BlockNode.prototype.getConstraint = function (name) {
+        return this.constraints.get(name);
     };
-    BlockNode.prototype.getConstraintNames = function () {
-        return Object.keys(this.constraints);
+    BlockNode.prototype.getConstraintNames = function (includeParents) {
+        if (includeParents === void 0) { includeParents = false; }
+        var names = (this.parent && includeParents) ? this.parent.getConstraintNames(includeParents) : [];
+        this.constraints.keys.forEach(function (name) {
+            if (names.indexOf(name) < 0) {
+                names.push(name);
+            }
+        });
+        return names;
     };
     BlockNode.prototype.getConstraintValue = function (name) {
-        return this.constraints[name];
+        var cntr = this.getConstraint(name);
+        var value = cntr ? cntr.value : undefined;
+        return value;
     };
-    BlockNode.prototype.findConstraintValue = function (name) {
-        if (typeof this.constraints[name] !== 'undefined') {
-            return this.constraints[name];
+    BlockNode.prototype.findConstraint = function (name) {
+        var cntr = this.getConstraint(name);
+        if (cntr !== undefined) {
+            return cntr;
         }
-        return this.parent ? this.parent.findConstraintValue(name) : undefined;
-    };
-    BlockNode.prototype.hasConstraintDef = function (name) {
-        return this.getConstraintNames().some(function (cntr) { return cntr === name; });
+        return this.parent ? this.parent.findConstraint(name) : undefined;
     };
     BlockNode.prototype.findConstraintOwner = function (name) {
-        if (this.hasConstraintDef(name)) {
+        if (this.constraints.containsKey(name)) {
             return this;
         }
         if (this.parent) {
@@ -120,16 +123,14 @@ var BlockNode = /** @class */ (function (_super) {
     };
     BlockNode.prototype.getDuplicateConstraints = function () {
         var _this = this;
-        var names = this.getConstraintNames();
-        if (!this.parent || names.length === 0) {
+        if (!this.parent || this.constraints.length === 0) {
             return [];
         }
         var ret = [];
-        names.forEach(function (name) {
-            var node = _this.parent ? _this.parent.findConstraintOwner(name) : undefined;
-            if (node !== undefined) {
-                // console.log(`${name} is already defined at ${node.codePos}`);
-                ret.push({ codePos: node.codePos, name: name });
+        this.constraints.forEach(function (cntr) {
+            var prevCntr = _this.parent ? _this.parent.getConstraint(cntr.key) : undefined;
+            if (prevCntr !== undefined) {
+                ret.push({ dupCntr: cntr, prevCntr: prevCntr });
             }
         });
         return ret;
@@ -149,15 +150,11 @@ var BlockNode = /** @class */ (function (_super) {
         }
         return undefined;
     };
-    BlockNode.prototype.isIgnoredConstraint = function (name) {
-        var value = String(this.getConstraintValue(name));
-        return value.startsWith("?");
-    };
-    BlockNode.prototype.getUnAnnotatedConstraintNames = function () {
+    BlockNode.prototype.getUnAnnotatedConstraints = function () {
         var _this = this;
-        return this.getConstraintNames()
-            .filter(function (name) { return !_this.isIgnoredConstraint(name); })
-            .filter(function (name) { return _this.findAnnot(name) === undefined; });
+        return this.constraints.filter(function (cntr) {
+            return !cntr.isIgnoredConstraint() && _this.findAnnot(cntr.key) === undefined;
+        });
     };
     BlockNode.prototype.acceptNodeMapper = function (visitor) {
         return visitor.visitBlockNode(this);

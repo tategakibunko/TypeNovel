@@ -51,7 +51,7 @@ var UndefinedConstraintChecker = /** @class */ (function (_super) {
         if (!node.isValidateTarget() || !node.isUndefinedAnnot()) {
             return [];
         }
-        var message = "Undefined constraint '" + node.name + "' is annoted by '$" + node.name + "'.";
+        var message = "Undefined constraint '" + node.name + "' is annotated.";
         return [{ codePos: codePos, message: message }];
     };
     return UndefinedConstraintChecker;
@@ -78,10 +78,10 @@ var DuplicateConstraintChecker = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     DuplicateConstraintChecker.prototype.visitBlockNode = function (node, codePos) {
-        var dupCntrs = node.getDuplicateConstraints();
-        return dupCntrs.map(function (dupCntr) {
-            var message = "'" + dupCntr.name + "' constraint is duplicate(already defined at line:" + dupCntr.codePos.line + ").";
-            return { codePos: codePos, message: message };
+        var results = node.getDuplicateConstraints();
+        return results.map(function (result) {
+            var message = "constraint '" + result.dupCntr.key + "' is duplicated(already defined at line:" + (result.prevCntr.codePos.line + 1) + ").";
+            return { codePos: result.dupCntr.codePos, message: message };
         });
     };
     return DuplicateConstraintChecker;
@@ -105,11 +105,11 @@ var UnAnnotatedConstraintChecker = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     UnAnnotatedConstraintChecker.prototype.visitBlockNode = function (node, codePos) {
-        var unAnnotatedCntrs = node.getUnAnnotatedConstraintNames();
-        return unAnnotatedCntrs.map(function (cntrName) {
-            var value = node.getConstraintValue(cntrName);
-            var message = "constraint '" + cntrName + "(" + value + ")' is not anntated in this '@" + node.name + "' block.";
-            return { codePos: codePos, message: message };
+        var unAnnotatedCntrs = node.getUnAnnotatedConstraints();
+        return unAnnotatedCntrs.map(function (cntr) {
+            var value = node.getConstraintValue(cntr.key);
+            var message = "constraint '" + cntr.key + "(" + value + ")' is not anntated in '@" + node.name + "'.";
+            return { codePos: cntr.codePos, message: message };
         });
     };
     return UnAnnotatedConstraintChecker;

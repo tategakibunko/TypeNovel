@@ -1,7 +1,8 @@
 import {
   TnNode,
   AnnotNode,
-  TextNode,
+  Constraint,
+  ConstraintCollection,
   NodeMapper,
   NodeFormatter,
   NodeValidator,
@@ -17,7 +18,7 @@ export class BlockNode extends TnNode {
   private className: string;
   private attrs: any;
   private args: any[];
-  private constraints: any;
+  private constraints: ConstraintCollection;
   private children: TnNode[];
   private codePos: CodePos;
   private content?: string;
@@ -39,10 +40,9 @@ export class BlockNode extends TnNode {
     this.className = args.map.className || '';
     this.content = args.map.content;
     this.whiteSpace = args.map.whiteSpace || 'normal';
-    this.constraints = this.parseConstraints(args.args);
+    this.constraints = this.parseConstraints(args.args[0]);
     const mmapAttrs = (args.map ? (args.map.attributes || {}) : {});
-    const cntrsAttrs = this.parseConstraintsAttrs(this.constraints);
-    this.attrs = { ...mmapAttrs, ...cntrsAttrs };
+    this.attrs = { ...mmapAttrs, ...this.constraints.attrs };
     this.parent = args.parent;
     this.codePos = args.codePos;
     this.uniqueId = args.uniqueId;
@@ -100,38 +100,40 @@ export class BlockNode extends TnNode {
     return this.whiteSpace === 'pre';
   }
 
-  private parseConstraints(args: any[]): any {
-    return (args[0] && typeof args[0] === 'object') ? args[0] : {};
+  private parseConstraints(arg0: any): ConstraintCollection {
+    return (arg0 && arg0 instanceof ConstraintCollection) ? arg0 : new ConstraintCollection([]);
   }
 
-  private parseConstraintsAttrs(constraints: any): any {
-    return this.getConstraintNames().reduce((acm: any, name: string) => {
-      acm[`data-${name}`] = String(constraints[name]);
-      return acm;
-    }, {});
+  private getConstraint(name: string): Constraint | undefined {
+    return this.constraints.get(name);
   }
 
-  private getConstraintNames(): string[] {
-    return Object.keys(this.constraints);
+  public getConstraintNames(includeParents = false): string[] {
+    let names = (this.parent && includeParents) ? this.parent.getConstraintNames(includeParents) : [];
+    this.constraints.keys.forEach(name => {
+      if (names.indexOf(name) < 0) {
+        names.push(name);
+      }
+    })
+    return names;
   }
 
   public getConstraintValue(name: string): any {
-    return this.constraints[name];
+    const cntr = this.getConstraint(name);
+    const value = cntr ? cntr.value : undefined;
+    return value;
   }
 
-  public findConstraintValue(name: string): any {
-    if (typeof this.constraints[name] !== 'undefined') {
-      return this.constraints[name];
+  public findConstraint(name: string): Constraint | undefined {
+    const cntr = this.getConstraint(name);
+    if (cntr !== undefined) {
+      return cntr;
     }
-    return this.parent ? this.parent.findConstraintValue(name) : undefined;
-  }
-
-  private hasConstraintDef(name: string): boolean {
-    return this.getConstraintNames().some(cntr => cntr === name);
+    return this.parent ? this.parent.findConstraint(name) : undefined;
   }
 
   public findConstraintOwner(name: string): BlockNode | undefined {
-    if (this.hasConstraintDef(name)) {
+    if (this.constraints.containsKey(name)) {
       return this;
     }
     if (this.parent) {
@@ -140,23 +142,21 @@ export class BlockNode extends TnNode {
     return undefined;
   }
 
-  public getDuplicateConstraints(): { codePos: CodePos, name: string }[] {
-    let names = this.getConstraintNames();
-    if (!this.parent || names.length === 0) {
+  public getDuplicateConstraints(): { prevCntr: Constraint, dupCntr: Constraint }[] {
+    if (!this.parent || this.constraints.length === 0) {
       return [];
     }
-    let ret: { codePos: CodePos, name: string }[] = [];
-    names.forEach(name => {
-      let node = this.parent ? this.parent.findConstraintOwner(name) : undefined;
-      if (node !== undefined) {
-        // console.log(`${name} is already defined at ${node.codePos}`);
-        ret.push({ codePos: node.codePos, name });
+    let ret: { prevCntr: Constraint, dupCntr: Constraint }[] = [];
+    this.constraints.forEach(cntr => {
+      let prevCntr = this.parent ? this.parent.getConstraint(cntr.key) : undefined;
+      if (prevCntr !== undefined) {
+        ret.push({ dupCntr: cntr, prevCntr });
       }
     });
     return ret;
   }
 
-  public findAnnot(name: string): TnNode | undefined {
+  public findAnnot(name: string): AnnotNode | undefined {
     const children = this.children.filter(child => !child.isTextNode());
     for (let i = 0; i < children.length; i++) {
       if (children[i].isBlockNode()) {
@@ -165,21 +165,16 @@ export class BlockNode extends TnNode {
           return annot;
         }
       } else if (children[i].isAnnotNode() && children[i].name === name) {
-        return children[i];
+        return children[i] as AnnotNode;
       }
     }
     return undefined;
   }
 
-  public isIgnoredConstraint(name: string): boolean {
-    const value = String(this.getConstraintValue(name));
-    return value.startsWith("?");
-  }
-
-  public getUnAnnotatedConstraintNames(): string[] {
-    return this.getConstraintNames()
-      .filter(name => !this.isIgnoredConstraint(name))
-      .filter(name => this.findAnnot(name) === undefined);
+  public getUnAnnotatedConstraints(): Constraint[] {
+    return this.constraints.filter(cntr => {
+      return !cntr.isIgnoredConstraint() && this.findAnnot(cntr.key) === undefined;
+    });
   }
 
   public acceptNodeMapper(visitor: NodeMapper): BlockNode {

@@ -1,0 +1,9 @@
+@scene({
+  season:"summer"
+}){
+  @scene({
+    season:"winter"
+  }){
+    $season() has come!
+  }
+}

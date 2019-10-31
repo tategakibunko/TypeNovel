@@ -4,6 +4,8 @@
 import {
   Ast,
   Utils,
+  Constraint,
+  ConstraintCollection,
 } from './modules';
 
 const mlexer = require("./lexer");
@@ -112,14 +114,13 @@ object ->
 
 pairs -> pair (%comma pair):* (%comma):? {% extractPairs %}
 
-pair -> pkey %colon expr {% (d) => [d[0], d[2]] %}
+pair -> pkey %colon expr {% extractPair %}
 
 pkey ->
   %ident {% (d) => d[0].value %}
 | literal {% id %}
 
 @{%
-
 function extractBlockChildren(children: any []): any [] {
   return children.map((child: any) => {
     return child instanceof Array ? child[0] : child;
@@ -134,18 +135,22 @@ function extractExprs(d: any) {
   return output;
 }
 
-function extractPair(kv: any, output: any) {
-  if(kv[0]) {
-    output[kv[0]] = kv[1];
-  }
+function extractPair(d: any) {
+  const key = d[0];
+  const value = d[2];
+  const line = d[1].line - 1;
+  const startColumn = d[1].col - 1;
+  const endColumn = startColumn + 1;
+  const pos = {line, startColumn, endColumn};
+  return new Constraint(key, value, pos);
 }
 
 function extractPairs(d: any) {
-  let output: any = {};
-  extractPair(d[0], output);
+  let output: Constraint [] = [];
+  output.push(d[0]);
   for (let i in d[1]) {
-    extractPair(d[1][i][1], output);
+    output.push(d[1][i][1]);
   }
-  return output;
+  return new ConstraintCollection(output);
 }
 %}

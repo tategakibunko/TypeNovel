@@ -1,5 +1,6 @@
 import {
   NodeValidator,
+  Constraint,
   BlockNode,
   AnnotNode,
   TextNode,
@@ -52,7 +53,7 @@ export class UndefinedConstraintChecker extends NoCheckValidator {
     if (!node.isValidateTarget() || !node.isUndefinedAnnot()) {
       return [];
     }
-    const message = `Undefined constraint '${node.name}' is annoted by '$${node.name}'.`;
+    const message = `Undefined constraint '${node.name}' is annotated.`;
     return [{ codePos, message }];
   }
 }
@@ -74,10 +75,10 @@ export class UndefinedConstraintChecker extends NoCheckValidator {
 */
 export class DuplicateConstraintChecker extends NoCheckValidator {
   visitBlockNode(node: BlockNode, codePos: CodePos): ValidationError[] {
-    const dupCntrs: { codePos: CodePos, name: string }[] = node.getDuplicateConstraints();
-    return dupCntrs.map(dupCntr => {
-      const message = `'${dupCntr.name}' constraint is duplicate(already defined at line:${dupCntr.codePos.line}).`;
-      return { codePos, message };
+    const results = node.getDuplicateConstraints();
+    return results.map(result => {
+      const message = `constraint '${result.dupCntr.key}' is duplicated(already defined at line:${result.prevCntr.codePos.line + 1}).`;
+      return { codePos: result.dupCntr.codePos, message };
     });
   }
 }
@@ -96,11 +97,11 @@ export class DuplicateConstraintChecker extends NoCheckValidator {
 */
 export class UnAnnotatedConstraintChecker extends NoCheckValidator {
   visitBlockNode(node: BlockNode, codePos: CodePos): ValidationError[] {
-    const unAnnotatedCntrs: string[] = node.getUnAnnotatedConstraintNames();
-    return unAnnotatedCntrs.map(cntrName => {
-      const value = node.getConstraintValue(cntrName);
-      const message = `constraint '${cntrName}(${value})' is not anntated in this '@${node.name}' block.`;
-      return { codePos, message };
+    const unAnnotatedCntrs: Constraint[] = node.getUnAnnotatedConstraints();
+    return unAnnotatedCntrs.map(cntr => {
+      const value = node.getConstraintValue(cntr.key);
+      const message = `constraint '${cntr.key}(${value})' is not anntated in '@${node.name}'.`;
+      return { codePos: cntr.codePos, message };
     });
   }
 }
