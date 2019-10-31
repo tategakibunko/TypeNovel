@@ -35,7 +35,7 @@ function extractPairs(d) {
     for (var i in d[1]) {
         output.push(d[1][i][1]);
     }
-    return output;
+    return new modules_1.ConstraintCollection(output);
 }
 ;
 ;

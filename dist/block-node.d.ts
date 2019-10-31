@@ -32,7 +32,7 @@ export declare class BlockNode extends TnNode {
     isWhiteSpacePre(): boolean;
     private parseConstraints;
     private getConstraint;
-    private getConstraintNames;
+    getConstraintNames(includeParents?: boolean): string[];
     getConstraintValue(name: string): any;
     findConstraint(name: string): Constraint | undefined;
     findConstraintOwner(name: string): BlockNode | undefined;
@@ -41,7 +41,6 @@ export declare class BlockNode extends TnNode {
         dupCntr: Constraint;
     }[];
     findAnnot(name: string): AnnotNode | undefined;
-    isIgnoredConstraint(name: string): boolean;
     getUnAnnotatedConstraints(): Constraint[];
     acceptNodeMapper(visitor: NodeMapper): BlockNode;
     acceptNodeFormatter(visitor: NodeFormatter, indent: number): string;

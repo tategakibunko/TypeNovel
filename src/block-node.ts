@@ -101,17 +101,21 @@ export class BlockNode extends TnNode {
   }
 
   private parseConstraints(arg0: any): ConstraintCollection {
-    const cntrs = (arg0 && arg0 instanceof Array) ? arg0 : [];
-    return new ConstraintCollection(cntrs as Constraint[]);
+    return (arg0 && arg0 instanceof ConstraintCollection) ? arg0 : new ConstraintCollection([]);
   }
 
   private getConstraint(name: string): Constraint | undefined {
     return this.constraints.get(name);
   }
 
-  // TODO
-  private getConstraintNames(includeParents = false): string[] {
-    return this.constraints.keys;
+  public getConstraintNames(includeParents = false): string[] {
+    let names = (this.parent && includeParents) ? this.parent.getConstraintNames(includeParents) : [];
+    this.constraints.keys.forEach(name => {
+      if (names.indexOf(name) < 0) {
+        names.push(name);
+      }
+    })
+    return names;
   }
 
   public getConstraintValue(name: string): any {
@@ -121,9 +125,9 @@ export class BlockNode extends TnNode {
   }
 
   public findConstraint(name: string): Constraint | undefined {
-    const value = this.getConstraintValue(name);
-    if (value !== undefined) {
-      return value;
+    const cntr = this.getConstraint(name);
+    if (cntr !== undefined) {
+      return cntr;
     }
     return this.parent ? this.parent.findConstraint(name) : undefined;
   }
@@ -165,11 +169,6 @@ export class BlockNode extends TnNode {
       }
     }
     return undefined;
-  }
-
-  public isIgnoredConstraint(name: string): boolean {
-    const value = String(this.getConstraintValue(name));
-    return value.startsWith("?");
   }
 
   public getUnAnnotatedConstraints(): Constraint[] {

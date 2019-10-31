@@ -1,6 +1,7 @@
 import {
   TnNode,
   Constraint,
+  ConstraintCollection,
   BlockNode,
   NodeMapper,
   NodeFormatter,
@@ -24,10 +25,10 @@ import {
     $season()        // '<season>winter</season>'
     $season('Xmas')  // '<season>Xmas</season>'
     $foo("bar")      // '<foo>bar</foo>'
-    $foo()           // '<foo>foo</foo>'
+    $foo()           // '<foo>undefined</foo>'
     $taro("name")    // '<taro-name>taro</taro-name>'
     $taro("age")     // '<taro-age>10</taro-age>'
-    $taro("ouch")    // '<taro></taro>'
+    $taro("ouch")    // '<taro-ouch>undefined</taro-ouch>'
     $words(2)        // '<words>switch!</words>
   }
 */
@@ -65,15 +66,7 @@ export class AnnotNode extends TnNode {
     this.parent = args.parent;
     this.uniqueId = args.uniqueId;
     this.attrs = (args.map ? (args.map.attributes || {}) : {});
-    if (args.parent) {
-      this.constraint = args.parent.findConstraint(this.name);
-    }
-    // this.constraint = args.parent ? args.parent.findConstraint(this.name) : undefined;
-    // console.log('annot %s constraint = %o', this.name, this.constraint);
-    if (this.constraint instanceof Array) {
-      this.constraint = this.constraint[0];
-      console.log('constraint is array!?');
-    }
+    this.constraint = args.parent ? args.parent.findConstraint(this.name) : undefined;
     this.value = args.map.content || this.getAnnotValue(args.name, args.args, this.constraint);
   }
 
@@ -86,11 +79,11 @@ export class AnnotNode extends TnNode {
   }
 
   private getAnnotValue(name: string, args: any[], constraint?: Constraint): string {
-    // console.log('annot value(%s), constraint:', name, constraint);
+    // console.log('annot value(%s), args:%o, constraint:', name, args, constraint);
     if (args.length === 0) {
-      // $foo() => 'foo'
+      // $foo() => 'undefined'
       if (constraint === undefined) {
-        return name;
+        return 'undefined';
       }
       // $season() => 'winter'
       return String(constraint);
@@ -108,18 +101,23 @@ export class AnnotNode extends TnNode {
       return String(aval);
     }
     // $words(2) => 'switch!'
-    if (constraint instanceof Array) {
-      return String(constraint[parseInt(aval, 10)]);
+    if (cval instanceof Array) {
+      return String(cval[parseInt(aval, 10)]);
     }
-    if (typeof cval === 'object') {
-      // $taro("ouch") => <taro></taro>
-      if (!cval[aval]) {
-        return '';
+    if (cval instanceof ConstraintCollection) {
+      const cntr = cval.get(aval);
+      this.tagName = [name].concat(args).join('-');
+      // $taro("ouch") => <taro-ouch>undefined</taro-ouch>
+      if (!cntr) {
+        return 'undefined';
       }
       // $taro("age") => <taro-age>20</taro-age>
-      this.tagName = [name].concat(args).join('-');
       const oval = args.reduce((acm, arg) => {
-        return typeof acm === 'object' ? (acm[arg] || '') : String(acm);
+        if (acm instanceof ConstraintCollection) {
+          const cntr = acm.get(arg);
+          return cntr ? cntr.value : undefined;
+        }
+        return String(acm);
       }, cval);
       return String(oval);
     }

@@ -5,6 +5,7 @@ import {
   Ast,
   Utils,
   Constraint,
+  ConstraintCollection,
 } from './modules';
 
 const mlexer = require("./lexer");
@@ -150,6 +151,6 @@ function extractPairs(d: any) {
   for (let i in d[1]) {
     output.push(d[1][i][1]);
   }
-  return output;
+  return new ConstraintCollection(output);
 }
 %}

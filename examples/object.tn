@@ -6,11 +6,15 @@
   taro:{
     info:{
       age:20
+    },
+    info2:{
+      data:"aaa"
     }
   }
 }){
-  \$person("name") = $person("name")
-  \$person("age") = $person("age")
-  $taro("info", "age")
-  $taro("info", "foo")
+  @p(){ \$person("name") = $person("name") }
+  @p(){ \$person("age") = $person("age") }
+  @p(){ \$taro("info", "age") = $taro("info", "age") }
+  @p(){ \$taro("info", "foo") = $taro("info", "foo") }
+  @p(){ \$taro("info2", "data") = $taro("info2", "data") }
 }

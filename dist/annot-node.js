@@ -28,10 +28,10 @@ var modules_1 = require("./modules");
     $season()        // '<season>winter</season>'
     $season('Xmas')  // '<season>Xmas</season>'
     $foo("bar")      // '<foo>bar</foo>'
-    $foo()           // '<foo>foo</foo>'
+    $foo()           // '<foo>undefined</foo>'
     $taro("name")    // '<taro-name>taro</taro-name>'
     $taro("age")     // '<taro-age>10</taro-age>'
-    $taro("ouch")    // '<taro></taro>'
+    $taro("ouch")    // '<taro-ouch>undefined</taro-ouch>'
     $words(2)        // '<words>switch!</words>
   }
 */
@@ -51,15 +51,7 @@ var AnnotNode = /** @class */ (function (_super) {
         _this.parent = args.parent;
         _this.uniqueId = args.uniqueId;
         _this.attrs = (args.map ? (args.map.attributes || {}) : {});
-        if (args.parent) {
-            _this.constraint = args.parent.findConstraint(_this.name);
-        }
-        // this.constraint = args.parent ? args.parent.findConstraint(this.name) : undefined;
-        // console.log('annot %s constraint = %o', this.name, this.constraint);
-        if (_this.constraint instanceof Array) {
-            _this.constraint = _this.constraint[0];
-            console.log('constraint is array!?');
-        }
+        _this.constraint = args.parent ? args.parent.findConstraint(_this.name) : undefined;
         _this.value = args.map.content || _this.getAnnotValue(args.name, args.args, _this.constraint);
         return _this;
     }
@@ -70,11 +62,11 @@ var AnnotNode = /** @class */ (function (_super) {
         return "annot(" + this.name + "): " + this.value;
     };
     AnnotNode.prototype.getAnnotValue = function (name, args, constraint) {
-        // console.log('annot value(%s), constraint:', name, constraint);
+        // console.log('annot value(%s), args:%o, constraint:', name, args, constraint);
         if (args.length === 0) {
-            // $foo() => 'foo'
+            // $foo() => 'undefined'
             if (constraint === undefined) {
-                return name;
+                return 'undefined';
             }
             // $season() => 'winter'
             return String(constraint);
@@ -90,18 +82,23 @@ var AnnotNode = /** @class */ (function (_super) {
             return String(aval);
         }
         // $words(2) => 'switch!'
-        if (constraint instanceof Array) {
-            return String(constraint[parseInt(aval, 10)]);
+        if (cval instanceof Array) {
+            return String(cval[parseInt(aval, 10)]);
         }
-        if (typeof cval === 'object') {
-            // $taro("ouch") => <taro></taro>
-            if (!cval[aval]) {
-                return '';
+        if (cval instanceof modules_1.ConstraintCollection) {
+            var cntr = cval.get(aval);
+            this.tagName = [name].concat(args).join('-');
+            // $taro("ouch") => <taro-ouch>undefined</taro-ouch>
+            if (!cntr) {
+                return 'undefined';
             }
             // $taro("age") => <taro-age>20</taro-age>
-            this.tagName = [name].concat(args).join('-');
             var oval = args.reduce(function (acm, arg) {
-                return typeof acm === 'object' ? (acm[arg] || '') : String(acm);
+                if (acm instanceof modules_1.ConstraintCollection) {
+                    var cntr_1 = acm.get(arg);
+                    return cntr_1 ? cntr_1.value : undefined;
+                }
+                return String(acm);
             }, cval);
             return String(oval);
         }

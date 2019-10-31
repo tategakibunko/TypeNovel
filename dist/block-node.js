@@ -85,16 +85,20 @@ var BlockNode = /** @class */ (function (_super) {
         return this.whiteSpace === 'pre';
     };
     BlockNode.prototype.parseConstraints = function (arg0) {
-        var cntrs = (arg0 && arg0 instanceof Array) ? arg0 : [];
-        return new modules_1.ConstraintCollection(cntrs);
+        return (arg0 && arg0 instanceof modules_1.ConstraintCollection) ? arg0 : new modules_1.ConstraintCollection([]);
     };
     BlockNode.prototype.getConstraint = function (name) {
         return this.constraints.get(name);
     };
-    // TODO
     BlockNode.prototype.getConstraintNames = function (includeParents) {
         if (includeParents === void 0) { includeParents = false; }
-        return this.constraints.keys;
+        var names = (this.parent && includeParents) ? this.parent.getConstraintNames(includeParents) : [];
+        this.constraints.keys.forEach(function (name) {
+            if (names.indexOf(name) < 0) {
+                names.push(name);
+            }
+        });
+        return names;
     };
     BlockNode.prototype.getConstraintValue = function (name) {
         var cntr = this.getConstraint(name);
@@ -102,9 +106,9 @@ var BlockNode = /** @class */ (function (_super) {
         return value;
     };
     BlockNode.prototype.findConstraint = function (name) {
-        var value = this.getConstraintValue(name);
-        if (value !== undefined) {
-            return value;
+        var cntr = this.getConstraint(name);
+        if (cntr !== undefined) {
+            return cntr;
         }
         return this.parent ? this.parent.findConstraint(name) : undefined;
     };
@@ -145,10 +149,6 @@ var BlockNode = /** @class */ (function (_super) {
             }
         }
         return undefined;
-    };
-    BlockNode.prototype.isIgnoredConstraint = function (name) {
-        var value = String(this.getConstraintValue(name));
-        return value.startsWith("?");
     };
     BlockNode.prototype.getUnAnnotatedConstraints = function () {
         var _this = this;

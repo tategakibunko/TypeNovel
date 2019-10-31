@@ -20,14 +20,7 @@ export class ConstraintCollection {
   private constraints: Constraint[];
 
   constructor(constraints: Constraint[]) {
-    // convert constraint[] in constraint to 'object'.
-    this.constraints = constraints.map(cntr => {
-      if (cntr instanceof Array && cntr[0] instanceof Constraint) {
-        console.log('constraint to object');
-        return new ConstraintCollection(cntr).object;
-      }
-      return cntr;
-    })
+    this.constraints = constraints;
   }
 
   get(name: string): Constraint | undefined {
