@@ -1,5 +1,6 @@
 import {
   TnNode,
+  Constraint,
   BlockNode,
   NodeMapper,
   NodeFormatter,
@@ -39,7 +40,7 @@ export class AnnotNode extends TnNode {
   private value: string;
   private codePos: CodePos;
   private content?: string;
-  private constraint?: any;
+  private constraint?: Constraint;
   private validate: boolean;
   private selfClosing: boolean;
 
@@ -64,7 +65,15 @@ export class AnnotNode extends TnNode {
     this.parent = args.parent;
     this.uniqueId = args.uniqueId;
     this.attrs = (args.map ? (args.map.attributes || {}) : {});
-    this.constraint = args.parent ? args.parent.findConstraintValue(this.name) : undefined;
+    if (args.parent) {
+      this.constraint = args.parent.findConstraint(this.name);
+    }
+    // this.constraint = args.parent ? args.parent.findConstraint(this.name) : undefined;
+    // console.log('annot %s constraint = %o', this.name, this.constraint);
+    if (this.constraint instanceof Array) {
+      this.constraint = this.constraint[0];
+      console.log('constraint is array!?');
+    }
     this.value = args.map.content || this.getAnnotValue(args.name, args.args, this.constraint);
   }
 
@@ -76,7 +85,8 @@ export class AnnotNode extends TnNode {
     return `annot(${this.name}): ${this.value}`;
   }
 
-  private getAnnotValue(name: string, args: any[], constraint?: any): string {
+  private getAnnotValue(name: string, args: any[], constraint?: Constraint): string {
+    // console.log('annot value(%s), constraint:', name, constraint);
     if (args.length === 0) {
       // $foo() => 'foo'
       if (constraint === undefined) {
@@ -91,24 +101,26 @@ export class AnnotNode extends TnNode {
     if (constraint === undefined) {
       return String(aval);
     }
+    const cval = constraint.value;
+
     // $season('Xmas') => 'Xmas'
-    if (typeof constraint === 'string') {
+    if (typeof cval === 'string') {
       return String(aval);
     }
     // $words(2) => 'switch!'
     if (constraint instanceof Array) {
       return String(constraint[parseInt(aval, 10)]);
     }
-    if (typeof constraint === 'object') {
+    if (typeof cval === 'object') {
       // $taro("ouch") => <taro></taro>
-      if (!constraint[aval]) {
+      if (!cval[aval]) {
         return '';
       }
       // $taro("age") => <taro-age>20</taro-age>
       this.tagName = [name].concat(args).join('-');
       const oval = args.reduce((acm, arg) => {
         return typeof acm === 'object' ? (acm[arg] || '') : String(acm);
-      }, constraint);
+      }, cval);
       return String(oval);
     }
     return String(aval);

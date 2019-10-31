@@ -51,7 +51,15 @@ var AnnotNode = /** @class */ (function (_super) {
         _this.parent = args.parent;
         _this.uniqueId = args.uniqueId;
         _this.attrs = (args.map ? (args.map.attributes || {}) : {});
-        _this.constraint = args.parent ? args.parent.findConstraintValue(_this.name) : undefined;
+        if (args.parent) {
+            _this.constraint = args.parent.findConstraint(_this.name);
+        }
+        // this.constraint = args.parent ? args.parent.findConstraint(this.name) : undefined;
+        // console.log('annot %s constraint = %o', this.name, this.constraint);
+        if (_this.constraint instanceof Array) {
+            _this.constraint = _this.constraint[0];
+            console.log('constraint is array!?');
+        }
         _this.value = args.map.content || _this.getAnnotValue(args.name, args.args, _this.constraint);
         return _this;
     }
@@ -62,6 +70,7 @@ var AnnotNode = /** @class */ (function (_super) {
         return "annot(" + this.name + "): " + this.value;
     };
     AnnotNode.prototype.getAnnotValue = function (name, args, constraint) {
+        // console.log('annot value(%s), constraint:', name, constraint);
         if (args.length === 0) {
             // $foo() => 'foo'
             if (constraint === undefined) {
@@ -75,24 +84,25 @@ var AnnotNode = /** @class */ (function (_super) {
         if (constraint === undefined) {
             return String(aval);
         }
+        var cval = constraint.value;
         // $season('Xmas') => 'Xmas'
-        if (typeof constraint === 'string') {
+        if (typeof cval === 'string') {
             return String(aval);
         }
         // $words(2) => 'switch!'
         if (constraint instanceof Array) {
             return String(constraint[parseInt(aval, 10)]);
         }
-        if (typeof constraint === 'object') {
+        if (typeof cval === 'object') {
             // $taro("ouch") => <taro></taro>
-            if (!constraint[aval]) {
+            if (!cval[aval]) {
                 return '';
             }
             // $taro("age") => <taro-age>20</taro-age>
             this.tagName = [name].concat(args).join('-');
             var oval = args.reduce(function (acm, arg) {
                 return typeof acm === 'object' ? (acm[arg] || '') : String(acm);
-            }, constraint);
+            }, cval);
             return String(oval);
         }
         return String(aval);

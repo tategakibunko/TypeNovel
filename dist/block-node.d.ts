@@ -1,4 +1,4 @@
-import { TnNode, NodeMapper, NodeFormatter, NodeValidator, ValidationError, CodePos, MarkupMapItem } from './modules';
+import { TnNode, AnnotNode, Constraint, NodeMapper, NodeFormatter, NodeValidator, ValidationError, CodePos, MarkupMapItem } from './modules';
 export declare class BlockNode extends TnNode {
     private tagName;
     private id;
@@ -31,19 +31,18 @@ export declare class BlockNode extends TnNode {
     setChildren(children: TnNode[]): BlockNode;
     isWhiteSpacePre(): boolean;
     private parseConstraints;
-    private parseConstraintsAttrs;
+    private getConstraint;
     private getConstraintNames;
     getConstraintValue(name: string): any;
-    findConstraintValue(name: string): any;
-    private hasConstraintDef;
+    findConstraint(name: string): Constraint | undefined;
     findConstraintOwner(name: string): BlockNode | undefined;
     getDuplicateConstraints(): {
-        codePos: CodePos;
-        name: string;
+        prevCntr: Constraint;
+        dupCntr: Constraint;
     }[];
-    findAnnot(name: string): TnNode | undefined;
+    findAnnot(name: string): AnnotNode | undefined;
     isIgnoredConstraint(name: string): boolean;
-    getUnAnnotatedConstraintNames(): string[];
+    getUnAnnotatedConstraints(): Constraint[];
     acceptNodeMapper(visitor: NodeMapper): BlockNode;
     acceptNodeFormatter(visitor: NodeFormatter, indent: number): string;
     acceptNodeValidator(visitor: NodeValidator): ValidationError[];
