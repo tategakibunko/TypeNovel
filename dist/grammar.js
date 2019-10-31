@@ -26,7 +26,6 @@ function extractPair(kv, output) {
     }
 }
 function extractPairs(d) {
-    console.log('extractPairs:', d);
     var output = {};
     extractPair(d[0], output);
     for (var i in d[1]) {
