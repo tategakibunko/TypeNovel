@@ -27,17 +27,17 @@ function getNodeFromLineNo(topNode: BlockNode, lineNo: number): BlockNode | unde
 }
 
 const topNode = getNodeFromFile('../tn-examples/example.tn');
-const range = topNode.getRange();
+const topRange = topNode.getRange();
 
-for (let line = 1; line <= range.endLine; line++) {
-  const node = getNodeFromLineNo(topNode, line);
+for (let lineNo = 1; lineNo <= topRange.endLine + 1; lineNo++) {
+  const node = getNodeFromLineNo(topNode, lineNo);
   if (!node) {
     continue;
   }
-  const range = node.getRange();
-  if (!range.isInside(line - 1)) {
+  const nodeRange = node.getRange();
+  if (!nodeRange.isInside(lineNo - 1)) {
     continue;
   }
   const cntrNames = node.getConstraints(true).map(cntr => cntr.key);
-  console.log(`line: ${line}, block: ${node.name}, range: ${range.startLine + 1} - ${range.endLine + 1}, cntrs: [${cntrNames}]`);
+  console.log(`line: ${lineNo}, block: ${node.name}, range: ${nodeRange.startLine + 1} - ${nodeRange.endLine + 1}, cntrs: [${cntrNames}]`);
 }
