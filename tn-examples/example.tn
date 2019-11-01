@@ -36,7 +36,7 @@
   rate3: 1e-20,
 }){
   @p(){ \$foo = $foo() }
-  @p(){ \$foo() = $foo("huu") }
+  @p(){ \$foo("huu") = $foo("huu") }
   @p(){ $words(0), $words(1), $words(2) }
   @p(){ \$person("name") = $person("name") }
   @p(){ \$person("age") = $person("age") }
