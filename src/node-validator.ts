@@ -100,7 +100,7 @@ export class UnAnnotatedConstraintChecker extends NoCheckValidator {
     const unAnnotatedCntrs: Constraint[] = node.getUnAnnotatedConstraints();
     return unAnnotatedCntrs.map(cntr => {
       const value = node.getConstraintValue(cntr.key);
-      const message = `constraint '${cntr.key}(${value})' is not anntated in '@${node.name}'.`;
+      const message = `constraint '${cntr.key}(${value})' is not anntated in '@${node.name}'(line:${codePos.line + 1}).`;
       return { codePos: cntr.codePos, message };
     });
   }

@@ -108,7 +108,7 @@ var UnAnnotatedConstraintChecker = /** @class */ (function (_super) {
         var unAnnotatedCntrs = node.getUnAnnotatedConstraints();
         return unAnnotatedCntrs.map(function (cntr) {
             var value = node.getConstraintValue(cntr.key);
-            var message = "constraint '" + cntr.key + "(" + value + ")' is not anntated in '@" + node.name + "'.";
+            var message = "constraint '" + cntr.key + "(" + value + ")' is not anntated in '@" + node.name + "'(line:" + (codePos.line + 1) + ").";
             return { codePos: cntr.codePos, message: message };
         });
     };
