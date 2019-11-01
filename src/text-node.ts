@@ -9,7 +9,6 @@ import {
 } from './modules';
 
 export class TextNode extends TnNode {
-  private codePos: CodePos;
   private value: string;
 
   constructor(args: {

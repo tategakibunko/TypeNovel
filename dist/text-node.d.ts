@@ -1,6 +1,5 @@
 import { TnNode, BlockNode, NodeMapper, NodeFormatter, NodeValidator, ValidationError, CodePos } from './modules';
 export declare class TextNode extends TnNode {
-    private codePos;
     private value;
     constructor(args: {
         parent?: BlockNode;
