@@ -4,7 +4,6 @@ import {
   NodeBuilder,
   TnNode,
   BlockNode,
-  NodeWhiteSpaceCleaner,
   DefaultTnConfig,
 } from '../dist';
 
@@ -13,13 +12,13 @@ function getNodeFromFile(path: string): BlockNode {
     typeNovelParser: new NearlyParser(),
     astMappers: [],
     astConverter: new NodeBuilder(DefaultTnConfig.markupMap || {}),
-    nodeMappers: [new NodeWhiteSpaceCleaner()]
+    nodeMappers: [],
   }) as BlockNode;
 }
 
 function getNodeFromLineNo(topNode: BlockNode, lineNo: number): BlockNode | undefined {
   const nodes = topNode.queryNode((node: TnNode) => {
-    return (node.isBlockNode() && node.codePos.line <= lineNo - 1);
+    return (node.isBlockNode() && node.codePos.line < lineNo);
   }).sort((n1, n2) => {
     return n2.codePos.line - n1.codePos.line;
   });
@@ -28,11 +27,17 @@ function getNodeFromLineNo(topNode: BlockNode, lineNo: number): BlockNode | unde
 }
 
 const topNode = getNodeFromFile('../tn-examples/example.tn');
+const range = topNode.getRange();
 
-for (let line = 1; line <= 50; line++) {
+for (let line = 1; line <= range.endLine; line++) {
   const node = getNodeFromLineNo(topNode, line);
-  if (node) {
-    const cntrNames = node.getConstraints(true).map(cntr => cntr.key);
-    console.log(`line: ${line}, block: ${node.name}, cntrs: ${cntrNames}`);
+  if (!node) {
+    continue;
   }
+  const range = node.getRange();
+  if (!range.isInside(line - 1)) {
+    continue;
+  }
+  const cntrNames = node.getConstraints(true).map(cntr => cntr.key);
+  console.log(`line: ${line}, block: ${node.name}, range: ${range.startLine + 1} - ${range.endLine + 1}, cntrs: [${cntrNames}]`);
 }

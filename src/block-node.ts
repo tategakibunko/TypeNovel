@@ -8,6 +8,7 @@ import {
   NodeValidator,
   ValidationError,
   CodePos,
+  CodeRange,
   MarkupMapItem,
   WhiteSpace,
 } from './modules';
@@ -88,6 +89,13 @@ export class BlockNode extends TnNode {
 
   public getChild(index: number): TnNode | undefined {
     return this.children[index] || undefined;
+  }
+
+  public getRange(): CodeRange {
+    const lastChild = this.children[this.children.length - 1];
+    const startLine = this.codePos.line;
+    const endLine = lastChild ? lastChild.codePos.line : this.codePos.line;
+    return new CodeRange(startLine, endLine);
   }
 
   public setChildren(children: TnNode[]): BlockNode {

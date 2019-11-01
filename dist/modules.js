@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __export(require("./utils"));
 __export(require("./config"));
 __export(require("./settings"));
+__export(require("./code-range"));
 __export(require("./constraint"));
 __export(require("./ast"));
 __export(require("./node"));

@@ -1,4 +1,4 @@
-import { TnNode, AnnotNode, Constraint, NodeMapper, NodeFormatter, NodeValidator, ValidationError, CodePos, MarkupMapItem } from './modules';
+import { TnNode, AnnotNode, Constraint, NodeMapper, NodeFormatter, NodeValidator, ValidationError, CodePos, CodeRange, MarkupMapItem } from './modules';
 export declare class BlockNode extends TnNode {
     private tagName;
     private id;
@@ -27,6 +27,7 @@ export declare class BlockNode extends TnNode {
     getIndexOfChild(child: TnNode): number;
     getIndexOfType(child: TnNode): number;
     getChild(index: number): TnNode | undefined;
+    getRange(): CodeRange;
     setChildren(children: TnNode[]): BlockNode;
     isWhiteSpacePre(): boolean;
     private parseConstraints;
