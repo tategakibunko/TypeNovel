@@ -13,6 +13,6 @@ export class StdConsolePrinter implements ConsolePrinter {
   public printValidationError(error: ValidationError) {
     const pos = error.codePos;
     const path = pos.path ? `${pos.path} ` : '';
-    console.log(`${path}line:${error.codePos.line + 1}, col:${error.codePos.startColumn}, ${error.message}`);
+    console.error(`${path}line:${error.codePos.line + 1}, col:${error.codePos.startColumn}, ${error.message}`);
   }
 }

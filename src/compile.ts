@@ -1,5 +1,7 @@
 import * as fs from 'fs';
 import {
+  Ast,
+  DefaultRootBlockName,
   TypeNovelParser,
   ValidationError,
   AstMapper,
@@ -7,11 +9,6 @@ import {
   NodeMapper,
   NodeFormatter,
   NodeValidator,
-} from './modules';
-import { } from './node-validator';
-import {
-  Ast,
-  DefaultRootBlockName,
 } from './modules';
 
 export interface CompileResult {

@@ -9,7 +9,7 @@ var StdConsolePrinter = /** @class */ (function () {
     StdConsolePrinter.prototype.printValidationError = function (error) {
         var pos = error.codePos;
         var path = pos.path ? pos.path + " " : '';
-        console.log(path + "line:" + (error.codePos.line + 1) + ", col:" + error.codePos.startColumn + ", " + error.message);
+        console.error(path + "line:" + (error.codePos.line + 1) + ", col:" + error.codePos.startColumn + ", " + error.message);
     };
     return StdConsolePrinter;
 }());
