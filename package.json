@@ -30,6 +30,7 @@
   },
   "homepage": "https://github.com/tategakibunko/ts-typenovel#readme",
   "jest": {
+    "testURL": "http://localhost/",
     "moduleFileExtensions": [
       "ts",
       "js"
