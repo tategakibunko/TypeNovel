@@ -38,6 +38,6 @@
   @p(){ \$foo = $foo() }
   @p(){ \$foo() = $foo("huu") }
   @p(){ $words(0), $words(1), $words(2) }
-  @p(){ \$person("name") =  $person("name") }
-  @p(){ \$person("age") =  $person("age") }
+  @p(){ \$person("name") = $person("name") }
+  @p(){ \$person("age") = $person("age") }
 }

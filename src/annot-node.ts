@@ -86,7 +86,7 @@ export class AnnotNode extends TnNode {
         return 'undefined';
       }
       // $season() => 'winter'
-      return String(constraint);
+      return String(constraint.value);
     }
     const aval = args[0];
 

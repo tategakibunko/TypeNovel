@@ -69,7 +69,7 @@ var AnnotNode = /** @class */ (function (_super) {
                 return 'undefined';
             }
             // $season() => 'winter'
-            return String(constraint);
+            return String(constraint.value);
         }
         var aval = args[0];
         // $foo('aaa!') => 'aaa!'
