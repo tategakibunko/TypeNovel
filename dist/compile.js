@@ -20,10 +20,26 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var fs = __importStar(require("fs"));
 var modules_1 = require("./modules");
+/*
+export interface CompileArgs {
+  path?: string; // source file path(optional)
+  rootBlockName?: string;
+  typeNovelParser: TypeNovelParser; // string -> Ast[]
+  astMappers: AstMapper[]; // Ast -> Ast'
+  astConverter: AstConverter; // Ast -> TnNode
+  nodeMappers: NodeMapper[]; // TnNode -> TnNode'
+  nodeValidators: NodeValidator[]; // TnNode -> ValidationError[]
+  nodeFormatter: NodeFormatter; // TnNode -> string
+}
+*/
 var Compile = /** @class */ (function () {
     function Compile() {
     }
-    Compile.fromString = function (source, opt) {
+    Compile.astFromFile = function (path, opt) {
+        var source = fs.readFileSync(path, { encoding: 'utf-8' });
+        return this.astFromString(source, __assign(__assign({}, opt), { path: path }));
+    };
+    Compile.astFromString = function (source, opt) {
         // String -> Ast []
         var astList = opt.typeNovelParser.astFromString(source, opt.path);
         // Ast[] -> Ast (wrap single top-level body)
@@ -39,12 +55,24 @@ var Compile = /** @class */ (function () {
         ast = opt.astMappers.reduce(function (acm, mapper) {
             return acm.acceptAstMapper(mapper, { path: opt.path });
         }, ast);
+        return ast;
+    };
+    Compile.nodeFromFile = function (path, opt) {
+        var source = fs.readFileSync(path, { encoding: 'utf-8' });
+        return this.nodeFromString(source, __assign(__assign({}, opt), { path: path }));
+    };
+    Compile.nodeFromString = function (source, opt) {
+        var ast = this.astFromString(source, opt);
         // Ast -> TnNode
         var node = ast.acceptAstConverter(opt.astConverter);
         // TnNode -> TnNode'
         node = opt.nodeMappers.reduce(function (acm, mapper) {
             return acm.acceptNodeMapper(mapper);
         }, node);
+        return node;
+    };
+    Compile.fromString = function (source, opt) {
+        var node = this.nodeFromString(source, opt);
         // TnNode -> ValidationError[]
         var errors = opt.nodeValidators
             .reduce(function (acm, validator) {

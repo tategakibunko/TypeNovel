@@ -3,6 +3,7 @@
 .vscode
 syntaxes/
 node_modules/
+ts-examples/*.js
 *.sh
 *.txt
 local/

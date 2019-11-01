@@ -39,7 +39,6 @@ export class AnnotNode extends TnNode {
   private attrs: any;
   private args: any[];
   private value: string;
-  private codePos: CodePos;
   private content?: string;
   private constraint?: Constraint;
   private validate: boolean;

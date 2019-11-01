@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import {
   Ast,
+  TnNode,
   DefaultRootBlockName,
   TypeNovelParser,
   ValidationError,
@@ -16,6 +17,24 @@ export interface CompileResult {
   errors: ValidationError[];
 }
 
+export interface CompileAstArgs {
+  path?: string; // source file path(optional)
+  rootBlockName?: string;
+  typeNovelParser: TypeNovelParser; // string -> Ast[]
+  astMappers: AstMapper[]; // Ast -> Ast'
+}
+
+export interface CompileNodeArgs extends CompileAstArgs {
+  astConverter: AstConverter; // Ast -> TnNode
+  nodeMappers: NodeMapper[]; // TnNode -> TnNode'
+}
+
+export interface CompileArgs extends CompileNodeArgs {
+  nodeValidators: NodeValidator[]; // TnNode -> ValidationError[]
+  nodeFormatter: NodeFormatter; // TnNode -> string
+}
+
+/*
 export interface CompileArgs {
   path?: string; // source file path(optional)
   rootBlockName?: string;
@@ -26,9 +45,15 @@ export interface CompileArgs {
   nodeValidators: NodeValidator[]; // TnNode -> ValidationError[]
   nodeFormatter: NodeFormatter; // TnNode -> string
 }
+*/
 
 export class Compile {
-  static fromString(source: string, opt: CompileArgs): CompileResult {
+  static astFromFile(path: string, opt: CompileAstArgs): Ast {
+    const source = fs.readFileSync(path, { encoding: 'utf-8' });
+    return this.astFromString(source, { ...opt, path });
+  }
+
+  static astFromString(source: string, opt: CompileAstArgs): Ast {
     // String -> Ast []
     let astList = opt.typeNovelParser.astFromString(source, opt.path);
 
@@ -47,6 +72,16 @@ export class Compile {
       return acm.acceptAstMapper(mapper, { path: opt.path });
     }, ast);
 
+    return ast;
+  }
+
+  static nodeFromFile(path: string, opt: CompileNodeArgs): TnNode {
+    const source = fs.readFileSync(path, { encoding: 'utf-8' });
+    return this.nodeFromString(source, { ...opt, path });
+  }
+
+  static nodeFromString(source: string, opt: CompileNodeArgs): TnNode {
+    const ast = this.astFromString(source, opt);
     // Ast -> TnNode
     let node = ast.acceptAstConverter(opt.astConverter);
 
@@ -54,6 +89,12 @@ export class Compile {
     node = opt.nodeMappers.reduce((acm, mapper) => {
       return acm.acceptNodeMapper(mapper);
     }, node);
+
+    return node;
+  }
+
+  static fromString(source: string, opt: CompileArgs): CompileResult {
+    const node = this.nodeFromString(source, opt);
 
     // TnNode -> ValidationError[]
     const errors: ValidationError[] = opt.nodeValidators

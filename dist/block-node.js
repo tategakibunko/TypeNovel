@@ -90,15 +90,27 @@ var BlockNode = /** @class */ (function (_super) {
     BlockNode.prototype.getConstraint = function (name) {
         return this.constraints.get(name);
     };
-    BlockNode.prototype.getConstraintNames = function (includeParents) {
+    BlockNode.prototype.queryNode = function (fn) {
+        var result = fn(this) ? [this] : [];
+        return this.children.reduce(function (acm, child) {
+            if (child.isBlockNode()) {
+                acm = acm.concat(child.queryNode(fn));
+            }
+            else {
+                acm = fn(child) ? acm.concat(child) : acm;
+            }
+            return acm;
+        }, result);
+    };
+    BlockNode.prototype.getConstraints = function (includeParents) {
         if (includeParents === void 0) { includeParents = false; }
-        var names = (this.parent && includeParents) ? this.parent.getConstraintNames(includeParents) : [];
-        this.constraints.keys.forEach(function (name) {
-            if (names.indexOf(name) < 0) {
-                names.push(name);
+        var cntrs = (this.parent && includeParents) ? this.parent.getConstraints(includeParents) : [];
+        this.constraints.forEach(function (cntr) {
+            if (!cntrs.some(function (c) { return c.key === cntr.key; })) {
+                cntrs.push(cntr);
             }
         });
-        return names;
+        return cntrs;
     };
     BlockNode.prototype.getConstraintValue = function (name) {
         var cntr = this.getConstraint(name);

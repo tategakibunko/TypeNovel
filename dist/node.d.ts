@@ -1,8 +1,9 @@
-import { BlockNode, NodeMapper, NodeFormatter, NodeValidator, ValidationError } from './modules';
+import { CodePos, BlockNode, NodeMapper, NodeFormatter, NodeValidator, ValidationError } from './modules';
 export declare abstract class TnNode {
     name: string;
     uniqueId: number;
     parent?: BlockNode;
+    codePos: CodePos;
     abstract acceptNodeMapper(visitor: NodeMapper): TnNode;
     abstract acceptNodeFormatter(visitor: NodeFormatter, indent: number): string;
     abstract acceptNodeValidator(visitor: NodeValidator): ValidationError[];

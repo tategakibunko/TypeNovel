@@ -20,7 +20,6 @@ export class BlockNode extends TnNode {
   private args: any[];
   private constraints: ConstraintCollection;
   private children: TnNode[];
-  private codePos: CodePos;
   private content?: string;
   private whiteSpace: WhiteSpace;
 
@@ -108,14 +107,26 @@ export class BlockNode extends TnNode {
     return this.constraints.get(name);
   }
 
-  public getConstraintNames(includeParents = false): string[] {
-    let names = (this.parent && includeParents) ? this.parent.getConstraintNames(includeParents) : [];
-    this.constraints.keys.forEach(name => {
-      if (names.indexOf(name) < 0) {
-        names.push(name);
+  public queryNode(fn: (node: TnNode) => boolean): TnNode[] {
+    let result: TnNode[] = fn(this) ? [this] : [];
+    return this.children.reduce((acm, child) => {
+      if (child.isBlockNode()) {
+        acm = acm.concat((child as BlockNode).queryNode(fn));
+      } else {
+        acm = fn(child) ? acm.concat(child) : acm;
+      }
+      return acm;
+    }, result);
+  }
+
+  public getConstraints(includeParents = false): Constraint[] {
+    let cntrs = (this.parent && includeParents) ? this.parent.getConstraints(includeParents) : [];
+    this.constraints.forEach(cntr => {
+      if (!cntrs.some(c => c.key === cntr.key)) {
+        cntrs.push(cntr);
       }
     })
-    return names;
+    return cntrs;
   }
 
   public getConstraintValue(name: string): any {

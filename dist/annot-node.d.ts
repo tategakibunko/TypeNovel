@@ -6,7 +6,6 @@ export declare class AnnotNode extends TnNode {
     private attrs;
     private args;
     private value;
-    private codePos;
     private content?;
     private constraint?;
     private validate;

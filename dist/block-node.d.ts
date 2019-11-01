@@ -7,7 +7,6 @@ export declare class BlockNode extends TnNode {
     private args;
     private constraints;
     private children;
-    private codePos;
     private content?;
     private whiteSpace;
     constructor(args: {
@@ -32,7 +31,8 @@ export declare class BlockNode extends TnNode {
     isWhiteSpacePre(): boolean;
     private parseConstraints;
     private getConstraint;
-    getConstraintNames(includeParents?: boolean): string[];
+    queryNode(fn: (node: TnNode) => boolean): TnNode[];
+    getConstraints(includeParents?: boolean): Constraint[];
     getConstraintValue(name: string): any;
     findConstraint(name: string): Constraint | undefined;
     findConstraintOwner(name: string): BlockNode | undefined;
