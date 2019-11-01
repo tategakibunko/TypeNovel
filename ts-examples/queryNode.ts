@@ -10,7 +10,7 @@ const topNode = Compile.nodeFromFile('../tn-examples/example.tn', {
 const nodes = topNode.queryNode((node: TnNode) => {
   return (node.isBlockNode() && node.codePos.line <= 38);
 }).sort((n1, n2) => {
-  return n1.codePos.line - n2.codePos.line;
+  return n2.codePos.line - n1.codePos.line;
 });
 
 const foundNode = nodes[0] as BlockNode;
