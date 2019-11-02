@@ -51,12 +51,26 @@ function extractExprs(d: any) {
   return output;
 }
 
+function extractSymbol(d: any) {
+  let value = d[0].value;
+  if(value.startsWith("'")){
+    value = JSON.parse(Utils.sq2Dq(value));
+  } else if(value.startsWith('"')){
+    value = JSON.parse(value);
+  }
+  const line = d[0].line;
+  const startColumn = d[0].col - 1;
+  const endColumn = startColumn + d[0].value.length;
+  return {value, line, startColumn, endColumn};
+}
+
 function extractPair(d: any) {
-  const key = d[0];
+  const symbol = d[0];
+  const key = symbol.value;
   const value = d[2];
-  const line = d[1].line - 1;
-  const startColumn = d[1].col - 1;
-  const endColumn = startColumn + 1;
+  const line = symbol.line;
+  const startColumn = symbol.startColumn;
+  const endColumn = symbol.endColumn;
   const pos = {line, startColumn, endColumn};
   return new Constraint(key, value, pos);
 }
@@ -192,9 +206,10 @@ const grammar: Grammar = {
     {"name": "pairs$ebnf$2", "symbols": ["pairs$ebnf$2$subexpression$1"], "postprocess": id},
     {"name": "pairs$ebnf$2", "symbols": [], "postprocess": () => null},
     {"name": "pairs", "symbols": ["pair", "pairs$ebnf$1", "pairs$ebnf$2"], "postprocess": extractPairs},
-    {"name": "pair", "symbols": ["pkey", (lexer.has("colon") ? {type: "colon"} : colon), "expr"], "postprocess": extractPair},
-    {"name": "pkey", "symbols": [(lexer.has("ident") ? {type: "ident"} : ident)], "postprocess": (d) => d[0].value},
-    {"name": "pkey", "symbols": ["literal"], "postprocess": id}
+    {"name": "pair", "symbols": ["symbol", (lexer.has("colon") ? {type: "colon"} : colon), "expr"], "postprocess": extractPair},
+    {"name": "symbol", "symbols": [(lexer.has("ident") ? {type: "ident"} : ident)], "postprocess": extractSymbol},
+    {"name": "symbol", "symbols": [(lexer.has("literalSq") ? {type: "literalSq"} : literalSq)], "postprocess": extractSymbol},
+    {"name": "symbol", "symbols": [(lexer.has("literalSq") ? {type: "literalSq"} : literalSq)], "postprocess": extractSymbol}
   ],
   ParserStart: "main",
 };

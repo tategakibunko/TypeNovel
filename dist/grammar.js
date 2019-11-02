@@ -20,12 +20,26 @@ function extractExprs(d) {
     }
     return output;
 }
+function extractSymbol(d) {
+    var value = d[0].value;
+    if (value.startsWith("'")) {
+        value = JSON.parse(modules_1.Utils.sq2Dq(value));
+    }
+    else if (value.startsWith('"')) {
+        value = JSON.parse(value);
+    }
+    var line = d[0].line;
+    var startColumn = d[0].col - 1;
+    var endColumn = startColumn + d[0].value.length;
+    return { value: value, line: line, startColumn: startColumn, endColumn: endColumn };
+}
 function extractPair(d) {
-    var key = d[0];
+    var symbol = d[0];
+    var key = symbol.value;
     var value = d[2];
-    var line = d[1].line - 1;
-    var startColumn = d[1].col - 1;
-    var endColumn = startColumn + 1;
+    var line = symbol.line;
+    var startColumn = symbol.startColumn;
+    var endColumn = symbol.endColumn;
     var pos = { line: line, startColumn: startColumn, endColumn: endColumn };
     return new modules_1.Constraint(key, value, pos);
 }
@@ -133,9 +147,10 @@ var grammar = {
         { "name": "pairs$ebnf$2", "symbols": ["pairs$ebnf$2$subexpression$1"], "postprocess": id },
         { "name": "pairs$ebnf$2", "symbols": [], "postprocess": function () { return null; } },
         { "name": "pairs", "symbols": ["pair", "pairs$ebnf$1", "pairs$ebnf$2"], "postprocess": extractPairs },
-        { "name": "pair", "symbols": ["pkey", (lexer.has("colon") ? { type: "colon" } : colon), "expr"], "postprocess": extractPair },
-        { "name": "pkey", "symbols": [(lexer.has("ident") ? { type: "ident" } : ident)], "postprocess": function (d) { return d[0].value; } },
-        { "name": "pkey", "symbols": ["literal"], "postprocess": id }
+        { "name": "pair", "symbols": ["symbol", (lexer.has("colon") ? { type: "colon" } : colon), "expr"], "postprocess": extractPair },
+        { "name": "symbol", "symbols": [(lexer.has("ident") ? { type: "ident" } : ident)], "postprocess": extractSymbol },
+        { "name": "symbol", "symbols": [(lexer.has("literalSq") ? { type: "literalSq" } : literalSq)], "postprocess": extractSymbol },
+        { "name": "symbol", "symbols": [(lexer.has("literalSq") ? { type: "literalSq" } : literalSq)], "postprocess": extractSymbol }
     ],
     ParserStart: "main",
 };

@@ -114,11 +114,12 @@ object ->
 
 pairs -> pair (%comma pair):* (%comma):? {% extractPairs %}
 
-pair -> pkey %colon expr {% extractPair %}
+pair -> symbol %colon expr {% extractPair %}
 
-pkey ->
-  %ident {% (d) => d[0].value %}
-| literal {% id %}
+symbol ->
+  %ident {% extractSymbol %}
+| %literalSq {% extractSymbol %}
+| %literalSq {% extractSymbol %}
 
 @{%
 function extractBlockChildren(children: any []): any [] {
@@ -135,12 +136,26 @@ function extractExprs(d: any) {
   return output;
 }
 
+function extractSymbol(d: any) {
+  let value = d[0].value;
+  if(value.startsWith("'")){
+    value = JSON.parse(Utils.sq2Dq(value));
+  } else if(value.startsWith('"')){
+    value = JSON.parse(value);
+  }
+  const line = d[0].line;
+  const startColumn = d[0].col - 1;
+  const endColumn = startColumn + d[0].value.length;
+  return {value, line, startColumn, endColumn};
+}
+
 function extractPair(d: any) {
-  const key = d[0];
+  const symbol = d[0];
+  const key = symbol.value;
   const value = d[2];
-  const line = d[1].line - 1;
-  const startColumn = d[1].col - 1;
-  const endColumn = startColumn + 1;
+  const line = symbol.line;
+  const startColumn = symbol.startColumn;
+  const endColumn = symbol.endColumn;
   const pos = {line, startColumn, endColumn};
   return new Constraint(key, value, pos);
 }
