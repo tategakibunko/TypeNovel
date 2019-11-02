@@ -20,14 +20,17 @@ function extractExprs(d) {
     }
     return output;
 }
-function extractSymbol(d) {
-    var value = d[0].value;
+function extractLiteral(value) {
     if (value.startsWith("'")) {
-        value = JSON.parse(modules_1.Utils.sq2Dq(value));
+        return JSON.parse(modules_1.Utils.sq2Dq(value));
     }
-    else if (value.startsWith('"')) {
-        value = JSON.parse(value);
+    if (value.startsWith('"')) {
+        return JSON.parse(value);
     }
+    return value;
+}
+function extractSymbol(d) {
+    var value = extractLiteral(d[0].value);
     var line = d[0].line;
     var startColumn = d[0].col - 1;
     var endColumn = startColumn + d[0].value.length;
@@ -132,8 +135,8 @@ var grammar = {
         { "name": "expr", "symbols": ["number"], "postprocess": id },
         { "name": "expr", "symbols": ["array"], "postprocess": id },
         { "name": "expr", "symbols": ["object"], "postprocess": id },
-        { "name": "literal", "symbols": [(lexer.has("literalSq") ? { type: "literalSq" } : literalSq)], "postprocess": function (d) { return JSON.parse(modules_1.Utils.sq2Dq(d[0].value)); } },
-        { "name": "literal", "symbols": [(lexer.has("literalDq") ? { type: "literalDq" } : literalDq)], "postprocess": function (d) { return JSON.parse(d[0].value); } },
+        { "name": "literal", "symbols": [(lexer.has("literalSq") ? { type: "literalSq" } : literalSq)], "postprocess": function (d) { return extractLiteral(d[0].value); } },
+        { "name": "literal", "symbols": [(lexer.has("literalDq") ? { type: "literalDq" } : literalDq)], "postprocess": function (d) { return extractLiteral(d[0].value); } },
         { "name": "number", "symbols": [(lexer.has("integer") ? { type: "integer" } : integer)], "postprocess": function (d) { return parseInt(d[0].value, 10); } },
         { "name": "number", "symbols": [(lexer.has("float") ? { type: "float" } : float)], "postprocess": function (d) { return parseFloat(d[0].value); } },
         { "name": "array", "symbols": [(lexer.has("arrayStart") ? { type: "arrayStart" } : arrayStart), (lexer.has("arrayEnd") ? { type: "arrayEnd" } : arrayEnd)], "postprocess": function (d) { return []; } },

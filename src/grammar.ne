@@ -97,8 +97,8 @@ expr ->
 | object {% id %}
 
 literal ->
-  %literalSq {% (d) => JSON.parse(Utils.sq2Dq(d[0].value)) %}
-| %literalDq {% (d) => JSON.parse(d[0].value) %}
+  %literalSq {% (d) => extractLiteral(d[0].value) %}
+| %literalDq {% (d) => extractLiteral(d[0].value) %}
 
 number ->
   %integer {% (d) => parseInt(d[0].value, 10) %}
@@ -136,13 +136,18 @@ function extractExprs(d: any) {
   return output;
 }
 
-function extractSymbol(d: any) {
-  let value = d[0].value;
+function extractLiteral(value: string) {
   if(value.startsWith("'")){
-    value = JSON.parse(Utils.sq2Dq(value));
-  } else if(value.startsWith('"')){
-    value = JSON.parse(value);
+    return JSON.parse(Utils.sq2Dq(value));
   }
+  if(value.startsWith('"')){
+    return JSON.parse(value);
+  }
+  return value;
+}
+
+function extractSymbol(d: any) {
+  const value = extractLiteral(d[0].value);
   const line = d[0].line;
   const startColumn = d[0].col - 1;
   const endColumn = startColumn + d[0].value.length;

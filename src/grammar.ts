@@ -51,13 +51,18 @@ function extractExprs(d: any) {
   return output;
 }
 
-function extractSymbol(d: any) {
-  let value = d[0].value;
+function extractLiteral(value: string) {
   if(value.startsWith("'")){
-    value = JSON.parse(Utils.sq2Dq(value));
-  } else if(value.startsWith('"')){
-    value = JSON.parse(value);
+    return JSON.parse(Utils.sq2Dq(value));
   }
+  if(value.startsWith('"')){
+    return JSON.parse(value);
+  }
+  return value;
+}
+
+function extractSymbol(d: any) {
+  const value = extractLiteral(d[0].value);
   const line = d[0].line;
   const startColumn = d[0].col - 1;
   const endColumn = startColumn + d[0].value.length;
@@ -191,8 +196,8 @@ const grammar: Grammar = {
     {"name": "expr", "symbols": ["number"], "postprocess": id},
     {"name": "expr", "symbols": ["array"], "postprocess": id},
     {"name": "expr", "symbols": ["object"], "postprocess": id},
-    {"name": "literal", "symbols": [(lexer.has("literalSq") ? {type: "literalSq"} : literalSq)], "postprocess": (d) => JSON.parse(Utils.sq2Dq(d[0].value))},
-    {"name": "literal", "symbols": [(lexer.has("literalDq") ? {type: "literalDq"} : literalDq)], "postprocess": (d) => JSON.parse(d[0].value)},
+    {"name": "literal", "symbols": [(lexer.has("literalSq") ? {type: "literalSq"} : literalSq)], "postprocess": (d) => extractLiteral(d[0].value)},
+    {"name": "literal", "symbols": [(lexer.has("literalDq") ? {type: "literalDq"} : literalDq)], "postprocess": (d) => extractLiteral(d[0].value)},
     {"name": "number", "symbols": [(lexer.has("integer") ? {type: "integer"} : integer)], "postprocess": (d) => parseInt(d[0].value, 10)},
     {"name": "number", "symbols": [(lexer.has("float") ? {type: "float"} : float)], "postprocess": (d) => parseFloat(d[0].value)},
     {"name": "array", "symbols": [(lexer.has("arrayStart") ? {type: "arrayStart"} : arrayStart), (lexer.has("arrayEnd") ? {type: "arrayEnd"} : arrayEnd)], "postprocess": (d) => []},
