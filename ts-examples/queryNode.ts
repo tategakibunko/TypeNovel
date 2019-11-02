@@ -18,15 +18,16 @@ function getNodeFromFile(path: string): BlockNode {
 
 function getNodeFromLineNo(topNode: BlockNode, lineNo: number): BlockNode | undefined {
   const topPath = topNode.codePos.path;
-  const nodes = topNode.queryNode((node: TnNode) => {
+  let nodes = topNode.queryNode((node: TnNode) => {
     return node.isBlockNode() && node.codePos.path === topPath && (<BlockNode>node).getRange().isInside(lineNo - 1);
   }).sort((n1, n2) => {
     return n2.codePos.line - n1.codePos.line;
   });
-  if (nodes.length > 1 && nodes.every(n => n.codePos.line === nodes[0].codePos.line)) {
-    return nodes[nodes.length - 1] as BlockNode;
-  }
-  return (nodes.length > 0) ? nodes[0] as BlockNode : undefined;
+  const maxLine = nodes[0].codePos.line;
+  nodes = nodes.filter(n => n.codePos.line === maxLine);
+
+  // if same line, select deepest child.
+  return (nodes.length > 0) ? nodes[nodes.length - 1] as BlockNode : undefined;
 }
 
 const topNode = getNodeFromFile('../tn-examples/example.tn');
