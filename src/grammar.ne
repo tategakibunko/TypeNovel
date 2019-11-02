@@ -80,11 +80,11 @@ text ->
   %text {% id %}
 | %textBeforeComment {% id %}
 | %escape {%
-    (d) => {
-      d[0].value = d[0].value.substring(1);
-      return d[0];
-    }
-  %}
+  (d) => {
+    d[0].value = d[0].value.substring(1);
+    return d[0];
+  }
+%}
 
 args -> %argsStart (exprs):? %argsEnd {% (d) => d[1]? d[1][0] : [] %}
 
