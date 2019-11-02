@@ -6,7 +6,7 @@ Mark "*": bug fixed.
 Mark "!": change that can break compatibility with older version
 ===============================================================================
 
-version 1.1.4
+version 1.1.4, 2019/11/02
 ==========================
 o Added BlockNode::getRange to get then range of source(startLine to endLine).
 * Set accurate code position for constraint.
