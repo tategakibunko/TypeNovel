@@ -34,10 +34,10 @@ function getErrorsFromNode(node: TnNode): ValidationError[] {
     .sort((e1, e2) => e1.codePos.line - e2.codePos.line);
 }
 
-function getNodeFromLineNo(topNode: BlockNode, lineNo: number): BlockNode | undefined {
+function getNodeFromLineNo(topNode: BlockNode, line: number): BlockNode | undefined {
   const topPath = topNode.codePos.path;
   let nodes = topNode.queryNode((node: TnNode) => {
-    return node.isBlockNode() && node.codePos.path === topPath && (<BlockNode>node).getRange().isInside(lineNo - 1);
+    return node.isBlockNode() && node.codePos.path === topPath && (<BlockNode>node).getRange().isInside(line);
   }).sort((n1, n2) => {
     return n2.codePos.line - n1.codePos.line;
   });
@@ -48,18 +48,19 @@ function getNodeFromLineNo(topNode: BlockNode, lineNo: number): BlockNode | unde
   return (nodes.length > 0) ? nodes[nodes.length - 1] as BlockNode : undefined;
 }
 
-const topNode = getNodeFromFile('../tn-examples/example.tn');
+const file = '../tn-examples/example.tn';
+const topNode = getNodeFromFile(file);
 const topRange = topNode.getRange();
 const errors = getErrorsFromNode(topNode);
 
 console.log(errors);
 
-for (let lineNo = 1; lineNo <= topRange.endLine + 1; lineNo++) {
-  const node = getNodeFromLineNo(topNode, lineNo);
+for (let line = 0; line <= topRange.endLine; line++) {
+  const node = getNodeFromLineNo(topNode, line);
   if (!node) {
     continue;
   }
   const nodeRange = node.getRange();
   const cntrNames = node.getConstraints(true).map(cntr => cntr.key);
-  console.log(`line: ${lineNo}, block: ${node.name}, range: ${nodeRange.startLine + 1} - ${nodeRange.endLine + 1}, cntrs: [${cntrNames}]`);
+  console.log(`line: ${line + 1}, block: ${node.name}, range: ${nodeRange.startLine + 1} - ${nodeRange.endLine + 1}, cntrs: [${cntrNames}]`);
 }

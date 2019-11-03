@@ -58,7 +58,7 @@ export class Compile {
     let astList = opt.typeNovelParser.astFromString(source, opt.path);
 
     // Ast[] -> Ast (wrap single top-level body)
-    let ast: Ast = (astList.length === 1) ? astList[0] : new Ast({
+    let ast: Ast = new Ast({
       type: 'block',
       name: opt.rootBlockName || DefaultRootBlockName,
       codePos: { path: opt.path, line: 0, startColumn: 0, endColumn: 0 },

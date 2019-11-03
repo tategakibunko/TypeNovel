@@ -9,6 +9,7 @@
   },
   "scripts": {
     "build": "make",
+    "build-examples": "tsc -p ./ts-examples",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

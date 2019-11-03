@@ -43,7 +43,7 @@ var Compile = /** @class */ (function () {
         // String -> Ast []
         var astList = opt.typeNovelParser.astFromString(source, opt.path);
         // Ast[] -> Ast (wrap single top-level body)
-        var ast = (astList.length === 1) ? astList[0] : new modules_1.Ast({
+        var ast = new modules_1.Ast({
             type: 'block',
             name: opt.rootBlockName || modules_1.DefaultRootBlockName,
             codePos: { path: opt.path, line: 0, startColumn: 0, endColumn: 0 },
