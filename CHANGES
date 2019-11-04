@@ -6,6 +6,10 @@ Mark "*": bug fixed.
 Mark "!": change that can break compatibility with older version
 ===============================================================================
 
+version 1.1.8, 2019/11/04
+==========================
+* Remove unneccesarry console.log.
+
 version 1.1.7, 2019/11/04
 ==========================
 * Fix column pos of annot-ast.
