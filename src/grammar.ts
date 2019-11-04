@@ -152,7 +152,7 @@ const grammar: Grammar = {
             startColumn: d[0].col - 1,
             endColumn: d[0].col + d[1].value.length, // d[0].col - 1 + d[1].value.length + 1
           };
-          console.log('annot:%o, at %o', d[0], codePos);
+          // console.log('annot:%o, at %o', d[0], codePos);
           return new Ast({
             type:'annot',
             name: d[1].value,

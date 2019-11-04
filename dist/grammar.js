@@ -93,7 +93,7 @@ var grammar = {
                     startColumn: d[0].col - 1,
                     endColumn: d[0].col + d[1].value.length,
                 };
-                console.log('annot:%o, at %o', d[0], codePos);
+                // console.log('annot:%o, at %o', d[0], codePos);
                 return new modules_1.Ast({
                     type: 'annot',
                     name: d[1].value,
