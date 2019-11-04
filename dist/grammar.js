@@ -91,9 +91,9 @@ var grammar = {
                     startLine: d[0].line - 1,
                     endLine: d[0].line - 1,
                     startColumn: d[0].col - 1,
-                    endColumn: d[0].co1 + d[1].value.length,
+                    endColumn: d[0].col + d[1].value.length,
                 };
-                // console.log('annot start:', d[0]);
+                console.log('annot:%o, at %o', d[0], codePos);
                 return new modules_1.Ast({
                     type: 'annot',
                     name: d[1].value,
@@ -112,7 +112,7 @@ var grammar = {
                     startLine: d[0].line - 1,
                     endLine: d[0].line - 1,
                     startColumn: d[0].col - 1,
-                    endColumn: d[0].co1 + d[1].value.length,
+                    endColumn: d[0].col + d[1].value.length,
                 };
                 // console.log('block start:', d[0]);
                 return new modules_1.Ast({
