@@ -27,7 +27,7 @@ stmt ->
 
 plain -> text {%
   (d) => {
-    const line = d[0].line;
+    const line = d[0].line - 1;
     const startColumn = d[0].col - 1;
     const endColumn = startColumn + d[0].value.length;
     // console.log('text start:', d[0]);
@@ -44,7 +44,7 @@ plain -> text {%
 
 annot -> %annotStart %annotName args {%
   (d) => {
-    const line = d[0].line;
+    const line = d[0].line - 1;
     const startColumn = d[0].col - 1;
     const endColumn = startColumn + d[1].value.length + 1;
     // console.log('annot start:', d[0]);
@@ -61,7 +61,7 @@ annot -> %annotStart %annotName args {%
 
 block -> %blockStart %blockName args %blockTextStart (stmt):* %blockTextEnd {%
   (d) => {
-    const line = d[0].line;
+    const line = d[0].line - 1;
     const startColumn = d[0].col - 1;
     const endColumn = startColumn + d[1].value.length + 1;
     // console.log('block start:', d[0]);
@@ -148,7 +148,7 @@ function extractLiteral(value: string) {
 
 function extractSymbol(d: any) {
   const value = extractLiteral(d[0].value);
-  const line = d[0].line;
+  const line = d[0].line - 1;
   const startColumn = d[0].col - 1;
   const endColumn = startColumn + d[0].value.length;
   return {value, line, startColumn, endColumn};
