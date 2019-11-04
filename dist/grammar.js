@@ -31,20 +31,19 @@ function extractLiteral(value) {
 }
 function extractSymbol(d) {
     var value = extractLiteral(d[0].value);
-    var line = d[0].line - 1;
-    var startColumn = d[0].col - 1;
-    var endColumn = startColumn + d[0].value.length;
-    return { value: value, line: line, startColumn: startColumn, endColumn: endColumn };
+    var codePos = {
+        startLine: d[0].line - 1,
+        endLine: d[0].line - 1,
+        startColumn: d[0].col - 1,
+        endColumn: d[0].col - 1 + d[0].value.length,
+    };
+    return { value: value, codePos: codePos };
 }
 function extractPair(d) {
     var symbol = d[0];
     var key = symbol.value;
     var value = d[2];
-    var line = symbol.line;
-    var startColumn = symbol.startColumn;
-    var endColumn = symbol.endColumn;
-    var pos = { line: line, startColumn: startColumn, endColumn: endColumn };
-    return new modules_1.Constraint(key, value, pos);
+    return new modules_1.Constraint(key, value, symbol.codePos);
 }
 function extractPairs(d) {
     var output = [];
@@ -69,24 +68,31 @@ var grammar = {
         { "name": "stmt", "symbols": ["annot"], "postprocess": id },
         { "name": "stmt", "symbols": ["block"], "postprocess": id },
         { "name": "plain", "symbols": ["text"], "postprocess": function (d) {
-                var line = d[0].line - 1;
-                var startColumn = d[0].col - 1;
-                var endColumn = startColumn + d[0].value.length;
-                // console.log('text start:', d[0]);
+                var value = d[0].value;
+                var codePos = {
+                    startLine: d[0].line - 1,
+                    endLine: d[0].line - 1 + value.split('\n').length - 1,
+                    startColumn: d[0].col - 1,
+                    endColumn: d[0].col - 1 + value.length
+                };
+                // console.log('text:%o, at %o', d[0], codePos);
                 return new modules_1.Ast({
                     type: 'text',
                     name: '(text)',
                     args: [],
-                    value: d[0].value,
+                    value: value,
                     children: [],
-                    codePos: { line: line, startColumn: startColumn, endColumn: endColumn },
+                    codePos: codePos,
                 });
             }
         },
         { "name": "annot", "symbols": [(lexer.has("annotStart") ? { type: "annotStart" } : annotStart), (lexer.has("annotName") ? { type: "annotName" } : annotName), "args"], "postprocess": function (d) {
-                var line = d[0].line - 1;
-                var startColumn = d[0].col - 1;
-                var endColumn = startColumn + d[1].value.length + 1;
+                var codePos = {
+                    startLine: d[0].line - 1,
+                    endLine: d[0].line - 1,
+                    startColumn: d[0].col - 1,
+                    endColumn: d[0].co1 + d[1].value.length,
+                };
                 // console.log('annot start:', d[0]);
                 return new modules_1.Ast({
                     type: 'annot',
@@ -94,7 +100,7 @@ var grammar = {
                     args: d[2] || [],
                     value: '',
                     children: [],
-                    codePos: { line: line, startColumn: startColumn, endColumn: endColumn },
+                    codePos: codePos,
                 });
             }
         },
@@ -102,9 +108,12 @@ var grammar = {
         { "name": "block$ebnf$1$subexpression$1", "symbols": ["stmt"] },
         { "name": "block$ebnf$1", "symbols": ["block$ebnf$1", "block$ebnf$1$subexpression$1"], "postprocess": function (d) { return d[0].concat([d[1]]); } },
         { "name": "block", "symbols": [(lexer.has("blockStart") ? { type: "blockStart" } : blockStart), (lexer.has("blockName") ? { type: "blockName" } : blockName), "args", (lexer.has("blockTextStart") ? { type: "blockTextStart" } : blockTextStart), "block$ebnf$1", (lexer.has("blockTextEnd") ? { type: "blockTextEnd" } : blockTextEnd)], "postprocess": function (d) {
-                var line = d[0].line - 1;
-                var startColumn = d[0].col - 1;
-                var endColumn = startColumn + d[1].value.length + 1;
+                var codePos = {
+                    startLine: d[0].line - 1,
+                    endLine: d[0].line - 1,
+                    startColumn: d[0].col - 1,
+                    endColumn: d[0].co1 + d[1].value.length,
+                };
                 // console.log('block start:', d[0]);
                 return new modules_1.Ast({
                     type: 'block',
@@ -112,7 +121,7 @@ var grammar = {
                     args: d[2] || [],
                     value: '',
                     children: extractBlockChildren(d[4]),
-                    codePos: { line: line, startColumn: startColumn, endColumn: endColumn },
+                    codePos: codePos,
                 });
             }
         },

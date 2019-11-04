@@ -61,7 +61,7 @@ export class Compile {
     let ast: Ast = new Ast({
       type: 'block',
       name: opt.rootBlockName || DefaultRootBlockName,
-      codePos: { path: opt.path, line: 0, startColumn: 0, endColumn: 0 },
+      codePos: { path: opt.path, startLine: 0, endLine: 0, startColumn: 0, endColumn: 0 },
       args: [],
       value: '',
       children: astList
@@ -101,7 +101,7 @@ export class Compile {
       .reduce((acm, validator) => {
         return acm.concat(node.acceptNodeValidator(validator));
       }, [] as ValidationError[])
-      .sort((e1, e2) => e1.codePos.line - e2.codePos.line);
+      .sort((e1, e2) => e1.codePos.startLine - e2.codePos.startLine);
 
     // TnNode -> string
     const output = node.acceptNodeFormatter(opt.nodeFormatter, 0);

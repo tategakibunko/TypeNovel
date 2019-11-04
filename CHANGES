@@ -8,6 +8,7 @@ Mark "!": change that can break compatibility with older version
 
 version 1.1.6
 ==========================
+o Added startLine/endLine to CodePos.
 * Fix line pos of symbol.
 
 version 1.1.5, 2019/11/03

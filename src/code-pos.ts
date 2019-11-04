@@ -1,6 +1,7 @@
 export interface CodePos {
   path?: string;
-  line: number;
+  startLine: number;
+  endLine: number;
   startColumn: number;
   endColumn: number;
 }

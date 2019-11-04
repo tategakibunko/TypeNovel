@@ -93,10 +93,10 @@ export class BlockNode extends TnNode {
 
   public getRange(): CodeRange {
     const lastChild = this.children[this.children.length - 1];
-    const startLine = this.codePos.line;
+    const startLine = this.codePos.startLine;
     const endLine = lastChild ?
-      (lastChild.isBlockNode() ? (<BlockNode>lastChild).getRange().endLine : lastChild.codePos.line) :
-      this.codePos.line;
+      (lastChild.isBlockNode() ? (<BlockNode>lastChild).getRange().endLine : lastChild.codePos.endLine) :
+      this.codePos.endLine;
     return new CodeRange(startLine, endLine);
   }
 

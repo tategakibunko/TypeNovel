@@ -27,26 +27,33 @@ stmt ->
 
 plain -> text {%
   (d) => {
-    const line = d[0].line - 1;
-    const startColumn = d[0].col - 1;
-    const endColumn = startColumn + d[0].value.length;
-    // console.log('text start:', d[0]);
+    const value = d[0].value;
+    const codePos = {
+      startLine: d[0].line - 1,
+      endLine: d[0].line - 1 + value.split('\n').length - 1,
+      startColumn: d[0].col - 1,
+      endColumn: d[0].col - 1 + value.length
+    };
+    // console.log('text:%o, at %o', d[0], codePos);
     return new Ast({
       type: 'text',
       name: '(text)',
       args: [],
-      value: d[0].value,
+      value,
       children: [],
-      codePos: {line, startColumn, endColumn},
+      codePos,
     });
   }
 %}
 
 annot -> %annotStart %annotName args {%
   (d) => {
-    const line = d[0].line - 1;
-    const startColumn = d[0].col - 1;
-    const endColumn = startColumn + d[1].value.length + 1;
+    const codePos = {
+      startLine: d[0].line - 1,
+      endLine: d[0].line - 1,
+      startColumn: d[0].col - 1,
+      endColumn: d[0].co1 + d[1].value.length, // d[0].col - 1 + d[1].value.length + 1
+    };
     // console.log('annot start:', d[0]);
     return new Ast({
       type:'annot',
@@ -54,16 +61,19 @@ annot -> %annotStart %annotName args {%
       args: d[2] || [],
       value: '',
       children: [],
-      codePos: {line, startColumn, endColumn},
+      codePos,
     });
   }
 %}
 
 block -> %blockStart %blockName args %blockTextStart (stmt):* %blockTextEnd {%
   (d) => {
-    const line = d[0].line - 1;
-    const startColumn = d[0].col - 1;
-    const endColumn = startColumn + d[1].value.length + 1;
+    const codePos = {
+      startLine: d[0].line - 1,
+      endLine: d[0].line - 1,
+      startColumn: d[0].col - 1,
+      endColumn: d[0].co1 + d[1].value.length, // d[0].col - 1 + d[1].value.length + 1
+    };
     // console.log('block start:', d[0]);
     return new Ast({
       type: 'block',
@@ -71,7 +81,7 @@ block -> %blockStart %blockName args %blockTextStart (stmt):* %blockTextEnd {%
       args: d[2] || [],
       value: '',
       children: extractBlockChildren(d[4]),
-      codePos: {line, startColumn, endColumn},
+      codePos,
     });
   }
 %}
@@ -148,21 +158,20 @@ function extractLiteral(value: string) {
 
 function extractSymbol(d: any) {
   const value = extractLiteral(d[0].value);
-  const line = d[0].line - 1;
-  const startColumn = d[0].col - 1;
-  const endColumn = startColumn + d[0].value.length;
-  return {value, line, startColumn, endColumn};
+  const codePos = {
+    startLine: d[0].line - 1,
+    endLine: d[0].line - 1,
+    startColumn: d[0].col - 1,
+    endColumn: d[0].col - 1 + d[0].value.length,
+  };
+  return {value, codePos};
 }
 
 function extractPair(d: any) {
   const symbol = d[0];
   const key = symbol.value;
   const value = d[2];
-  const line = symbol.line;
-  const startColumn = symbol.startColumn;
-  const endColumn = symbol.endColumn;
-  const pos = {line, startColumn, endColumn};
-  return new Constraint(key, value, pos);
+  return new Constraint(key, value, symbol.codePos);
 }
 
 function extractPairs(d: any) {

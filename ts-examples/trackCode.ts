@@ -31,7 +31,7 @@ function getErrorsFromNode(node: TnNode): ValidationError[] {
     .reduce((acm, validator) => {
       return acm.concat(node.acceptNodeValidator(validator));
     }, [] as ValidationError[])
-    .sort((e1, e2) => e1.codePos.line - e2.codePos.line);
+    .sort((e1, e2) => e1.codePos.startLine - e2.codePos.startLine);
 }
 
 function getNodeFromLineNo(topNode: BlockNode, line: number): BlockNode | undefined {
@@ -39,10 +39,10 @@ function getNodeFromLineNo(topNode: BlockNode, line: number): BlockNode | undefi
   let nodes = topNode.queryNode((node: TnNode) => {
     return node.isBlockNode() && node.codePos.path === topPath && (<BlockNode>node).getRange().isInside(line);
   }).sort((n1, n2) => {
-    return n2.codePos.line - n1.codePos.line;
+    return n2.codePos.startLine - n1.codePos.startLine;
   });
-  const maxLine = nodes[0].codePos.line;
-  nodes = nodes.filter(n => n.codePos.line === maxLine);
+  const maxLine = nodes[0].codePos.startLine;
+  nodes = nodes.filter(n => n.codePos.startLine === maxLine);
 
   // if same line, select deepest child.
   return (nodes.length > 0) ? nodes[nodes.length - 1] as BlockNode : undefined;

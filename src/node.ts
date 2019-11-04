@@ -11,7 +11,7 @@ export abstract class TnNode {
   public name = '';
   public uniqueId = 0;
   public parent?: BlockNode;
-  public codePos: CodePos = { line: -1, startColumn: -1, endColumn: -1 };
+  public codePos: CodePos = { startLine: -1, endLine: -1, startColumn: -1, endColumn: -1 };
   public abstract acceptNodeMapper(visitor: NodeMapper): TnNode;
   public abstract acceptNodeFormatter(visitor: NodeFormatter, indent: number): string;
   public abstract acceptNodeValidator(visitor: NodeValidator): ValidationError[];

@@ -46,7 +46,7 @@ var Compile = /** @class */ (function () {
         var ast = new modules_1.Ast({
             type: 'block',
             name: opt.rootBlockName || modules_1.DefaultRootBlockName,
-            codePos: { path: opt.path, line: 0, startColumn: 0, endColumn: 0 },
+            codePos: { path: opt.path, startLine: 0, endLine: 0, startColumn: 0, endColumn: 0 },
             args: [],
             value: '',
             children: astList
@@ -78,7 +78,7 @@ var Compile = /** @class */ (function () {
             .reduce(function (acm, validator) {
             return acm.concat(node.acceptNodeValidator(validator));
         }, [])
-            .sort(function (e1, e2) { return e1.codePos.line - e2.codePos.line; });
+            .sort(function (e1, e2) { return e1.codePos.startLine - e2.codePos.startLine; });
         // TnNode -> string
         var output = node.acceptNodeFormatter(opt.nodeFormatter, 0);
         return { output: output, errors: errors };

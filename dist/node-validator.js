@@ -80,7 +80,7 @@ var DuplicateConstraintChecker = /** @class */ (function (_super) {
     DuplicateConstraintChecker.prototype.visitBlockNode = function (node, codePos) {
         var results = node.getDuplicateConstraints();
         return results.map(function (result) {
-            var message = "constraint '" + result.dupCntr.key + "' is duplicated(already defined at line:" + (result.prevCntr.codePos.line + 1) + ").";
+            var message = "constraint '" + result.dupCntr.key + "' is duplicated(already defined at line:" + (result.prevCntr.codePos.startLine + 1) + ").";
             return { codePos: result.dupCntr.codePos, message: message };
         });
     };
@@ -108,7 +108,7 @@ var UnAnnotatedConstraintChecker = /** @class */ (function (_super) {
         var unAnnotatedCntrs = node.getUnAnnotatedConstraints();
         return unAnnotatedCntrs.map(function (cntr) {
             var value = node.getConstraintValue(cntr.key);
-            var message = "constraint '" + cntr.key + "(" + value + ")' is not anntated in '@" + node.name + "'(line:" + (codePos.line + 1) + ").";
+            var message = "constraint '" + cntr.key + "(" + value + ")' is not anntated in '@" + node.name + "'(line:" + (codePos.startLine + 1) + ").";
             return { codePos: cntr.codePos, message: message };
         });
     };

@@ -4,7 +4,7 @@ var TnNode = /** @class */ (function () {
     function TnNode() {
         this.name = '';
         this.uniqueId = 0;
-        this.codePos = { line: -1, startColumn: -1, endColumn: -1 };
+        this.codePos = { startLine: -1, endLine: -1, startColumn: -1, endColumn: -1 };
     }
     TnNode.prototype.isTextNode = function () {
         return false;
