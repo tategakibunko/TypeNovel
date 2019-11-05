@@ -36,12 +36,12 @@ var BlockNode = /** @class */ (function (_super) {
         _this.className = args.map.className || '';
         _this.content = args.map.content;
         _this.whiteSpace = args.map.whiteSpace || 'normal';
-        _this.constraints = _this.parseConstraints(args.args[0]);
-        var mmapAttrs = (args.map ? (args.map.attributes || {}) : {});
-        _this.attrs = __assign(__assign({}, mmapAttrs), _this.constraints.attrs);
         _this.parent = args.parent;
         _this.codePos = args.codePos;
         _this.uniqueId = args.uniqueId;
+        _this.constraints = _this.parseConstraints(args.args[0], args.codePos.path);
+        var mmapAttrs = (args.map ? (args.map.attributes || {}) : {});
+        _this.attrs = __assign(__assign({}, mmapAttrs), _this.constraints.attrs);
         _this.children = []; // empty by default
         return _this;
     }
@@ -92,8 +92,12 @@ var BlockNode = /** @class */ (function (_super) {
     BlockNode.prototype.isWhiteSpacePre = function () {
         return this.whiteSpace === 'pre';
     };
-    BlockNode.prototype.parseConstraints = function (arg0) {
-        return (arg0 && arg0 instanceof modules_1.ConstraintCollection) ? arg0 : new modules_1.ConstraintCollection([]);
+    BlockNode.prototype.parseConstraints = function (arg0, path) {
+        var cntrs = (arg0 && arg0 instanceof modules_1.ConstraintCollection) ? arg0 : new modules_1.ConstraintCollection([]);
+        if (path) {
+            cntrs.setPath(path);
+        }
+        return cntrs;
     };
     BlockNode.prototype.getConstraint = function (name) {
         return this.constraints.get(name);

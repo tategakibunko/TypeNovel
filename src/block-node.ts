@@ -40,12 +40,12 @@ export class BlockNode extends TnNode {
     this.className = args.map.className || '';
     this.content = args.map.content;
     this.whiteSpace = args.map.whiteSpace || 'normal';
-    this.constraints = this.parseConstraints(args.args[0]);
-    const mmapAttrs = (args.map ? (args.map.attributes || {}) : {});
-    this.attrs = { ...mmapAttrs, ...this.constraints.attrs };
     this.parent = args.parent;
     this.codePos = args.codePos;
     this.uniqueId = args.uniqueId;
+    this.constraints = this.parseConstraints(args.args[0], args.codePos.path);
+    const mmapAttrs = (args.map ? (args.map.attributes || {}) : {});
+    this.attrs = { ...mmapAttrs, ...this.constraints.attrs };
     this.children = []; // empty by default
   }
 
@@ -109,8 +109,12 @@ export class BlockNode extends TnNode {
     return this.whiteSpace === 'pre';
   }
 
-  private parseConstraints(arg0: any): ConstraintCollection {
-    return (arg0 && arg0 instanceof ConstraintCollection) ? arg0 : new ConstraintCollection([]);
+  private parseConstraints(arg0: any, path?: string): ConstraintCollection {
+    let cntrs = (arg0 && arg0 instanceof ConstraintCollection) ? arg0 : new ConstraintCollection([]);
+    if (path) {
+      cntrs.setPath(path);
+    }
+    return cntrs;
   }
 
   private getConstraint(name: string): Constraint | undefined {

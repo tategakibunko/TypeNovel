@@ -39,6 +39,15 @@ export class ConstraintCollection {
     this.constraints.forEach(cntr => fn(cntr));
   }
 
+  public setPath(path: string) {
+    this.constraints.forEach(cntr => {
+      cntr.codePos.path = path;
+      if (cntr.value instanceof ConstraintCollection) {
+        cntr.value.setPath(path);
+      }
+    });
+  }
+
   get length(): number {
     return this.constraints.length;
   }
