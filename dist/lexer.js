@@ -7,7 +7,7 @@ const rexInt = /\d+/
 // [example]
 // 0.1, 1.1, 1e10, 1.0e10, 1e+10, 1e-10, 1.0e-10 ...
 const rexFloat = /\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/
-const debug = true;
+const debug = false;
 
 const skipTypes = [
   'skip',
