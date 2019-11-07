@@ -6,6 +6,11 @@ Mark "*": bug fixed.
 Mark "!": change that can break compatibility with older version
 ===============================================================================
 
+version 1.1.10
+==========================
+* Fix ambigout grammar rule.
+* Fix line pos of source when comments are included.
+
 version 1.1.9, 2019/11/05
 ==========================
 * Store correct code path to constraints of block node.
