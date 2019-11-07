@@ -122,7 +122,7 @@ array ->
 
 object ->
   %objStart (%ws):* %objEnd {% (d) => { return {}; } %}
-| %objStart (%ws):* pairs %objEnd {% (d) => d[1] %}
+| %objStart (%ws):* pairs %objEnd {% (d) => d[2] %}
 
 pairs -> pair ((%ws):* %comma (%ws):* pair):* (%comma):? (%ws):* {% extractPairs %}
 

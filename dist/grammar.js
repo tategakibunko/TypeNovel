@@ -182,7 +182,7 @@ var grammar = {
         { "name": "object$ebnf$2", "symbols": [] },
         { "name": "object$ebnf$2$subexpression$1", "symbols": [(lexer.has("ws") ? { type: "ws" } : ws)] },
         { "name": "object$ebnf$2", "symbols": ["object$ebnf$2", "object$ebnf$2$subexpression$1"], "postprocess": function (d) { return d[0].concat([d[1]]); } },
-        { "name": "object", "symbols": [(lexer.has("objStart") ? { type: "objStart" } : objStart), "object$ebnf$2", "pairs", (lexer.has("objEnd") ? { type: "objEnd" } : objEnd)], "postprocess": function (d) { return d[1]; } },
+        { "name": "object", "symbols": [(lexer.has("objStart") ? { type: "objStart" } : objStart), "object$ebnf$2", "pairs", (lexer.has("objEnd") ? { type: "objEnd" } : objEnd)], "postprocess": function (d) { return d[2]; } },
         { "name": "pairs$ebnf$1", "symbols": [] },
         { "name": "pairs$ebnf$1$subexpression$1$ebnf$1", "symbols": [] },
         { "name": "pairs$ebnf$1$subexpression$1$ebnf$1$subexpression$1", "symbols": [(lexer.has("ws") ? { type: "ws" } : ws)] },
