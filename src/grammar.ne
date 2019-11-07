@@ -98,9 +98,9 @@ text ->
 %}
 
 # args = lparen ws expr ws (comma ws expr ws)* rparen
-args -> %argsStart (exprs):? %argsEnd {% (d) => d[1]? d[1][0] : [] %}
+args -> %argsStart (%ws):* (exprs):? (%ws):* %argsEnd {% (d) => d[2]? d[2][0] : [] %}
 
-exprs -> (%ws):* expr (%ws):* (%comma (%ws):* expr (%ws):*):* {% extractExprs %}
+exprs -> expr ((%ws):* %comma (%ws):* expr):* {% extractExprs %}
 
 expr ->
   literal {% id %}
@@ -118,16 +118,15 @@ number ->
 
 array ->
   %arrayStart (%ws):* %arrayEnd {% (d) => [] %}
-| %arrayStart exprs %arrayEnd {% (d) => d[1] %}
+| %arrayStart (%ws):* exprs (%ws):* %arrayEnd {% (d) => d[2] %}
 
 object ->
   %objStart (%ws):* %objEnd {% (d) => { return {}; } %}
-| %objStart pairs %objEnd {% (d) => d[1] %}
+| %objStart (%ws):* pairs %objEnd {% (d) => d[1] %}
 
-# { ws expr ws colon ws expr ws (comma ws expr ws colon ws expr ws)* comma? ws* }
-pairs -> pair (%comma pair):* (%comma):? (%ws):* {% extractPairs %}
+pairs -> pair ((%ws):* %comma (%ws):* pair):* (%comma):? (%ws):* {% extractPairs %}
 
-pair -> (%ws):* symbol (%ws):* %colon (%ws):* expr (%ws):* {% extractPair %}
+pair -> symbol (%ws):* %colon (%ws):* expr {% extractPair %}
 
 symbol ->
   %ident {% extractSymbol %}
@@ -142,9 +141,9 @@ function extractBlockChildren(children: any []): any [] {
 }
 
 function extractExprs(d: any) {
-  let output: any = [d[1]];
-  for (let i in d[3]) {
-    output.push(d[3][i][2]);
+  let output: any = [d[0]];
+  for (let i in d[1]) {
+    output.push(d[1][i][3]);
   }
   return output;
 }
@@ -171,9 +170,9 @@ function extractSymbol(d: any) {
 }
 
 function extractPair(d: any) {
-  const symbol = d[1];
+  const symbol = d[0];
   const key = symbol.value;
-  const value = d[5];
+  const value = d[4];
   return new Constraint(key, value, symbol.codePos);
 }
 
@@ -181,7 +180,7 @@ function extractPairs(d: any) {
   let output: Constraint [] = [];
   output.push(d[0]);
   for (let i in d[1]) {
-    output.push(d[1][i][1]);
+    output.push(d[1][i][3]);
   }
   return new ConstraintCollection(output);
 }

@@ -14,9 +14,9 @@ function extractBlockChildren(children) {
     });
 }
 function extractExprs(d) {
-    var output = [d[1]];
-    for (var i in d[3]) {
-        output.push(d[3][i][2]);
+    var output = [d[0]];
+    for (var i in d[1]) {
+        output.push(d[1][i][3]);
     }
     return output;
 }
@@ -40,16 +40,16 @@ function extractSymbol(d) {
     return { value: value, codePos: codePos };
 }
 function extractPair(d) {
-    var symbol = d[1];
+    var symbol = d[0];
     var key = symbol.value;
-    var value = d[5];
+    var value = d[4];
     return new modules_1.Constraint(key, value, symbol.codePos);
 }
 function extractPairs(d) {
     var output = [];
     output.push(d[0]);
     for (var i in d[1]) {
-        output.push(d[1][i][1]);
+        output.push(d[1][i][3]);
     }
     return new modules_1.ConstraintCollection(output);
 }
@@ -136,26 +136,26 @@ var grammar = {
                 return d[0];
             }
         },
-        { "name": "args$ebnf$1$subexpression$1", "symbols": ["exprs"] },
-        { "name": "args$ebnf$1", "symbols": ["args$ebnf$1$subexpression$1"], "postprocess": id },
-        { "name": "args$ebnf$1", "symbols": [], "postprocess": function () { return null; } },
-        { "name": "args", "symbols": [(lexer.has("argsStart") ? { type: "argsStart" } : argsStart), "args$ebnf$1", (lexer.has("argsEnd") ? { type: "argsEnd" } : argsEnd)], "postprocess": function (d) { return d[1] ? d[1][0] : []; } },
+        { "name": "args$ebnf$1", "symbols": [] },
+        { "name": "args$ebnf$1$subexpression$1", "symbols": [(lexer.has("ws") ? { type: "ws" } : ws)] },
+        { "name": "args$ebnf$1", "symbols": ["args$ebnf$1", "args$ebnf$1$subexpression$1"], "postprocess": function (d) { return d[0].concat([d[1]]); } },
+        { "name": "args$ebnf$2$subexpression$1", "symbols": ["exprs"] },
+        { "name": "args$ebnf$2", "symbols": ["args$ebnf$2$subexpression$1"], "postprocess": id },
+        { "name": "args$ebnf$2", "symbols": [], "postprocess": function () { return null; } },
+        { "name": "args$ebnf$3", "symbols": [] },
+        { "name": "args$ebnf$3$subexpression$1", "symbols": [(lexer.has("ws") ? { type: "ws" } : ws)] },
+        { "name": "args$ebnf$3", "symbols": ["args$ebnf$3", "args$ebnf$3$subexpression$1"], "postprocess": function (d) { return d[0].concat([d[1]]); } },
+        { "name": "args", "symbols": [(lexer.has("argsStart") ? { type: "argsStart" } : argsStart), "args$ebnf$1", "args$ebnf$2", "args$ebnf$3", (lexer.has("argsEnd") ? { type: "argsEnd" } : argsEnd)], "postprocess": function (d) { return d[2] ? d[2][0] : []; } },
         { "name": "exprs$ebnf$1", "symbols": [] },
-        { "name": "exprs$ebnf$1$subexpression$1", "symbols": [(lexer.has("ws") ? { type: "ws" } : ws)] },
+        { "name": "exprs$ebnf$1$subexpression$1$ebnf$1", "symbols": [] },
+        { "name": "exprs$ebnf$1$subexpression$1$ebnf$1$subexpression$1", "symbols": [(lexer.has("ws") ? { type: "ws" } : ws)] },
+        { "name": "exprs$ebnf$1$subexpression$1$ebnf$1", "symbols": ["exprs$ebnf$1$subexpression$1$ebnf$1", "exprs$ebnf$1$subexpression$1$ebnf$1$subexpression$1"], "postprocess": function (d) { return d[0].concat([d[1]]); } },
+        { "name": "exprs$ebnf$1$subexpression$1$ebnf$2", "symbols": [] },
+        { "name": "exprs$ebnf$1$subexpression$1$ebnf$2$subexpression$1", "symbols": [(lexer.has("ws") ? { type: "ws" } : ws)] },
+        { "name": "exprs$ebnf$1$subexpression$1$ebnf$2", "symbols": ["exprs$ebnf$1$subexpression$1$ebnf$2", "exprs$ebnf$1$subexpression$1$ebnf$2$subexpression$1"], "postprocess": function (d) { return d[0].concat([d[1]]); } },
+        { "name": "exprs$ebnf$1$subexpression$1", "symbols": ["exprs$ebnf$1$subexpression$1$ebnf$1", (lexer.has("comma") ? { type: "comma" } : comma), "exprs$ebnf$1$subexpression$1$ebnf$2", "expr"] },
         { "name": "exprs$ebnf$1", "symbols": ["exprs$ebnf$1", "exprs$ebnf$1$subexpression$1"], "postprocess": function (d) { return d[0].concat([d[1]]); } },
-        { "name": "exprs$ebnf$2", "symbols": [] },
-        { "name": "exprs$ebnf$2$subexpression$1", "symbols": [(lexer.has("ws") ? { type: "ws" } : ws)] },
-        { "name": "exprs$ebnf$2", "symbols": ["exprs$ebnf$2", "exprs$ebnf$2$subexpression$1"], "postprocess": function (d) { return d[0].concat([d[1]]); } },
-        { "name": "exprs$ebnf$3", "symbols": [] },
-        { "name": "exprs$ebnf$3$subexpression$1$ebnf$1", "symbols": [] },
-        { "name": "exprs$ebnf$3$subexpression$1$ebnf$1$subexpression$1", "symbols": [(lexer.has("ws") ? { type: "ws" } : ws)] },
-        { "name": "exprs$ebnf$3$subexpression$1$ebnf$1", "symbols": ["exprs$ebnf$3$subexpression$1$ebnf$1", "exprs$ebnf$3$subexpression$1$ebnf$1$subexpression$1"], "postprocess": function (d) { return d[0].concat([d[1]]); } },
-        { "name": "exprs$ebnf$3$subexpression$1$ebnf$2", "symbols": [] },
-        { "name": "exprs$ebnf$3$subexpression$1$ebnf$2$subexpression$1", "symbols": [(lexer.has("ws") ? { type: "ws" } : ws)] },
-        { "name": "exprs$ebnf$3$subexpression$1$ebnf$2", "symbols": ["exprs$ebnf$3$subexpression$1$ebnf$2", "exprs$ebnf$3$subexpression$1$ebnf$2$subexpression$1"], "postprocess": function (d) { return d[0].concat([d[1]]); } },
-        { "name": "exprs$ebnf$3$subexpression$1", "symbols": [(lexer.has("comma") ? { type: "comma" } : comma), "exprs$ebnf$3$subexpression$1$ebnf$1", "expr", "exprs$ebnf$3$subexpression$1$ebnf$2"] },
-        { "name": "exprs$ebnf$3", "symbols": ["exprs$ebnf$3", "exprs$ebnf$3$subexpression$1"], "postprocess": function (d) { return d[0].concat([d[1]]); } },
-        { "name": "exprs", "symbols": ["exprs$ebnf$1", "expr", "exprs$ebnf$2", "exprs$ebnf$3"], "postprocess": extractExprs },
+        { "name": "exprs", "symbols": ["expr", "exprs$ebnf$1"], "postprocess": extractExprs },
         { "name": "expr", "symbols": ["literal"], "postprocess": id },
         { "name": "expr", "symbols": ["number"], "postprocess": id },
         { "name": "expr", "symbols": ["array"], "postprocess": id },
@@ -168,14 +168,29 @@ var grammar = {
         { "name": "array$ebnf$1$subexpression$1", "symbols": [(lexer.has("ws") ? { type: "ws" } : ws)] },
         { "name": "array$ebnf$1", "symbols": ["array$ebnf$1", "array$ebnf$1$subexpression$1"], "postprocess": function (d) { return d[0].concat([d[1]]); } },
         { "name": "array", "symbols": [(lexer.has("arrayStart") ? { type: "arrayStart" } : arrayStart), "array$ebnf$1", (lexer.has("arrayEnd") ? { type: "arrayEnd" } : arrayEnd)], "postprocess": function (d) { return []; } },
-        { "name": "array", "symbols": [(lexer.has("arrayStart") ? { type: "arrayStart" } : arrayStart), "exprs", (lexer.has("arrayEnd") ? { type: "arrayEnd" } : arrayEnd)], "postprocess": function (d) { return d[1]; } },
+        { "name": "array$ebnf$2", "symbols": [] },
+        { "name": "array$ebnf$2$subexpression$1", "symbols": [(lexer.has("ws") ? { type: "ws" } : ws)] },
+        { "name": "array$ebnf$2", "symbols": ["array$ebnf$2", "array$ebnf$2$subexpression$1"], "postprocess": function (d) { return d[0].concat([d[1]]); } },
+        { "name": "array$ebnf$3", "symbols": [] },
+        { "name": "array$ebnf$3$subexpression$1", "symbols": [(lexer.has("ws") ? { type: "ws" } : ws)] },
+        { "name": "array$ebnf$3", "symbols": ["array$ebnf$3", "array$ebnf$3$subexpression$1"], "postprocess": function (d) { return d[0].concat([d[1]]); } },
+        { "name": "array", "symbols": [(lexer.has("arrayStart") ? { type: "arrayStart" } : arrayStart), "array$ebnf$2", "exprs", "array$ebnf$3", (lexer.has("arrayEnd") ? { type: "arrayEnd" } : arrayEnd)], "postprocess": function (d) { return d[2]; } },
         { "name": "object$ebnf$1", "symbols": [] },
         { "name": "object$ebnf$1$subexpression$1", "symbols": [(lexer.has("ws") ? { type: "ws" } : ws)] },
         { "name": "object$ebnf$1", "symbols": ["object$ebnf$1", "object$ebnf$1$subexpression$1"], "postprocess": function (d) { return d[0].concat([d[1]]); } },
         { "name": "object", "symbols": [(lexer.has("objStart") ? { type: "objStart" } : objStart), "object$ebnf$1", (lexer.has("objEnd") ? { type: "objEnd" } : objEnd)], "postprocess": function (d) { return {}; } },
-        { "name": "object", "symbols": [(lexer.has("objStart") ? { type: "objStart" } : objStart), "pairs", (lexer.has("objEnd") ? { type: "objEnd" } : objEnd)], "postprocess": function (d) { return d[1]; } },
+        { "name": "object$ebnf$2", "symbols": [] },
+        { "name": "object$ebnf$2$subexpression$1", "symbols": [(lexer.has("ws") ? { type: "ws" } : ws)] },
+        { "name": "object$ebnf$2", "symbols": ["object$ebnf$2", "object$ebnf$2$subexpression$1"], "postprocess": function (d) { return d[0].concat([d[1]]); } },
+        { "name": "object", "symbols": [(lexer.has("objStart") ? { type: "objStart" } : objStart), "object$ebnf$2", "pairs", (lexer.has("objEnd") ? { type: "objEnd" } : objEnd)], "postprocess": function (d) { return d[1]; } },
         { "name": "pairs$ebnf$1", "symbols": [] },
-        { "name": "pairs$ebnf$1$subexpression$1", "symbols": [(lexer.has("comma") ? { type: "comma" } : comma), "pair"] },
+        { "name": "pairs$ebnf$1$subexpression$1$ebnf$1", "symbols": [] },
+        { "name": "pairs$ebnf$1$subexpression$1$ebnf$1$subexpression$1", "symbols": [(lexer.has("ws") ? { type: "ws" } : ws)] },
+        { "name": "pairs$ebnf$1$subexpression$1$ebnf$1", "symbols": ["pairs$ebnf$1$subexpression$1$ebnf$1", "pairs$ebnf$1$subexpression$1$ebnf$1$subexpression$1"], "postprocess": function (d) { return d[0].concat([d[1]]); } },
+        { "name": "pairs$ebnf$1$subexpression$1$ebnf$2", "symbols": [] },
+        { "name": "pairs$ebnf$1$subexpression$1$ebnf$2$subexpression$1", "symbols": [(lexer.has("ws") ? { type: "ws" } : ws)] },
+        { "name": "pairs$ebnf$1$subexpression$1$ebnf$2", "symbols": ["pairs$ebnf$1$subexpression$1$ebnf$2", "pairs$ebnf$1$subexpression$1$ebnf$2$subexpression$1"], "postprocess": function (d) { return d[0].concat([d[1]]); } },
+        { "name": "pairs$ebnf$1$subexpression$1", "symbols": ["pairs$ebnf$1$subexpression$1$ebnf$1", (lexer.has("comma") ? { type: "comma" } : comma), "pairs$ebnf$1$subexpression$1$ebnf$2", "pair"] },
         { "name": "pairs$ebnf$1", "symbols": ["pairs$ebnf$1", "pairs$ebnf$1$subexpression$1"], "postprocess": function (d) { return d[0].concat([d[1]]); } },
         { "name": "pairs$ebnf$2$subexpression$1", "symbols": [(lexer.has("comma") ? { type: "comma" } : comma)] },
         { "name": "pairs$ebnf$2", "symbols": ["pairs$ebnf$2$subexpression$1"], "postprocess": id },
@@ -190,13 +205,7 @@ var grammar = {
         { "name": "pair$ebnf$2", "symbols": [] },
         { "name": "pair$ebnf$2$subexpression$1", "symbols": [(lexer.has("ws") ? { type: "ws" } : ws)] },
         { "name": "pair$ebnf$2", "symbols": ["pair$ebnf$2", "pair$ebnf$2$subexpression$1"], "postprocess": function (d) { return d[0].concat([d[1]]); } },
-        { "name": "pair$ebnf$3", "symbols": [] },
-        { "name": "pair$ebnf$3$subexpression$1", "symbols": [(lexer.has("ws") ? { type: "ws" } : ws)] },
-        { "name": "pair$ebnf$3", "symbols": ["pair$ebnf$3", "pair$ebnf$3$subexpression$1"], "postprocess": function (d) { return d[0].concat([d[1]]); } },
-        { "name": "pair$ebnf$4", "symbols": [] },
-        { "name": "pair$ebnf$4$subexpression$1", "symbols": [(lexer.has("ws") ? { type: "ws" } : ws)] },
-        { "name": "pair$ebnf$4", "symbols": ["pair$ebnf$4", "pair$ebnf$4$subexpression$1"], "postprocess": function (d) { return d[0].concat([d[1]]); } },
-        { "name": "pair", "symbols": ["pair$ebnf$1", "symbol", "pair$ebnf$2", (lexer.has("colon") ? { type: "colon" } : colon), "pair$ebnf$3", "expr", "pair$ebnf$4"], "postprocess": extractPair },
+        { "name": "pair", "symbols": ["symbol", "pair$ebnf$1", (lexer.has("colon") ? { type: "colon" } : colon), "pair$ebnf$2", "expr"], "postprocess": extractPair },
         { "name": "symbol", "symbols": [(lexer.has("ident") ? { type: "ident" } : ident)], "postprocess": extractSymbol },
         { "name": "symbol", "symbols": [(lexer.has("literalSq") ? { type: "literalSq" } : literalSq)], "postprocess": extractSymbol },
         { "name": "symbol", "symbols": [(lexer.has("literalSq") ? { type: "literalSq" } : literalSq)], "postprocess": extractSymbol }
