@@ -7,7 +7,7 @@ const rexInt = /\d+/
 // [example]
 // 0.1, 1.1, 1e10, 1.0e10, 1e+10, 1e-10, 1.0e-10 ...
 const rexFloat = /\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/
-const debug = false;
+const debug = true;
 
 const skipTypes = [
   'skip',
@@ -46,6 +46,7 @@ const argsRule = function (argsEnd) {
   return {
     argsStart: '(',
     argsEnd: argsEnd,
+    rangeCommentStart: { match: '/*', push: 'rangeComment' },
     comma: ',',
     objStart: { match: '{', push: 'object' },
     arrayStart: { match: '[', push: 'array' },
@@ -123,7 +124,11 @@ lexer.next = (next => () => {
   };
   if (token && debug) {
     // console.log('[%s, %s](%s)', token.type, lexer.state, token.value);
-    console.log('%s', token.type);
+    if (token.type === 'ws') {
+      console.log('ws');
+    } else {
+      console.log('%s[%s]', token.type, token.value);
+    }
   }
   return token;
 })(lexer.next);

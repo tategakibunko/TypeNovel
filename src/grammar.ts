@@ -7,11 +7,11 @@ declare var annotStart: any;
 declare var annotName: any;
 declare var blockStart: any;
 declare var blockName: any;
+declare var ws: any;
 declare var blockTextStart: any;
 declare var blockTextEnd: any;
 declare var text: any;
 declare var textBeforeComment: any;
-declare var ws: any;
 declare var escape: any;
 declare var argsStart: any;
 declare var argsEnd: any;
@@ -45,9 +45,9 @@ function extractBlockChildren(children: any []): any [] {
 }
 
 function extractExprs(d: any) {
-  let output: any = [d[0]];
-  for (let i in d[1]) {
-    output.push(d[1][i][1]);
+  let output: any = [d[1]];
+  for (let i in d[3]) {
+    output.push(d[3][i][2]);
   }
   return output;
 }
@@ -76,7 +76,7 @@ function extractSymbol(d: any) {
 function extractPair(d: any) {
   const symbol = d[1];
   const key = symbol.value;
-  const value = d[4];
+  const value = d[5];
   return new Constraint(key, value, symbol.codePos);
 }
 
@@ -165,15 +165,18 @@ const grammar: Grammar = {
         }
         },
     {"name": "block$ebnf$1", "symbols": []},
-    {"name": "block$ebnf$1$subexpression$1", "symbols": ["stmt"]},
+    {"name": "block$ebnf$1$subexpression$1", "symbols": [(lexer.has("ws") ? {type: "ws"} : ws)]},
     {"name": "block$ebnf$1", "symbols": ["block$ebnf$1", "block$ebnf$1$subexpression$1"], "postprocess": (d) => d[0].concat([d[1]])},
-    {"name": "block", "symbols": [(lexer.has("blockStart") ? {type: "blockStart"} : blockStart), (lexer.has("blockName") ? {type: "blockName"} : blockName), "args", (lexer.has("blockTextStart") ? {type: "blockTextStart"} : blockTextStart), "block$ebnf$1", (lexer.has("blockTextEnd") ? {type: "blockTextEnd"} : blockTextEnd)], "postprocess": 
+    {"name": "block$ebnf$2", "symbols": []},
+    {"name": "block$ebnf$2$subexpression$1", "symbols": ["stmt"]},
+    {"name": "block$ebnf$2", "symbols": ["block$ebnf$2", "block$ebnf$2$subexpression$1"], "postprocess": (d) => d[0].concat([d[1]])},
+    {"name": "block", "symbols": [(lexer.has("blockStart") ? {type: "blockStart"} : blockStart), (lexer.has("blockName") ? {type: "blockName"} : blockName), "args", "block$ebnf$1", (lexer.has("blockTextStart") ? {type: "blockTextStart"} : blockTextStart), "block$ebnf$2", (lexer.has("blockTextEnd") ? {type: "blockTextEnd"} : blockTextEnd)], "postprocess": 
         (d) => {
           const codePos = {
             startLine: d[0].line - 1,
-            endLine: d[5].line - 1,
+            endLine: d[6].line - 1,
             startColumn: d[0].col - 1,
-            endColumn: d[5].col - 1,
+            endColumn: d[6].col - 1,
           };
           // console.log('block start:%o, at %o', d[0], codePos);
           return new Ast({
@@ -181,7 +184,7 @@ const grammar: Grammar = {
             name: d[1].value,
             args: d[2] || [],
             value: '',
-            children: extractBlockChildren(d[4]),
+            children: extractBlockChildren(d[5]),
             codePos,
           });
         }
@@ -198,47 +201,35 @@ const grammar: Grammar = {
     {"name": "args$ebnf$1$subexpression$1", "symbols": ["exprs"]},
     {"name": "args$ebnf$1", "symbols": ["args$ebnf$1$subexpression$1"], "postprocess": id},
     {"name": "args$ebnf$1", "symbols": [], "postprocess": () => null},
-    {"name": "args$ebnf$2", "symbols": []},
-    {"name": "args$ebnf$2$subexpression$1", "symbols": [(lexer.has("ws") ? {type: "ws"} : ws)]},
-    {"name": "args$ebnf$2", "symbols": ["args$ebnf$2", "args$ebnf$2$subexpression$1"], "postprocess": (d) => d[0].concat([d[1]])},
-    {"name": "args", "symbols": [(lexer.has("argsStart") ? {type: "argsStart"} : argsStart), "args$ebnf$1", (lexer.has("argsEnd") ? {type: "argsEnd"} : argsEnd), "args$ebnf$2"], "postprocess": (d) => d[1]? d[1][0] : []},
+    {"name": "args", "symbols": [(lexer.has("argsStart") ? {type: "argsStart"} : argsStart), "args$ebnf$1", (lexer.has("argsEnd") ? {type: "argsEnd"} : argsEnd)], "postprocess": (d) => d[1]? d[1][0] : []},
     {"name": "exprs$ebnf$1", "symbols": []},
-    {"name": "exprs$ebnf$1$subexpression$1", "symbols": [(lexer.has("comma") ? {type: "comma"} : comma), "expr"]},
+    {"name": "exprs$ebnf$1$subexpression$1", "symbols": [(lexer.has("ws") ? {type: "ws"} : ws)]},
     {"name": "exprs$ebnf$1", "symbols": ["exprs$ebnf$1", "exprs$ebnf$1$subexpression$1"], "postprocess": (d) => d[0].concat([d[1]])},
-    {"name": "exprs", "symbols": ["expr", "exprs$ebnf$1"], "postprocess": extractExprs},
-    {"name": "expr$ebnf$1", "symbols": []},
-    {"name": "expr$ebnf$1$subexpression$1", "symbols": [(lexer.has("ws") ? {type: "ws"} : ws)]},
-    {"name": "expr$ebnf$1", "symbols": ["expr$ebnf$1", "expr$ebnf$1$subexpression$1"], "postprocess": (d) => d[0].concat([d[1]])},
-    {"name": "expr$ebnf$2", "symbols": []},
-    {"name": "expr$ebnf$2$subexpression$1", "symbols": [(lexer.has("ws") ? {type: "ws"} : ws)]},
-    {"name": "expr$ebnf$2", "symbols": ["expr$ebnf$2", "expr$ebnf$2$subexpression$1"], "postprocess": (d) => d[0].concat([d[1]])},
-    {"name": "expr", "symbols": ["expr$ebnf$1", "literal", "expr$ebnf$2"], "postprocess": (d) => d[1]},
-    {"name": "expr$ebnf$3", "symbols": []},
-    {"name": "expr$ebnf$3$subexpression$1", "symbols": [(lexer.has("ws") ? {type: "ws"} : ws)]},
-    {"name": "expr$ebnf$3", "symbols": ["expr$ebnf$3", "expr$ebnf$3$subexpression$1"], "postprocess": (d) => d[0].concat([d[1]])},
-    {"name": "expr$ebnf$4", "symbols": []},
-    {"name": "expr$ebnf$4$subexpression$1", "symbols": [(lexer.has("ws") ? {type: "ws"} : ws)]},
-    {"name": "expr$ebnf$4", "symbols": ["expr$ebnf$4", "expr$ebnf$4$subexpression$1"], "postprocess": (d) => d[0].concat([d[1]])},
-    {"name": "expr", "symbols": ["expr$ebnf$3", "number", "expr$ebnf$4"], "postprocess": (d) => d[1]},
-    {"name": "expr$ebnf$5", "symbols": []},
-    {"name": "expr$ebnf$5$subexpression$1", "symbols": [(lexer.has("ws") ? {type: "ws"} : ws)]},
-    {"name": "expr$ebnf$5", "symbols": ["expr$ebnf$5", "expr$ebnf$5$subexpression$1"], "postprocess": (d) => d[0].concat([d[1]])},
-    {"name": "expr$ebnf$6", "symbols": []},
-    {"name": "expr$ebnf$6$subexpression$1", "symbols": [(lexer.has("ws") ? {type: "ws"} : ws)]},
-    {"name": "expr$ebnf$6", "symbols": ["expr$ebnf$6", "expr$ebnf$6$subexpression$1"], "postprocess": (d) => d[0].concat([d[1]])},
-    {"name": "expr", "symbols": ["expr$ebnf$5", "array", "expr$ebnf$6"], "postprocess": (d) => d[1]},
-    {"name": "expr$ebnf$7", "symbols": []},
-    {"name": "expr$ebnf$7$subexpression$1", "symbols": [(lexer.has("ws") ? {type: "ws"} : ws)]},
-    {"name": "expr$ebnf$7", "symbols": ["expr$ebnf$7", "expr$ebnf$7$subexpression$1"], "postprocess": (d) => d[0].concat([d[1]])},
-    {"name": "expr$ebnf$8", "symbols": []},
-    {"name": "expr$ebnf$8$subexpression$1", "symbols": [(lexer.has("ws") ? {type: "ws"} : ws)]},
-    {"name": "expr$ebnf$8", "symbols": ["expr$ebnf$8", "expr$ebnf$8$subexpression$1"], "postprocess": (d) => d[0].concat([d[1]])},
-    {"name": "expr", "symbols": ["expr$ebnf$7", "object", "expr$ebnf$8"], "postprocess": (d) => d[1]},
+    {"name": "exprs$ebnf$2", "symbols": []},
+    {"name": "exprs$ebnf$2$subexpression$1", "symbols": [(lexer.has("ws") ? {type: "ws"} : ws)]},
+    {"name": "exprs$ebnf$2", "symbols": ["exprs$ebnf$2", "exprs$ebnf$2$subexpression$1"], "postprocess": (d) => d[0].concat([d[1]])},
+    {"name": "exprs$ebnf$3", "symbols": []},
+    {"name": "exprs$ebnf$3$subexpression$1$ebnf$1", "symbols": []},
+    {"name": "exprs$ebnf$3$subexpression$1$ebnf$1$subexpression$1", "symbols": [(lexer.has("ws") ? {type: "ws"} : ws)]},
+    {"name": "exprs$ebnf$3$subexpression$1$ebnf$1", "symbols": ["exprs$ebnf$3$subexpression$1$ebnf$1", "exprs$ebnf$3$subexpression$1$ebnf$1$subexpression$1"], "postprocess": (d) => d[0].concat([d[1]])},
+    {"name": "exprs$ebnf$3$subexpression$1$ebnf$2", "symbols": []},
+    {"name": "exprs$ebnf$3$subexpression$1$ebnf$2$subexpression$1", "symbols": [(lexer.has("ws") ? {type: "ws"} : ws)]},
+    {"name": "exprs$ebnf$3$subexpression$1$ebnf$2", "symbols": ["exprs$ebnf$3$subexpression$1$ebnf$2", "exprs$ebnf$3$subexpression$1$ebnf$2$subexpression$1"], "postprocess": (d) => d[0].concat([d[1]])},
+    {"name": "exprs$ebnf$3$subexpression$1", "symbols": [(lexer.has("comma") ? {type: "comma"} : comma), "exprs$ebnf$3$subexpression$1$ebnf$1", "expr", "exprs$ebnf$3$subexpression$1$ebnf$2"]},
+    {"name": "exprs$ebnf$3", "symbols": ["exprs$ebnf$3", "exprs$ebnf$3$subexpression$1"], "postprocess": (d) => d[0].concat([d[1]])},
+    {"name": "exprs", "symbols": ["exprs$ebnf$1", "expr", "exprs$ebnf$2", "exprs$ebnf$3"], "postprocess": extractExprs},
+    {"name": "expr", "symbols": ["literal"], "postprocess": id},
+    {"name": "expr", "symbols": ["number"], "postprocess": id},
+    {"name": "expr", "symbols": ["array"], "postprocess": id},
+    {"name": "expr", "symbols": ["object"], "postprocess": id},
     {"name": "literal", "symbols": [(lexer.has("literalSq") ? {type: "literalSq"} : literalSq)], "postprocess": (d) => extractLiteral(d[0].value)},
     {"name": "literal", "symbols": [(lexer.has("literalDq") ? {type: "literalDq"} : literalDq)], "postprocess": (d) => extractLiteral(d[0].value)},
     {"name": "number", "symbols": [(lexer.has("integer") ? {type: "integer"} : integer)], "postprocess": (d) => parseInt(d[0].value, 10)},
     {"name": "number", "symbols": [(lexer.has("float") ? {type: "float"} : float)], "postprocess": (d) => parseFloat(d[0].value)},
-    {"name": "array", "symbols": [(lexer.has("arrayStart") ? {type: "arrayStart"} : arrayStart), (lexer.has("arrayEnd") ? {type: "arrayEnd"} : arrayEnd)], "postprocess": (d) => []},
+    {"name": "array$ebnf$1", "symbols": []},
+    {"name": "array$ebnf$1$subexpression$1", "symbols": [(lexer.has("ws") ? {type: "ws"} : ws)]},
+    {"name": "array$ebnf$1", "symbols": ["array$ebnf$1", "array$ebnf$1$subexpression$1"], "postprocess": (d) => d[0].concat([d[1]])},
+    {"name": "array", "symbols": [(lexer.has("arrayStart") ? {type: "arrayStart"} : arrayStart), "array$ebnf$1", (lexer.has("arrayEnd") ? {type: "arrayEnd"} : arrayEnd)], "postprocess": (d) => []},
     {"name": "array", "symbols": [(lexer.has("arrayStart") ? {type: "arrayStart"} : arrayStart), "exprs", (lexer.has("arrayEnd") ? {type: "arrayEnd"} : arrayEnd)], "postprocess": (d) => d[1]},
     {"name": "object$ebnf$1", "symbols": []},
     {"name": "object$ebnf$1$subexpression$1", "symbols": [(lexer.has("ws") ? {type: "ws"} : ws)]},
@@ -261,7 +252,13 @@ const grammar: Grammar = {
     {"name": "pair$ebnf$2", "symbols": []},
     {"name": "pair$ebnf$2$subexpression$1", "symbols": [(lexer.has("ws") ? {type: "ws"} : ws)]},
     {"name": "pair$ebnf$2", "symbols": ["pair$ebnf$2", "pair$ebnf$2$subexpression$1"], "postprocess": (d) => d[0].concat([d[1]])},
-    {"name": "pair", "symbols": ["pair$ebnf$1", "symbol", "pair$ebnf$2", (lexer.has("colon") ? {type: "colon"} : colon), "expr"], "postprocess": extractPair},
+    {"name": "pair$ebnf$3", "symbols": []},
+    {"name": "pair$ebnf$3$subexpression$1", "symbols": [(lexer.has("ws") ? {type: "ws"} : ws)]},
+    {"name": "pair$ebnf$3", "symbols": ["pair$ebnf$3", "pair$ebnf$3$subexpression$1"], "postprocess": (d) => d[0].concat([d[1]])},
+    {"name": "pair$ebnf$4", "symbols": []},
+    {"name": "pair$ebnf$4$subexpression$1", "symbols": [(lexer.has("ws") ? {type: "ws"} : ws)]},
+    {"name": "pair$ebnf$4", "symbols": ["pair$ebnf$4", "pair$ebnf$4$subexpression$1"], "postprocess": (d) => d[0].concat([d[1]])},
+    {"name": "pair", "symbols": ["pair$ebnf$1", "symbol", "pair$ebnf$2", (lexer.has("colon") ? {type: "colon"} : colon), "pair$ebnf$3", "expr", "pair$ebnf$4"], "postprocess": extractPair},
     {"name": "symbol", "symbols": [(lexer.has("ident") ? {type: "ident"} : ident)], "postprocess": extractSymbol},
     {"name": "symbol", "symbols": [(lexer.has("literalSq") ? {type: "literalSq"} : literalSq)], "postprocess": extractSymbol},
     {"name": "symbol", "symbols": [(lexer.has("literalSq") ? {type: "literalSq"} : literalSq)], "postprocess": extractSymbol}

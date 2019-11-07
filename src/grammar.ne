@@ -66,13 +66,13 @@ annot -> %annotStart %annotName args {%
   }
 %}
 
-block -> %blockStart %blockName args %blockTextStart (stmt):* %blockTextEnd {%
+block -> %blockStart %blockName args (%ws):* %blockTextStart (stmt):* %blockTextEnd {%
   (d) => {
     const codePos = {
       startLine: d[0].line - 1,
-      endLine: d[5].line - 1,
+      endLine: d[6].line - 1,
       startColumn: d[0].col - 1,
-      endColumn: d[5].col - 1,
+      endColumn: d[6].col - 1,
     };
     // console.log('block start:%o, at %o', d[0], codePos);
     return new Ast({
@@ -80,7 +80,7 @@ block -> %blockStart %blockName args %blockTextStart (stmt):* %blockTextEnd {%
       name: d[1].value,
       args: d[2] || [],
       value: '',
-      children: extractBlockChildren(d[4]),
+      children: extractBlockChildren(d[5]),
       codePos,
     });
   }
@@ -97,15 +97,16 @@ text ->
   }
 %}
 
-args -> %argsStart (exprs):? %argsEnd (%ws):* {% (d) => d[1]? d[1][0] : [] %}
+# args = lparen ws expr ws (comma ws expr ws)* rparen
+args -> %argsStart (exprs):? %argsEnd {% (d) => d[1]? d[1][0] : [] %}
 
-exprs -> expr (%comma expr):* {% extractExprs %}
+exprs -> (%ws):* expr (%ws):* (%comma (%ws):* expr (%ws):*):* {% extractExprs %}
 
 expr ->
-  (%ws):* literal (%ws):* {% (d) => d[1] %}
-| (%ws):* number (%ws):* {% (d) => d[1] %}
-| (%ws):* array (%ws):* {% (d) => d[1] %}
-| (%ws):* object (%ws):* {% (d) => d[1] %}
+  literal {% id %}
+| number {% id %}
+| array {% id %}
+| object {% id %}
 
 literal ->
   %literalSq {% (d) => extractLiteral(d[0].value) %}
@@ -116,16 +117,17 @@ number ->
 | %float {% (d) => parseFloat(d[0].value) %}
 
 array ->
-  %arrayStart %arrayEnd {% (d) => [] %}
+  %arrayStart (%ws):* %arrayEnd {% (d) => [] %}
 | %arrayStart exprs %arrayEnd {% (d) => d[1] %}
 
 object ->
   %objStart (%ws):* %objEnd {% (d) => { return {}; } %}
 | %objStart pairs %objEnd {% (d) => d[1] %}
 
+# { ws expr ws colon ws expr ws (comma ws expr ws colon ws expr ws)* comma? ws* }
 pairs -> pair (%comma pair):* (%comma):? (%ws):* {% extractPairs %}
 
-pair -> (%ws):* symbol (%ws):* %colon expr {% extractPair %}
+pair -> (%ws):* symbol (%ws):* %colon (%ws):* expr (%ws):* {% extractPair %}
 
 symbol ->
   %ident {% extractSymbol %}
@@ -140,9 +142,9 @@ function extractBlockChildren(children: any []): any [] {
 }
 
 function extractExprs(d: any) {
-  let output: any = [d[0]];
-  for (let i in d[1]) {
-    output.push(d[1][i][1]);
+  let output: any = [d[1]];
+  for (let i in d[3]) {
+    output.push(d[3][i][2]);
   }
   return output;
 }
@@ -171,7 +173,7 @@ function extractSymbol(d: any) {
 function extractPair(d: any) {
   const symbol = d[1];
   const key = symbol.value;
-  const value = d[4];
+  const value = d[5];
   return new Constraint(key, value, symbol.codePos);
 }
 
