@@ -79,14 +79,6 @@ var BlockNode = /** @class */ (function (_super) {
     };
     BlockNode.prototype.getRange = function () {
         return new modules_1.CodeRange(this.codePos.startLine, this.codePos.endLine);
-        /*
-        const lastChild = this.children[this.children.length - 1];
-        const startLine = this.codePos.startLine;
-        const endLine = lastChild ?
-          (lastChild.isBlockNode() ? (<BlockNode>lastChild).getRange().endLine : lastChild.codePos.endLine) :
-          this.codePos.endLine;
-        return new CodeRange(startLine, endLine);
-        */
     };
     BlockNode.prototype.setChildren = function (children) {
         this.children = children;

@@ -7,7 +7,7 @@ const rexInt = /\d+/
 // [example]
 // 0.1, 1.1, 1e10, 1.0e10, 1e+10, 1e-10, 1.0e-10 ...
 const rexFloat = /\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/
-const debug = true;
+const debug = false;
 
 const skipTypes = [
   'skip',
@@ -115,12 +115,15 @@ const lexer = moo.states({
 lexer.next = (next => () => {
   let token;
   while ((token = next.call(lexer)) && skipTypes.indexOf(token.type) >= 0) {
+    /*
     if (debug) {
       console.log('--- skip --- [%s, %s](%s) ... skip', token.type, lexer.state, token.value);
     }
+    */
   };
   if (token && debug) {
-    console.log('[%s, %s](%s)', token.type, lexer.state, token.value);
+    // console.log('[%s, %s](%s)', token.type, lexer.state, token.value);
+    console.log('%s', token.type);
   }
   return token;
 })(lexer.next);
