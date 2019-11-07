@@ -18,7 +18,7 @@ var TextNode = /** @class */ (function (_super) {
     __extends(TextNode, _super);
     function TextNode(args) {
         var _this = _super.call(this) || this;
-        _this.name = '(text)';
+        _this.name = args.name;
         _this.codePos = args.codePos;
         _this.value = args.value;
         _this.parent = args.parent;

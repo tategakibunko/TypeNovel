@@ -73,6 +73,7 @@ export class Ast {
   public acceptAstConverter(visitor: AstConverter, parent?: BlockNode): TnNode {
     switch (this.type) {
       case 'text': return visitor.visitTextAst({
+        name: this.name,
         value: this.value,
         codePos: this.codePos,
         parent,

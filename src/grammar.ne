@@ -70,11 +70,11 @@ block -> %blockStart %blockName args %blockTextStart (stmt):* %blockTextEnd {%
   (d) => {
     const codePos = {
       startLine: d[0].line - 1,
-      endLine: d[0].line - 1,
+      endLine: d[5].line - 1,
       startColumn: d[0].col - 1,
-      endColumn: d[0].col + d[1].value.length, // d[0].col - 1 + d[1].value.length + 1
+      endColumn: d[5].col - 1,
     };
-    // console.log('block start:', d[0]);
+    // console.log('block start:%o, at %o', d[0], codePos);
     return new Ast({
       type: 'block',
       name: d[1].value,
@@ -89,6 +89,7 @@ block -> %blockStart %blockName args %blockTextStart (stmt):* %blockTextEnd {%
 text ->
   %text {% id %}
 | %textBeforeComment {% id %}
+| %ws {% id %}
 | %escape {%
   (d) => {
     d[0].value = d[0].value.substring(1);
@@ -96,15 +97,15 @@ text ->
   }
 %}
 
-args -> %argsStart (exprs):? %argsEnd {% (d) => d[1]? d[1][0] : [] %}
+args -> %argsStart (exprs):? %argsEnd (%ws):* {% (d) => d[1]? d[1][0] : [] %}
 
 exprs -> expr (%comma expr):* {% extractExprs %}
 
 expr ->
-  literal {% id %}
-| number {% id %}
-| array {% id %}
-| object {% id %}
+  (%ws):* literal (%ws):* {% (d) => d[1] %}
+| (%ws):* number (%ws):* {% (d) => d[1] %}
+| (%ws):* array (%ws):* {% (d) => d[1] %}
+| (%ws):* object (%ws):* {% (d) => d[1] %}
 
 literal ->
   %literalSq {% (d) => extractLiteral(d[0].value) %}
@@ -119,12 +120,12 @@ array ->
 | %arrayStart exprs %arrayEnd {% (d) => d[1] %}
 
 object ->
-  %objStart %objEnd {% (d) => { return {}; } %}
+  %objStart (%ws):* %objEnd {% (d) => { return {}; } %}
 | %objStart pairs %objEnd {% (d) => d[1] %}
 
-pairs -> pair (%comma pair):* (%comma):? {% extractPairs %}
+pairs -> pair (%comma pair):* (%comma):? (%ws):* {% extractPairs %}
 
-pair -> symbol %colon expr {% extractPair %}
+pair -> (%ws):* symbol (%ws):* %colon expr {% extractPair %}
 
 symbol ->
   %ident {% extractSymbol %}
@@ -168,9 +169,9 @@ function extractSymbol(d: any) {
 }
 
 function extractPair(d: any) {
-  const symbol = d[0];
+  const symbol = d[1];
   const key = symbol.value;
-  const value = d[2];
+  const value = d[4];
   return new Constraint(key, value, symbol.codePos);
 }
 

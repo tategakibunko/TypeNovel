@@ -48,6 +48,7 @@ var Ast = /** @class */ (function () {
     Ast.prototype.acceptAstConverter = function (visitor, parent) {
         switch (this.type) {
             case 'text': return visitor.visitTextAst({
+                name: this.name,
                 value: this.value,
                 codePos: this.codePos,
                 parent: parent,

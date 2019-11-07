@@ -10,6 +10,7 @@ import {
 // Ast -> TnNode
 export interface AstConverter {
   visitTextAst: (args: {
+    name: string;
     value: string;
     codePos: CodePos;
     parent?: BlockNode;
@@ -44,6 +45,7 @@ export class NodeBuilder implements AstConverter {
   }
 
   public visitTextAst(args: {
+    name: string,
     value: string,
     codePos: CodePos,
     parent?: BlockNode,

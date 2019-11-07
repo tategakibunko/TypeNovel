@@ -1,6 +1,7 @@
 import { MarkupMap, CodePos, Ast, BlockNode, AnnotNode, TextNode } from './modules';
 export interface AstConverter {
     visitTextAst: (args: {
+        name: string;
         value: string;
         codePos: CodePos;
         parent?: BlockNode;
@@ -26,6 +27,7 @@ export declare class NodeBuilder implements AstConverter {
     private markupMap;
     constructor(markupMap: MarkupMap);
     visitTextAst(args: {
+        name: string;
         value: string;
         codePos: CodePos;
         parent?: BlockNode;

@@ -1,10 +1,11 @@
+// line cmt1
 @scene({
-  foo:"foo!",// this is comment
-  /* this is
-     also comment
+  foo : "foo!", // line cmt2
+  /*
+    range cmt1
   */
-  bar:"bar!",
-  list: [1, 2,/* comment */ "switch!"],
+  bar : "bar!",
+  list : [ 1, 2, /* range cmt2 */ "switch!" ],
 }){
-  $foo(), $bar()
+  $foo(), /* range cmt3 */ $bar()
 }

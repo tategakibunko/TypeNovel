@@ -2,6 +2,7 @@ import { TnNode, BlockNode, NodeMapper, NodeFormatter, NodeValidator, Validation
 export declare class TextNode extends TnNode {
     private value;
     constructor(args: {
+        name: string;
         parent?: BlockNode;
         codePos: CodePos;
         value: string;

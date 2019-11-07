@@ -12,13 +12,14 @@ export class TextNode extends TnNode {
   private value: string;
 
   constructor(args: {
+    name: string,
     parent?: BlockNode,
     codePos: CodePos,
     value: string,
     uniqueId: number,
   }) {
     super();
-    this.name = '(text)';
+    this.name = args.name;
     this.codePos = args.codePos;
     this.value = args.value;
     this.parent = args.parent;

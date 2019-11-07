@@ -78,12 +78,15 @@ var BlockNode = /** @class */ (function (_super) {
         return this.children[index] || undefined;
     };
     BlockNode.prototype.getRange = function () {
-        var lastChild = this.children[this.children.length - 1];
-        var startLine = this.codePos.startLine;
-        var endLine = lastChild ?
-            (lastChild.isBlockNode() ? lastChild.getRange().endLine : lastChild.codePos.endLine) :
-            this.codePos.endLine;
-        return new modules_1.CodeRange(startLine, endLine);
+        return new modules_1.CodeRange(this.codePos.startLine, this.codePos.endLine);
+        /*
+        const lastChild = this.children[this.children.length - 1];
+        const startLine = this.codePos.startLine;
+        const endLine = lastChild ?
+          (lastChild.isBlockNode() ? (<BlockNode>lastChild).getRange().endLine : lastChild.codePos.endLine) :
+          this.codePos.endLine;
+        return new CodeRange(startLine, endLine);
+        */
     };
     BlockNode.prototype.setChildren = function (children) {
         this.children = children;
