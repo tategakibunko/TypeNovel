@@ -1,6 +1,6 @@
 import { Tnc, CompileResult } from '../dist';
 
-let result: CompileResult = Tnc.fromFile('../tn-examples/04.tn', {
+let result: CompileResult = Tnc.fromFile('../tn-examples/example.tn', {
   format: 'html'
 });
 
