@@ -47,19 +47,19 @@ export class Tnc {
     // String -> Ast[]
     let typeNovelParser = new NearlyParser();
 
-    // Ast[] -> Ast'[]
+    // Ast -> Ast'
     let astMappers: AstMapper[] = [
     ];
 
-    // Ast[] -> TnNode[]
+    // Ast -> TnNode
     let astConverter = new NodeBuilder(config.markupMap || {});
 
-    // TnNode[] -> TnNode[]
+    // TnNode -> TnNode'
     let nodeMappers: NodeMapper[] = [
       new NodeWhiteSpaceCleaner(),
     ];
 
-    // TnNode[] -> ValidationError[]
+    // TnNode -> ValidationError[]
     let nodeValidators = [];
     if (config.compilerOptions.warnDuplicateConstraint) {
       nodeValidators.push(new DuplicateConstraintChecker());
@@ -71,7 +71,7 @@ export class Tnc {
       nodeValidators.push(new UndefinedConstraintChecker());
     }
 
-    // TnNode[] -> string[]
+    // TnNode -> string[]
     const format = args.format || 'html';
     const nodeFormatter = format === 'text' ? new PlainTextFormatter() :
       (args.minify ? new MinifiedHtmlFormatter() : new StdHtmlFormatter());

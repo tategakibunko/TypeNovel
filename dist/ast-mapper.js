@@ -40,7 +40,7 @@ var AstExpander = /** @class */ (function (_super) {
     }
     AstExpander.prototype.visitBlockAst = function (ast, opt) {
         var _this = this;
-        return ast.expandChildren(this.parser, opt.path).mapChildren(function (child) {
+        return ast.expandIncludedChildren(this.parser, opt.path).mapChildren(function (child) {
             return child.acceptAstMapper(_this, { path: opt.path, parent: ast });
         });
     };

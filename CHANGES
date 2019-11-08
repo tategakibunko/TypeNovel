@@ -6,6 +6,10 @@ Mark "*": bug fixed.
 Mark "!": change that can break compatibility with older version
 ===============================================================================
 
+version 1.1.11, 2019/11/08
+==========================
+o Avoid exception at $include(filepath) when the target file doesn't exist.
+
 version 1.1.10, 2019/11/07
 ==========================
 * Fix ambigout grammar rule.

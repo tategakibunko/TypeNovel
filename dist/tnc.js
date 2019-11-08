@@ -27,15 +27,15 @@ var Tnc = /** @class */ (function () {
         var rootBlockName = config.compilerOptions.rootBlockName || 'body';
         // String -> Ast[]
         var typeNovelParser = new modules_1.NearlyParser();
-        // Ast[] -> Ast'[]
+        // Ast -> Ast'
         var astMappers = [];
-        // Ast[] -> TnNode[]
+        // Ast -> TnNode
         var astConverter = new modules_1.NodeBuilder(config.markupMap || {});
-        // TnNode[] -> TnNode[]
+        // TnNode -> TnNode'
         var nodeMappers = [
             new modules_1.NodeWhiteSpaceCleaner(),
         ];
-        // TnNode[] -> ValidationError[]
+        // TnNode -> ValidationError[]
         var nodeValidators = [];
         if (config.compilerOptions.warnDuplicateConstraint) {
             nodeValidators.push(new modules_1.DuplicateConstraintChecker());
@@ -46,7 +46,7 @@ var Tnc = /** @class */ (function () {
         if (config.compilerOptions.warnUndefinedConstraint) {
             nodeValidators.push(new modules_1.UndefinedConstraintChecker());
         }
-        // TnNode[] -> string[]
+        // TnNode -> string[]
         var format = args.format || 'html';
         var nodeFormatter = format === 'text' ? new modules_1.PlainTextFormatter() :
             (args.minify ? new modules_1.MinifiedHtmlFormatter() : new modules_1.StdHtmlFormatter());

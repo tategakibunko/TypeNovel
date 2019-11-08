@@ -1,0 +1,2 @@
+$include("foo.tn") // not exists
+$include("01.tn") // exists

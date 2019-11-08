@@ -1,6 +1,14 @@
 "use strict";
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var modules_1 = require("./modules");
+var fs = __importStar(require("fs"));
 var Ast = /** @class */ (function () {
     function Ast(args) {
         this.type = args.type;
@@ -24,11 +32,11 @@ var Ast = /** @class */ (function () {
     Ast.prototype.expandInclude = function (parser, path) {
         if (this.type === 'annot' && this.name === 'include') {
             var filepath = modules_1.Utils.getPath(this.args[0], path);
-            return parser.astFromFile(filepath);
+            return fs.existsSync(filepath) ? parser.astListFromFile(filepath) : [this];
         }
         return [this];
     };
-    Ast.prototype.expandChildren = function (parser, path) {
+    Ast.prototype.expandIncludedChildren = function (parser, path) {
         this.children = this.children.reduce(function (acm, child) {
             return acm.concat(child.expandInclude(parser, path));
         }, []);

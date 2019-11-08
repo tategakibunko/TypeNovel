@@ -93,6 +93,11 @@ exports.DefaultTnConfig = {
                 "height": "<arg3>"
             }
         },
+        // [example]
+        // $include('path/to/external-file.tn')
+        "$include": {
+            "validate": false
+        },
         "$a": {
             "validate": false,
             "attributes": {

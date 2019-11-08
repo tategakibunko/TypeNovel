@@ -19,7 +19,7 @@ export declare class Ast {
     filterChildren(fn: (child: Ast) => boolean): Ast;
     mapChildren(fn: (child: Ast) => Ast): Ast;
     private expandInclude;
-    expandChildren(parser: TypeNovelParser, path?: string): Ast;
+    expandIncludedChildren(parser: TypeNovelParser, path?: string): Ast;
     acceptAstMapper(visitor: AstMapper, opt: {
         path?: string;
         parent?: Ast;

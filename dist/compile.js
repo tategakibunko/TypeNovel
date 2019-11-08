@@ -19,7 +19,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var fs = __importStar(require("fs"));
-var modules_1 = require("./modules");
 /*
 export interface CompileArgs {
   path?: string; // source file path(optional)
@@ -40,17 +39,8 @@ var Compile = /** @class */ (function () {
         return this.astFromString(source, __assign(__assign({}, opt), { path: path }));
     };
     Compile.astFromString = function (source, opt) {
-        // String -> Ast []
-        var astList = opt.typeNovelParser.astFromString(source, opt.path);
-        // Ast[] -> Ast (wrap single top-level body)
-        var ast = new modules_1.Ast({
-            type: 'block',
-            name: opt.rootBlockName || modules_1.DefaultRootBlockName,
-            codePos: { path: opt.path, startLine: 0, endLine: 0, startColumn: 0, endColumn: 0 },
-            args: [],
-            value: '',
-            children: astList
-        });
+        // String -> Ast
+        var ast = opt.typeNovelParser.astFromString(source, opt);
         // Ast -> Ast'
         ast = opt.astMappers.reduce(function (acm, mapper) {
             return acm.acceptAstMapper(mapper, { path: opt.path });

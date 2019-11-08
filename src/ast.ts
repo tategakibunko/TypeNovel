@@ -1,4 +1,5 @@
 import { Utils, CodePos, TnNode, AstMapper, AstConverter, BlockNode, TypeNovelParser } from './modules';
+import * as fs from 'fs';
 
 export type AstType = 'text' | 'annot' | 'block';
 
@@ -43,12 +44,13 @@ export class Ast {
   private expandInclude(parser: TypeNovelParser, path?: string): Ast[] {
     if (this.type === 'annot' && this.name === 'include') {
       const filepath = Utils.getPath(this.args[0], path);
-      return parser.astFromFile(filepath);
+      // If file not exists, $include("foo.tn") will be compiled to <include>foo.tn</include>.
+      return fs.existsSync(filepath) ? parser.astListFromFile(filepath) : [this];
     }
     return [this];
   }
 
-  public expandChildren(parser: TypeNovelParser, path?: string): Ast {
+  public expandIncludedChildren(parser: TypeNovelParser, path?: string): Ast {
     this.children = this.children.reduce((acm, child) => {
       return acm.concat(child.expandInclude(parser, path));
     }, [] as Ast[]);

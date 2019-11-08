@@ -59,7 +59,7 @@ export class AstExpander extends IdAstMapper {
     path?: string,
     parent?: Ast,
   }): Ast {
-    return ast.expandChildren(this.parser, opt.path).mapChildren(child => {
+    return ast.expandIncludedChildren(this.parser, opt.path).mapChildren(child => {
       return child.acceptAstMapper(this, { path: opt.path, parent: ast });
     })
   }

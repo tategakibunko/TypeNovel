@@ -2,7 +2,6 @@ import * as fs from 'fs';
 import {
   Ast,
   TnNode,
-  DefaultRootBlockName,
   TypeNovelParser,
   ValidationError,
   AstMapper,
@@ -54,18 +53,8 @@ export class Compile {
   }
 
   static astFromString(source: string, opt: CompileAstArgs): Ast {
-    // String -> Ast []
-    let astList = opt.typeNovelParser.astFromString(source, opt.path);
-
-    // Ast[] -> Ast (wrap single top-level body)
-    let ast: Ast = new Ast({
-      type: 'block',
-      name: opt.rootBlockName || DefaultRootBlockName,
-      codePos: { path: opt.path, startLine: 0, endLine: 0, startColumn: 0, endColumn: 0 },
-      args: [],
-      value: '',
-      children: astList
-    });
+    // String -> Ast
+    let ast = opt.typeNovelParser.astFromString(source, opt);
 
     // Ast -> Ast'
     ast = opt.astMappers.reduce((acm, mapper) => {
@@ -82,6 +71,7 @@ export class Compile {
 
   static nodeFromString(source: string, opt: CompileNodeArgs): TnNode {
     const ast = this.astFromString(source, opt);
+
     // Ast -> TnNode
     let node = ast.acceptAstConverter(opt.astConverter);
 
