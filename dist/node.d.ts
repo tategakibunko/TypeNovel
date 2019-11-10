@@ -11,11 +11,11 @@ export declare abstract class TnNode {
     isTextNode(): boolean;
     isAnnotNode(): boolean;
     isBlockNode(): boolean;
-    readonly next: TnNode | undefined;
-    readonly prev: TnNode | undefined;
-    readonly index: number;
-    readonly nth: number;
-    readonly indexOfType: number;
+    get next(): TnNode | undefined;
+    get prev(): TnNode | undefined;
+    get index(): number;
+    get nth(): number;
+    get indexOfType(): number;
     isFirstChild(): boolean;
     isLastChild(): boolean;
     protected evalAttrValue(value: string, args: any[]): string;

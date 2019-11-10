@@ -32,6 +32,7 @@ var Ast = /** @class */ (function () {
     Ast.prototype.expandInclude = function (parser, path) {
         if (this.type === 'annot' && this.name === 'include') {
             var filepath = modules_1.Utils.getPath(this.args[0], path);
+            // If file not exists, $include("foo.tn") will be compiled to <include>foo.tn</include>.
             return fs.existsSync(filepath) ? parser.astListFromFile(filepath) : [this];
         }
         return [this];

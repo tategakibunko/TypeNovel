@@ -1,4 +1,4 @@
-import { NodeValidator, BlockNode, AnnotNode, TextNode, CodePos, ValidationError } from './modules';
+import { BlockNode, AnnotNode, TextNode, CodePos } from './modules';
 export interface ValidationError {
     message: string;
     codePos: CodePos;

@@ -6,6 +6,10 @@ Mark "*": bug fixed.
 Mark "!": change that can break compatibility with older version
 ===============================================================================
 
+version 1.1.13, 2019/11/10
+==========================
+* Remove module confliction.
+
 version 1.1.12, 2019/11/08
 ==========================
 * Remove unnecessary files from npm packages.

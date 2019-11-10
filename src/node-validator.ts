@@ -1,11 +1,9 @@
 import {
-  NodeValidator,
   Constraint,
   BlockNode,
   AnnotNode,
   TextNode,
   CodePos,
-  ValidationError,
 } from './modules';
 
 export interface ValidationError {
