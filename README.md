@@ -37,7 +37,7 @@ Then `/usr/local/bin/tnc` would be installed.
 1.0.4
 ```
 
-## Use compiler from project
+## Use compiler from your project
 
 You can compile from source by `Tnc.fromString`.
 
