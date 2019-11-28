@@ -53,7 +53,7 @@ console.error(result.errors);
 console.log(result.output);
 ```
 
-Or you can compile from file by `Tnc.fromString`.
+Or you can compile from file by `Tnc.fromFile`.
 
 ```typescript
 import { Tnc } from 'typenovel';
