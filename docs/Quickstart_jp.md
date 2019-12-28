@@ -33,6 +33,8 @@
 
 出力されるHTMLタグは`tnconfig.json`における`markupMap`という項目で編集できます。
 
+初期設定の`tnconfig.json` は `tnc --init` で作成できます。
+
 ```javascript
 {
   "markupMap": {

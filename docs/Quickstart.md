@@ -33,6 +33,8 @@ And result is here.
 
 You can customize html tag by `markupMap` section of `tnconfig.json`.
 
+You can create initial `tnconfig.json` by `tnc --init`.
+
 ```javascript
 {
   "markupMap": {
