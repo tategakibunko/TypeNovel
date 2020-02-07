@@ -4,6 +4,14 @@
 
 Use [TypeNovelReader](https://github.com/tategakibunko/TypeNovelReader).
 
+## Install
+
+You can install TypeNovel by [npm](https://www.npmjs.com/).
+
+```bash
+npm install -g typenovel
+```
+
 ## Compile options
 
 ### --version
