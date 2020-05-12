@@ -54,7 +54,7 @@
     "@types/node": "^12.12.38",
     "jest": "^24.9.0",
     "ts-jest": "^24.3.0",
-    "typescript": "^3.8.3"
+    "typescript": "^3.9.2"
   },
   "dependencies": {
     "commandpost": "^1.4.0",
