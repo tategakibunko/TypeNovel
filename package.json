@@ -27,9 +27,9 @@
   "author": "Watanabe Masaki",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/tategakibunko/ts-typenovel/issues"
+    "url": "https://github.com/tategakibunko/TypeNovel/issues"
   },
-  "homepage": "https://github.com/tategakibunko/ts-typenovel#readme",
+  "homepage": "https://github.com/tategakibunko/TypeNovel",
   "jest": {
     "testURL": "http://localhost/",
     "moduleFileExtensions": [
