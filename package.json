@@ -57,6 +57,7 @@
     "typescript": "^3.9.7"
   },
   "dependencies": {
+    "@angular-devkit/schematics": "^10.2.0",
     "commandpost": "^1.4.0",
     "moo": "^0.5.1",
     "nearley": "^2.19.7"
