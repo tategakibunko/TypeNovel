@@ -1,15 +1,4 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
@@ -18,7 +7,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var fs = __importStar(require("fs"));
+const fs = __importStar(require("fs"));
 /*
 export interface CompileArgs {
   path?: string; // source file path(optional)
@@ -31,53 +20,50 @@ export interface CompileArgs {
   nodeFormatter: NodeFormatter; // TnNode -> string
 }
 */
-var Compile = /** @class */ (function () {
-    function Compile() {
+class Compile {
+    static astFromFile(path, opt) {
+        const source = fs.readFileSync(path, { encoding: 'utf-8' });
+        return this.astFromString(source, Object.assign(Object.assign({}, opt), { path }));
     }
-    Compile.astFromFile = function (path, opt) {
-        var source = fs.readFileSync(path, { encoding: 'utf-8' });
-        return this.astFromString(source, __assign(__assign({}, opt), { path: path }));
-    };
-    Compile.astFromString = function (source, opt) {
+    static astFromString(source, opt) {
         // String -> Ast
-        var ast = opt.typeNovelParser.astFromString(source, opt);
+        let ast = opt.typeNovelParser.astFromString(source, opt);
         // Ast -> Ast'
-        ast = opt.astMappers.reduce(function (acm, mapper) {
+        ast = opt.astMappers.reduce((acm, mapper) => {
             return acm.acceptAstMapper(mapper, { path: opt.path });
         }, ast);
         return ast;
-    };
-    Compile.nodeFromFile = function (path, opt) {
-        var source = fs.readFileSync(path, { encoding: 'utf-8' });
-        return this.nodeFromString(source, __assign(__assign({}, opt), { path: path }));
-    };
-    Compile.nodeFromString = function (source, opt) {
-        var ast = this.astFromString(source, opt);
+    }
+    static nodeFromFile(path, opt) {
+        const source = fs.readFileSync(path, { encoding: 'utf-8' });
+        return this.nodeFromString(source, Object.assign(Object.assign({}, opt), { path }));
+    }
+    static nodeFromString(source, opt) {
+        const ast = this.astFromString(source, opt);
         // Ast -> TnNode
-        var node = ast.acceptAstConverter(opt.astConverter);
+        let node = ast.acceptAstConverter(opt.astConverter);
         // TnNode -> TnNode'
-        node = opt.nodeMappers.reduce(function (acm, mapper) {
+        node = opt.nodeMappers.reduce((acm, mapper) => {
             return acm.acceptNodeMapper(mapper);
         }, node);
         return node;
-    };
-    Compile.fromString = function (source, opt) {
-        var node = this.nodeFromString(source, opt);
+    }
+    static fromString(source, opt) {
+        const node = this.nodeFromString(source, opt);
         // TnNode -> ValidationError[]
-        var errors = opt.nodeValidators
-            .reduce(function (acm, validator) {
+        const errors = opt.nodeValidators
+            .reduce((acm, validator) => {
             return acm.concat(node.acceptNodeValidator(validator));
         }, [])
-            .sort(function (e1, e2) { return e1.codePos.startLine - e2.codePos.startLine; });
+            .sort((e1, e2) => e1.codePos.startLine - e2.codePos.startLine);
         // TnNode -> string
-        var output = node.acceptNodeFormatter(opt.nodeFormatter, 0);
-        return { output: output, errors: errors };
-    };
-    Compile.fromFile = function (path, opt) {
-        var source = fs.readFileSync(path, { encoding: 'utf-8' });
-        return this.fromString(source, __assign(__assign({}, opt), { path: path }));
-    };
-    return Compile;
-}());
+        const output = node.acceptNodeFormatter(opt.nodeFormatter, 0);
+        return { output, errors };
+    }
+    static fromFile(path, opt) {
+        const source = fs.readFileSync(path, { encoding: 'utf-8' });
+        return this.fromString(source, Object.assign(Object.assign({}, opt), { path }));
+    }
+}
 exports.Compile = Compile;
 //# sourceMappingURL=compile.js.map

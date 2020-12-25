@@ -7,10 +7,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var modules_1 = require("./modules");
-var fs = __importStar(require("fs"));
-var commandpost = __importStar(require("commandpost"));
-var pkg = require('../package.json');
+const modules_1 = require("./modules");
+const fs = __importStar(require("fs"));
+const commandpost = __importStar(require("commandpost"));
+const pkg = require('../package.json');
 /*
   TypeNovel compiler
 
@@ -24,24 +24,24 @@ var pkg = require('../package.json');
     --config <path>    Specify path of 'tnconfig.json'
     --format <format>  Output format('text' or 'html')
 */
-var root = commandpost
+const root = commandpost
     .create("tnc <inputFile>")
-    .version("" + pkg.version, "-v, --version")
+    .version(`${pkg.version}`, "-v, --version")
     .description("TypeNovel compiler")
     .option("--init", "Generate default 'tnconfig.json'")
     .option("--minify", "Minify output html")
     .option("--output <path>", "Specify output path(if none, stdout is used)")
     .option("--config <path>", "Specify path of 'tnconfig.json'")
     .option("--format <format>", "Output format('text' or 'html')")
-    .action(function (opts, args) {
-    var outputPath = opts.output[0];
-    var result = modules_1.Tnc.fromFile(args.inputFile, {
+    .action((opts, args) => {
+    const outputPath = opts.output[0];
+    const result = modules_1.Tnc.fromFile(args.inputFile, {
         config: opts.config[0],
         minify: opts.minify,
         format: opts.format[0],
     });
-    var printer = new modules_1.StdConsolePrinter();
-    result.errors.forEach(function (error) { return printer.printValidationError(error); });
+    const printer = new modules_1.StdConsolePrinter();
+    result.errors.forEach(error => printer.printValidationError(error));
     if (result.errors.length > 0) {
         console.log('\n');
     }
@@ -52,13 +52,13 @@ var root = commandpost
         printer.printOutput(result.output);
     }
 });
-if (process.argv.some(function (arg) { return arg === '--init'; })) {
+if (process.argv.some(arg => arg === '--init')) {
     modules_1.Tnc.init();
     process.exit(1);
 }
 commandpost
     .exec(root, process.argv)
-    .catch(function (err) {
+    .catch(err => {
     if (err instanceof Error) {
         console.error(err.stack);
     }

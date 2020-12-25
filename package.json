@@ -45,7 +45,7 @@
       }
     },
     "testMatch": [
-      "**/src/**/*.test.ts"
+      "src/**/*.test.ts"
     ]
   },
   "devDependencies": {

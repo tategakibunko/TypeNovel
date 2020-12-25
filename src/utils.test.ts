@@ -1,4 +1,4 @@
-import { Utils } from '../dist';
+import { Utils } from './modules';
 
 describe('Utils.escapeAttr', () => {
   test('should escape unsafe characters', () => {

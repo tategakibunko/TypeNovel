@@ -1,91 +1,69 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var TnNode = /** @class */ (function () {
-    function TnNode() {
+class TnNode {
+    constructor() {
         this.name = '';
         this.uniqueId = 0;
         this.codePos = { startLine: -1, endLine: -1, startColumn: -1, endColumn: -1 };
     }
-    TnNode.prototype.isTextNode = function () {
+    isTextNode() {
         return false;
-    };
-    TnNode.prototype.isAnnotNode = function () {
+    }
+    isAnnotNode() {
         return false;
-    };
-    TnNode.prototype.isBlockNode = function () {
+    }
+    isBlockNode() {
         return false;
-    };
-    Object.defineProperty(TnNode.prototype, "next", {
-        get: function () {
-            if (this.parent) {
-                return this.parent.getChild(this.index + 1);
-            }
-            return undefined;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(TnNode.prototype, "prev", {
-        get: function () {
-            if (this.parent) {
-                return this.parent.getChild(this.index - 1);
-            }
-            return undefined;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(TnNode.prototype, "index", {
-        get: function () {
-            return this.parent ? this.parent.getIndexOfChild(this) : 0;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(TnNode.prototype, "nth", {
-        get: function () {
-            return this.index + 1;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(TnNode.prototype, "indexOfType", {
-        get: function () {
-            if (!this.parent) {
-                return 0;
-            }
-            return this.parent.getIndexOfType(this);
-        },
-        enumerable: true,
-        configurable: true
-    });
-    TnNode.prototype.isFirstChild = function () {
+    }
+    get next() {
+        if (this.parent) {
+            return this.parent.getChild(this.index + 1);
+        }
+        return undefined;
+    }
+    get prev() {
+        if (this.parent) {
+            return this.parent.getChild(this.index - 1);
+        }
+        return undefined;
+    }
+    get index() {
+        return this.parent ? this.parent.getIndexOfChild(this) : 0;
+    }
+    get nth() {
+        return this.index + 1;
+    }
+    get indexOfType() {
+        if (!this.parent) {
+            return 0;
+        }
+        return this.parent.getIndexOfType(this);
+    }
+    isFirstChild() {
         return this.index === 0;
-    };
-    TnNode.prototype.isLastChild = function () {
+    }
+    isLastChild() {
         return this.parent ? this.index === this.parent.getChildCount() - 1 : true;
-    };
-    TnNode.prototype.evalAttrValue = function (value, args) {
-        var index = this.index;
-        var indexOfType = this.indexOfType;
+    }
+    evalAttrValue(value, args) {
+        const index = this.index;
+        const indexOfType = this.indexOfType;
         return value
             .replace(/<name>/g, this.name)
-            .replace(/<arg(\d)>/g, function (_, p1) { return String(args[parseInt(p1) - 1] || ''); })
+            .replace(/<arg(\d)>/g, (_, p1) => String(args[parseInt(p1) - 1] || ''))
             .replace(/<index>/g, String(index))
             .replace(/<indexOfType>/g, String(indexOfType))
             .replace(/<nth>/g, String(index + 1))
             .replace(/<nthOfType>/g, String(indexOfType + 1))
             .replace(/<uniqueId>/g, String(this.uniqueId))
             .trim();
-    };
-    TnNode.prototype.evalAttrs = function (name, args, mapAttrs) {
-        var _this = this;
-        return Object.keys(mapAttrs).reduce(function (acm, key) {
-            acm[key] = _this.evalAttrValue(mapAttrs[key], args);
+    }
+    evalAttrs(name, args, mapAttrs) {
+        return Object.keys(mapAttrs).reduce((acm, key) => {
+            acm[key] = this.evalAttrValue(mapAttrs[key], args);
             return acm;
         }, {});
-    };
-    return TnNode;
-}());
+    }
+}
 exports.TnNode = TnNode;
 //# sourceMappingURL=node.js.map

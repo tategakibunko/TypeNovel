@@ -7,36 +7,34 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var modules_1 = require("./modules");
-var fs = __importStar(require("fs"));
-var Tnc = /** @class */ (function () {
-    function Tnc() {
-    }
-    Tnc.init = function () {
+const modules_1 = require("./modules");
+const fs = __importStar(require("fs"));
+class Tnc {
+    static init() {
         modules_1.Config.initTnConfig();
         console.log("'tnconfig.json' is generated.");
-    };
-    Tnc.fromFile = function (inputFile, args) {
-        var path = modules_1.Utils.getPath(inputFile);
-        var source = fs.readFileSync(path, { encoding: 'utf-8' });
+    }
+    static fromFile(inputFile, args) {
+        const path = modules_1.Utils.getPath(inputFile);
+        const source = fs.readFileSync(path, { encoding: 'utf-8' });
         return this.fromString(source, args, path);
-    };
-    Tnc.fromString = function (source, args, path) {
+    }
+    static fromString(source, args, path) {
         // console.log(args);
-        var config = modules_1.Config.loadTnConfig(args.config || 'tnconfig.json');
-        var rootBlockName = config.compilerOptions.rootBlockName || 'body';
+        const config = modules_1.Config.loadTnConfig(args.config || 'tnconfig.json');
+        const rootBlockName = config.compilerOptions.rootBlockName || 'body';
         // String -> Ast[]
-        var typeNovelParser = new modules_1.NearlyParser();
+        let typeNovelParser = new modules_1.NearlyParser();
         // Ast -> Ast'
-        var astMappers = [];
+        let astMappers = [];
         // Ast -> TnNode
-        var astConverter = new modules_1.NodeBuilder(config.markupMap || {});
+        let astConverter = new modules_1.NodeBuilder(config.markupMap || {});
         // TnNode -> TnNode'
-        var nodeMappers = [
+        let nodeMappers = [
             new modules_1.NodeWhiteSpaceCleaner(),
         ];
         // TnNode -> ValidationError[]
-        var nodeValidators = [];
+        let nodeValidators = [];
         if (config.compilerOptions.warnDuplicateConstraint) {
             nodeValidators.push(new modules_1.DuplicateConstraintChecker());
         }
@@ -47,22 +45,21 @@ var Tnc = /** @class */ (function () {
             nodeValidators.push(new modules_1.UndefinedConstraintChecker());
         }
         // TnNode -> string[]
-        var format = args.format || 'html';
-        var nodeFormatter = format === 'text' ? new modules_1.PlainTextFormatter() :
+        const format = args.format || 'html';
+        const nodeFormatter = format === 'text' ? new modules_1.PlainTextFormatter() :
             (args.minify ? new modules_1.MinifiedHtmlFormatter() : new modules_1.StdHtmlFormatter());
-        var compileArgs = {
-            path: path,
-            rootBlockName: rootBlockName,
-            typeNovelParser: typeNovelParser,
-            astMappers: astMappers,
-            astConverter: astConverter,
-            nodeMappers: nodeMappers,
-            nodeValidators: nodeValidators,
-            nodeFormatter: nodeFormatter,
+        const compileArgs = {
+            path,
+            rootBlockName,
+            typeNovelParser,
+            astMappers,
+            astConverter,
+            nodeMappers,
+            nodeValidators,
+            nodeFormatter,
         };
         return modules_1.Compile.fromString(source, compileArgs);
-    };
-    return Tnc;
-}());
+    }
+}
 exports.Tnc = Tnc;
 //# sourceMappingURL=tnc.js.map

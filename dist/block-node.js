@@ -1,105 +1,79 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var modules_1 = require("./modules");
-var BlockNode = /** @class */ (function (_super) {
-    __extends(BlockNode, _super);
-    function BlockNode(args) {
-        var _this = _super.call(this) || this;
-        _this.name = args.name;
-        _this.args = args.args;
-        _this.tagName = args.map.tagName || args.name, _this.args;
-        _this.id = args.map.id || '';
-        _this.className = args.map.className || '';
-        _this.content = args.map.content;
-        _this.whiteSpace = args.map.whiteSpace || 'normal';
-        _this.parent = args.parent;
-        _this.codePos = args.codePos;
-        _this.uniqueId = args.uniqueId;
-        _this.constraints = _this.parseConstraints(args.args[0], args.codePos.path);
-        var mmapAttrs = (args.map ? (args.map.attributes || {}) : {});
-        _this.attrs = __assign(__assign({}, mmapAttrs), _this.constraints.attrs);
-        _this.children = []; // empty by default
-        return _this;
+const modules_1 = require("./modules");
+class BlockNode extends modules_1.TnNode {
+    constructor(args) {
+        super();
+        this.name = args.name;
+        this.args = args.args;
+        this.tagName = args.map.tagName || args.name, this.args;
+        this.id = args.map.id || '';
+        this.className = args.map.className || '';
+        this.content = args.map.content;
+        this.whiteSpace = args.map.whiteSpace || 'normal';
+        this.parent = args.parent;
+        this.codePos = args.codePos;
+        this.uniqueId = args.uniqueId;
+        this.constraints = this.parseConstraints(args.args[0], args.codePos.path);
+        const mmapAttrs = (args.map ? (args.map.attributes || {}) : {});
+        this.attrs = Object.assign(Object.assign({}, mmapAttrs), this.constraints.attrs);
+        this.children = []; // empty by default
     }
-    BlockNode.prototype.isBlockNode = function () {
+    isBlockNode() {
         return true;
-    };
-    BlockNode.prototype.toString = function () {
-        return "block(" + this.name + ") with " + this.children.length + " children";
-    };
-    BlockNode.prototype.filterChildren = function (fn) {
-        this.children = this.children.filter(function (child) { return fn(child); });
+    }
+    toString() {
+        return `block(${this.name}) with ${this.children.length} children`;
+    }
+    filterChildren(fn) {
+        this.children = this.children.filter(child => fn(child));
         return this;
-    };
-    BlockNode.prototype.mapChildren = function (fn) {
-        this.children = this.children.map(function (child) { return fn(child); });
+    }
+    mapChildren(fn) {
+        this.children = this.children.map(child => fn(child));
         return this;
-    };
-    BlockNode.prototype.getChildCount = function () {
+    }
+    getChildCount() {
         return this.children.length;
-    };
-    BlockNode.prototype.getChildrenOfType = function (name) {
-        return this.children.filter(function (c) { return c.name === name; });
-    };
-    BlockNode.prototype.getChildCountOfType = function (child) {
+    }
+    getChildrenOfType(name) {
+        return this.children.filter(c => c.name === name);
+    }
+    getChildCountOfType(child) {
         return this.getChildrenOfType(child.name).length;
-    };
-    BlockNode.prototype.getIndexOfChild = function (child) {
+    }
+    getIndexOfChild(child) {
         return this.children.indexOf(child);
-    };
-    BlockNode.prototype.getIndexOfType = function (child) {
+    }
+    getIndexOfType(child) {
         return this.getChildrenOfType(child.name).indexOf(child);
-    };
-    BlockNode.prototype.getChild = function (index) {
+    }
+    getChild(index) {
         return this.children[index] || undefined;
-    };
-    BlockNode.prototype.getRange = function () {
+    }
+    getRange() {
         return new modules_1.CodeRange(this.codePos.startLine, this.codePos.endLine);
-    };
-    BlockNode.prototype.setChildren = function (children) {
+    }
+    setChildren(children) {
         this.children = children;
         return this;
-    };
-    BlockNode.prototype.isWhiteSpacePre = function () {
+    }
+    isWhiteSpacePre() {
         return this.whiteSpace === 'pre';
-    };
-    BlockNode.prototype.parseConstraints = function (arg0, path) {
-        var cntrs = (arg0 && arg0 instanceof modules_1.ConstraintCollection) ? arg0 : new modules_1.ConstraintCollection([]);
+    }
+    parseConstraints(arg0, path) {
+        let cntrs = (arg0 && arg0 instanceof modules_1.ConstraintCollection) ? arg0 : new modules_1.ConstraintCollection([]);
         if (path) {
             cntrs.setPath(path);
         }
         return cntrs;
-    };
-    BlockNode.prototype.getConstraint = function (name) {
+    }
+    getConstraint(name) {
         return this.constraints.get(name);
-    };
-    BlockNode.prototype.queryNode = function (fn) {
-        var result = fn(this) ? [this] : [];
-        return this.children.reduce(function (acm, child) {
+    }
+    queryNode(fn) {
+        let result = fn(this) ? [this] : [];
+        return this.children.reduce((acm, child) => {
             if (child.isBlockNode()) {
                 acm = acm.concat(child.queryNode(fn));
             }
@@ -108,30 +82,29 @@ var BlockNode = /** @class */ (function (_super) {
             }
             return acm;
         }, result);
-    };
-    BlockNode.prototype.getConstraints = function (includeParents) {
-        if (includeParents === void 0) { includeParents = false; }
-        var cntrs = (this.parent && includeParents) ? this.parent.getConstraints(includeParents) : [];
-        this.constraints.forEach(function (cntr) {
-            if (!cntrs.some(function (c) { return c.key === cntr.key; })) {
+    }
+    getConstraints(includeParents = false) {
+        let cntrs = (this.parent && includeParents) ? this.parent.getConstraints(includeParents) : [];
+        this.constraints.forEach(cntr => {
+            if (!cntrs.some(c => c.key === cntr.key)) {
                 cntrs.push(cntr);
             }
         });
         return cntrs;
-    };
-    BlockNode.prototype.getConstraintValue = function (name) {
-        var cntr = this.getConstraint(name);
-        var value = cntr ? cntr.value : undefined;
+    }
+    getConstraintValue(name) {
+        const cntr = this.getConstraint(name);
+        const value = cntr ? cntr.value : undefined;
         return value;
-    };
-    BlockNode.prototype.findConstraint = function (name) {
-        var cntr = this.getConstraint(name);
+    }
+    findConstraint(name) {
+        const cntr = this.getConstraint(name);
         if (cntr !== undefined) {
             return cntr;
         }
         return this.parent ? this.parent.findConstraint(name) : undefined;
-    };
-    BlockNode.prototype.findConstraintOwner = function (name) {
+    }
+    findConstraintOwner(name) {
         if (this.constraints.containsKey(name)) {
             return this;
         }
@@ -139,26 +112,25 @@ var BlockNode = /** @class */ (function (_super) {
             return this.parent.findConstraintOwner(name);
         }
         return undefined;
-    };
-    BlockNode.prototype.getDuplicateConstraints = function () {
-        var _this = this;
+    }
+    getDuplicateConstraints() {
         if (!this.parent || this.constraints.length === 0) {
             return [];
         }
-        var ret = [];
-        this.constraints.forEach(function (cntr) {
-            var prevCntr = _this.parent ? _this.parent.getConstraint(cntr.key) : undefined;
+        let ret = [];
+        this.constraints.forEach(cntr => {
+            let prevCntr = this.parent ? this.parent.getConstraint(cntr.key) : undefined;
             if (prevCntr !== undefined) {
-                ret.push({ dupCntr: cntr, prevCntr: prevCntr });
+                ret.push({ dupCntr: cntr, prevCntr });
             }
         });
         return ret;
-    };
-    BlockNode.prototype.findAnnot = function (name) {
-        var children = this.children.filter(function (child) { return !child.isTextNode(); });
-        for (var i = 0; i < children.length; i++) {
+    }
+    findAnnot(name) {
+        const children = this.children.filter(child => !child.isTextNode());
+        for (let i = 0; i < children.length; i++) {
             if (children[i].isBlockNode()) {
-                var annot = children[i].findAnnot(name);
+                const annot = children[i].findAnnot(name);
                 if (annot) {
                     return annot;
                 }
@@ -168,17 +140,16 @@ var BlockNode = /** @class */ (function (_super) {
             }
         }
         return undefined;
-    };
-    BlockNode.prototype.getUnAnnotatedConstraints = function () {
-        var _this = this;
-        return this.constraints.filter(function (cntr) {
-            return !cntr.isIgnoredConstraint() && _this.findAnnot(cntr.key) === undefined;
+    }
+    getUnAnnotatedConstraints() {
+        return this.constraints.filter(cntr => {
+            return !cntr.isIgnoredConstraint() && this.findAnnot(cntr.key) === undefined;
         });
-    };
-    BlockNode.prototype.acceptNodeMapper = function (visitor) {
+    }
+    acceptNodeMapper(visitor) {
         return visitor.visitBlockNode(this);
-    };
-    BlockNode.prototype.acceptNodeFormatter = function (visitor, indent) {
+    }
+    acceptNodeFormatter(visitor, indent) {
         return visitor.visitBlockNode({
             name: this.name,
             tagName: this.evalAttrValue(this.tagName, this.args),
@@ -190,17 +161,16 @@ var BlockNode = /** @class */ (function (_super) {
             children: this.children,
             prev: this.prev,
             next: this.next,
-            indent: indent,
+            indent,
         });
-    };
-    BlockNode.prototype.acceptNodeValidator = function (visitor) {
-        var validations = visitor.visitBlockNode(this, this.codePos);
-        return this.children.reduce(function (acm, node) {
-            var valis = node.acceptNodeValidator(visitor);
+    }
+    acceptNodeValidator(visitor) {
+        const validations = visitor.visitBlockNode(this, this.codePos);
+        return this.children.reduce((acm, node) => {
+            const valis = node.acceptNodeValidator(visitor);
             return acm.concat(valis);
         }, validations);
-    };
-    return BlockNode;
-}(modules_1.TnNode));
+    }
+}
 exports.BlockNode = BlockNode;
 //# sourceMappingURL=block-node.js.map
