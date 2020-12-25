@@ -14,5 +14,8 @@ compile:
 deploy:
 	cp -f src/lexer.js dist/
 
+test:
+	jest
+
 ts-examples:
 	cd ts-examples && make
