@@ -41,11 +41,11 @@
     },
     "globals": {
       "ts-jest": {
-        "tsConfig": "../src/tsconfig.json"
+        "tsConfig": "./src/tsconfig.json"
       }
     },
     "testMatch": [
-      "**/tests/**/*.test.ts"
+      "**/src/**/*.test.ts"
     ]
   },
   "devDependencies": {
