@@ -3,6 +3,7 @@
 .vscode
 syntaxes/
 node_modules/
+dist/*.map
 ts-examples/*.js
 ts-examples/*.map
 *.sh
