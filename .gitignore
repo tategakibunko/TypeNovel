@@ -4,6 +4,7 @@
 syntaxes/
 node_modules/
 dist/*.map
+dist/*.js
 ts-examples/*.map
 ts-examples/*.js
 *.sh
