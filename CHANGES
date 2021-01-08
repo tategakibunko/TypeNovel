@@ -6,6 +6,10 @@ Mark "*": bug fixed.
 Mark "!": change that can break compatibility with older version
 ===============================================================================
 
+version 1.1.14
+==========================
+* Use character name instead of character code for character escaping(&#60; -> &lt; etc).
+
 version 1.1.13, 2019/11/10
 ==========================
 * Remove module confliction.
