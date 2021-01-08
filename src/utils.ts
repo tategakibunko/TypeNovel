@@ -22,18 +22,18 @@ export class Utils {
 
   static escapeAttr(str: string): string {
     return str
-      .replace(/&/g, "&#38;")
-      .replace(/</g, "&#60;")
-      .replace(/>/g, "&#62;")
-      .replace(/"/g, "&#34;")
-      .replace(/'/g, "&#39;");
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&apos;");
   }
 
   static escapeText(str: string): string {
     return str
-      .replace(/&/g, "&#38;")
-      .replace(/</g, "&#60;")
-      .replace(/>/g, "&#62;");
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
   }
 
   static camelToChain(str: string): string {

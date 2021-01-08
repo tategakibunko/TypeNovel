@@ -26,17 +26,17 @@ class Utils {
     }
     static escapeAttr(str) {
         return str
-            .replace(/&/g, "&#38;")
-            .replace(/</g, "&#60;")
-            .replace(/>/g, "&#62;")
-            .replace(/"/g, "&#34;")
-            .replace(/'/g, "&#39;");
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&apos;");
     }
     static escapeText(str) {
         return str
-            .replace(/&/g, "&#38;")
-            .replace(/</g, "&#60;")
-            .replace(/>/g, "&#62;");
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;");
     }
     static camelToChain(str) {
         return str.replace(/([A-Z])/g, (m, p1) => `-${p1.toLowerCase()}`);
