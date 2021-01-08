@@ -1,0 +1,3 @@
+@scene({season:"winter"}){
+  <b>季節</b>は$season("<ruby>\"師走\"<rt>しわす</rt></ruby>")です。
+}

@@ -4,8 +4,8 @@
 syntaxes/
 node_modules/
 dist/*.map
-ts-examples/*.js
 ts-examples/*.map
+ts-examples/*.js
 *.sh
 *.txt
 local/

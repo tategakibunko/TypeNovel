@@ -30,10 +30,17 @@ export class Utils {
   }
 
   static escapeText(str: string): string {
+    // 2021/01/08 updated.
+    // Make it enable to write html tag in annotation body.
+    // [example]
+    // $season("<ruby>師走<rt>しわす</rt></ruby>")
+    return str;
+    /*
     return str
       .replace(/&/g, "&amp;")
       .replace(/</g, "&lt;")
       .replace(/>/g, "&gt;");
+      */
   }
 
   static camelToChain(str: string): string {

@@ -33,10 +33,17 @@ class Utils {
             .replace(/'/g, "&apos;");
     }
     static escapeText(str) {
+        // 2021/01/08 updated.
+        // Make it enable to write html tag in annotation body.
+        // [example]
+        // $season("<ruby>師走<rt>しわす</rt></ruby>")
+        return str;
+        /*
         return str
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;");
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;");
+          */
     }
     static camelToChain(str) {
         return str.replace(/([A-Z])/g, (m, p1) => `-${p1.toLowerCase()}`);
