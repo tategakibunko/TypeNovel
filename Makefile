@@ -9,6 +9,7 @@ grammar.ts:
 	cd src && make $@
 
 compile:
+	mkdir -p dist
 	tsc
 
 deploy:
